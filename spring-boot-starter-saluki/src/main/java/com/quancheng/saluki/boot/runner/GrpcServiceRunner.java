@@ -77,16 +77,16 @@ public class GrpcServiceRunner implements DisposableBean, CommandLineRunner {
     if (instances.size() > 0) {
       try {
         for (Object instance : instances) {
-          SalukiService serviceAnnotation = instance.getClass().getAnnotation(SalukiService.class);
+          Object target = GrpcAop.getTarget(instance);
+          SalukiService serviceAnnotation = target.getClass().getAnnotation(SalukiService.class);
           String serviceName = serviceAnnotation.service();
           Set<String> serviceNames = Sets.newHashSet();
-          Object target = instance;
+
           if (StringUtils.isBlank(serviceName)) {
-            if (this.isGrpcServer(instance)) {
+            if (this.isGrpcServer(target)) {
               throw new java.lang.IllegalArgumentException(
-                  "you use grpc stub service,must set service name,service instance is" + instance);
+                  "you use grpc stub service,must set service name,service instance is" + target);
             } else {
-              target = GrpcAop.getTarget(target);
               Class<?>[] interfaces = ClassUtils.getAllInterfacesForClass(target.getClass());
               for (Class<?> interfaceClass : interfaces) {
                 String interfaceName = interfaceClass.getName();

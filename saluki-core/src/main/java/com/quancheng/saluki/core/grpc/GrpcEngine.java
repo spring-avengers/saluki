@@ -121,6 +121,7 @@ public final class GrpcEngine {
             .negotiationType(NegotiationType.TLS)//
             .eventLoopGroup(createWorkEventLoopGroup())//
             .keepAliveTime(1, TimeUnit.DAYS)//
+            .maxHeaderListSize(10240)//
             .directExecutor()//
             .build();//
         return ClientInterceptors.intercept(channel,
@@ -141,6 +142,7 @@ public final class GrpcEngine {
         .keepAliveTime(1, TimeUnit.DAYS)//
         .bossEventLoopGroup(createBossEventLoopGroup())//
         .workerEventLoopGroup(createWorkEventLoopGroup())//
+        .maxHeaderListSize(10240)//
         // This is a performance optimization that avoids the synchronization and queuing overhead
         // that comes with SerializingExecutor.
         // 性能优化，用户线程与Io线程的切换需要耗费时间的，而同步和入队需要耗费时间的

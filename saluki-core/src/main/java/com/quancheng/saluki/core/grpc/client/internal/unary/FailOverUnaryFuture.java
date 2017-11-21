@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.quancheng.saluki.core.common.RpcContext;
 import com.quancheng.saluki.core.grpc.client.internal.GrpcCallOptions;
 
 import io.grpc.CallOptions;
@@ -149,12 +150,16 @@ public class FailOverUnaryFuture<Request, Response> extends ClientCall.Listener<
 
   @Override
   public void run() {
-    this.clientCall = channel.newCall(method, callOptions);
-    this.completionFuture = new CompletionFuture<Response>(this.clientCall);
-    this.clientCall.start(this, new Metadata());
-    this.clientCall.sendMessage(request);
-    this.clientCall.halfClose();
-    this.clientCall.request(1);
+    try {
+      this.clientCall = channel.newCall(method, callOptions);
+      this.completionFuture = new CompletionFuture<Response>(this.clientCall);
+      this.clientCall.start(this, new Metadata());
+      this.clientCall.sendMessage(request);
+      this.clientCall.halfClose();
+      this.clientCall.request(1);
+    } finally {
+      RpcContext.removeContext();
+    }
   }
 
 

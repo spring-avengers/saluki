@@ -15,6 +15,8 @@ package com.quancheng.saluki.core.grpc.client.internal.stream;
 
 import javax.annotation.Nullable;
 
+import com.quancheng.saluki.core.common.RpcContext;
+
 import io.grpc.ClientCall;
 import io.grpc.stub.ClientCallStreamObserver;
 
@@ -85,7 +87,11 @@ public class CallToStreamObserverAdapter<Request, Response>
 
   @Override
   public void request(int count) {
-    call.request(count);
+    try {
+      call.request(count);
+    } finally {
+      RpcContext.removeContext();
+    }
   }
 
   @Override

@@ -89,6 +89,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
       log.debug(String.format("Service: %s  Method: %s  RemoteAddress: %s",
           providerUrl.getServiceInterface(), method.getName(),
           RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS)));
+      RpcContext.removeContext();
     }
     return null;
   }
@@ -96,15 +97,19 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
 
   @Override
   public void invoke(Message request, StreamObserver<Message> responseObserver) {
-    switch (grpcMethodType.methodType()) {
-      case UNARY:
-        unaryCall(request, responseObserver);
-        break;
-      case SERVER_STREAMING:
-        streamCall(request, responseObserver);
-        break;
-      default:
-        break;
+    try {
+      switch (grpcMethodType.methodType()) {
+        case UNARY:
+          unaryCall(request, responseObserver);
+          break;
+        case SERVER_STREAMING:
+          streamCall(request, responseObserver);
+          break;
+        default:
+          break;
+      }
+    } finally {
+      RpcContext.removeContext();
     }
   }
 

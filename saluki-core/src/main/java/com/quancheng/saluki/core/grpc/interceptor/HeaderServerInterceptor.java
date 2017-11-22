@@ -110,9 +110,7 @@ public class HeaderServerInterceptor implements ServerInterceptor {
           RpcContext.getContext().set(entry.getKey(), entry.getValue());
         }
       }
-    } catch (
-
-    Throwable e) {
+    } catch (Throwable e) {
       log.error(e.getMessage(), e);
     }
   }

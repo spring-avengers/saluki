@@ -89,7 +89,6 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
       log.debug(String.format("Service: %s  Method: %s  RemoteAddress: %s",
           providerUrl.getServiceInterface(), method.getName(),
           RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS)));
-      RpcContext.removeContext();
     }
     return null;
   }
@@ -97,19 +96,15 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
 
   @Override
   public void invoke(Message request, StreamObserver<Message> responseObserver) {
-    try {
-      switch (grpcMethodType.methodType()) {
-        case UNARY:
-          unaryCall(request, responseObserver);
-          break;
-        case SERVER_STREAMING:
-          streamCall(request, responseObserver);
-          break;
-        default:
-          break;
-      }
-    } finally {
-      RpcContext.removeContext();
+    switch (grpcMethodType.methodType()) {
+      case UNARY:
+        unaryCall(request, responseObserver);
+        break;
+      case SERVER_STREAMING:
+        streamCall(request, responseObserver);
+        break;
+      default:
+        break;
     }
   }
 
@@ -168,6 +163,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
           collect(reqProtoBufer, collectMessage, start, true);
         }
       });
+
       StatusRuntimeException statusException =
           Status.UNAVAILABLE.withDescription(stackTrace).asRuntimeException();
       responseObserver.onError(statusException);

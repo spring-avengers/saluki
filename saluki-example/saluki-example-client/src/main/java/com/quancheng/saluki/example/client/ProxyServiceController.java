@@ -8,6 +8,7 @@ import com.quancheng.examples.model.hello.HelloReply;
 import com.quancheng.examples.model.hello.HelloRequest;
 import com.quancheng.examples.service.HelloService;
 import com.quancheng.saluki.boot.SalukiReference;
+import com.quancheng.saluki.core.common.RpcContext;
 import com.saluki.example.model.First;
 import com.saluki.example.model.Second;
 
@@ -95,9 +96,11 @@ public class ProxyServiceController {
 
 
   private HelloReply call(final String name) {
+    RpcContext.getContext().set("123", "123");
     HelloRequest request = new HelloRequest();
     request.setName(name);
     HelloReply reply = helloService.sayHello(request);
+    //System.out.println(RpcContext.getContext().get("123"));
     return reply;
   }
 

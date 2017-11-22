@@ -25,6 +25,7 @@ import io.grpc.ServerCall;
 import io.grpc.ServerCall.Listener;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
+import io.grpc.Status;
 
 /**
  * @author shimingliu 2016年12月14日 下午10:29:37
@@ -49,13 +50,18 @@ public class HeaderServerInterceptor implements ServerInterceptor {
     return next.startCall(new SimpleForwardingServerCall<ReqT, RespT>(call) {
 
       @Override
-      public void request(int numMessages) {
+      public void sendMessage(RespT message) {
         InetSocketAddress remoteAddress =
             (InetSocketAddress) call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
         RpcContext.getContext().setAttachment(Constants.REMOTE_ADDRESS,
             remoteAddress.getHostString());
         copyMetadataToThreadLocal(headers);
-        super.request(numMessages);
+      }
+
+      @Override
+      public void close(Status status, Metadata trailers) {
+        super.close(status, trailers);
+        RpcContext.removeContext();
       }
 
     }, headers);
@@ -66,8 +72,8 @@ public class HeaderServerInterceptor implements ServerInterceptor {
     String values = headers.get(GrpcUtil.GRPC_CONTEXT_VALUES);
     try {
       if (attachments != null) {
-        Map<String, String> attachmentsMap = SerializerUtil.fromJson(attachments,
-            new TypeToken<Map<String, String>>() {}.getType());
+        Map<String, String> attachmentsMap =
+            SerializerUtil.fromJson(attachments, new TypeToken<Map<String, String>>() {}.getType());
         RpcContext.getContext().setAttachments(attachmentsMap);
       }
       if (values != null) {

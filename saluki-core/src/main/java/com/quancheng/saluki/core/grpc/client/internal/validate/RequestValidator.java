@@ -22,7 +22,6 @@ import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.base.Optional;
 import com.quancheng.saluki.core.common.Constants;
 import com.quancheng.saluki.core.common.RpcContext;
 import com.quancheng.saluki.core.grpc.annotation.ArgValidator;

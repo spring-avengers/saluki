@@ -96,7 +96,6 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
     this.rpcContext = new ImmutableTriple<Map<String, String>, Map<String, Object>, Set<Class>>(
         RpcContext.getContext().getAttachments(), RpcContext.getContext().get(),
         RpcContext.getContext().getHoldenGroups());
-    RpcContext.removeContext();
   }
 
   public void setRequest(GrpcRequest request) {
@@ -123,22 +122,26 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
 
   @Override
   protected Object run() throws Exception {
-    RpcContext.getContext().setAttachments(rpcContext.getLeft());
-    RpcContext.getContext().set(rpcContext.getMiddle());
-    RpcContext.getContext().setHoldenGroups(rpcContext.getRight());
-    MethodDescriptor<Message, Message> methodDesc = this.request.getMethodDescriptor();
-    Integer timeOut = this.request.getCallTimeout();
-    Message request = getRequestMessage();
-    Message response = this.run0(request, methodDesc, timeOut, clientCall);
-    Object obj = this.transformMessage(response);
-    collectLogExecutor.execute(new Runnable() {
+    try {
+      RpcContext.getContext().setAttachments(rpcContext.getLeft());
+      RpcContext.getContext().set(rpcContext.getMiddle());
+      RpcContext.getContext().setHoldenGroups(rpcContext.getRight());
+      MethodDescriptor<Message, Message> methodDesc = this.request.getMethodDescriptor();
+      Integer timeOut = this.request.getCallTimeout();
+      Message request = getRequestMessage();
+      Message response = this.run0(request, methodDesc, timeOut, clientCall);
+      Object obj = this.transformMessage(response);
+      collectLogExecutor.execute(new Runnable() {
 
-      @Override
-      public void run() {
-        collect(serviceName, methodName, request, response, false);
-      }
-    });
-    return obj;
+        @Override
+        public void run() {
+          collect(serviceName, methodName, request, response, false);
+        }
+      });
+      return obj;
+    } finally {
+      RpcContext.removeContext();
+    }
   }
 
   @Override

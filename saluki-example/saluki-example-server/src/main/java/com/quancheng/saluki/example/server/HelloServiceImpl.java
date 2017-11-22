@@ -4,6 +4,7 @@ import com.quancheng.examples.model.hello.HelloReply;
 import com.quancheng.examples.model.hello.HelloRequest;
 import com.quancheng.examples.service.HelloService;
 import com.quancheng.saluki.boot.SalukiService;
+import com.quancheng.saluki.core.common.RpcContext;
 
 import io.grpc.stub.StreamObserver;
 
@@ -14,6 +15,7 @@ public class HelloServiceImpl implements HelloService {
   public HelloReply sayHello(HelloRequest request) {
     HelloReply reply = new HelloReply();
     reply.setMessage(request.getName());
+    System.out.println(RpcContext.getContext().get("123"));
     // int registryPort = 0;
     // Preconditions.checkState(registryPort != 0, "RegistryPort can not be null", registryPort);
     return reply;

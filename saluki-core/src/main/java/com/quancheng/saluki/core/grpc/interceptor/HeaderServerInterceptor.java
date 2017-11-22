@@ -45,15 +45,39 @@ public class HeaderServerInterceptor implements ServerInterceptor {
   @Override
   public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
       final Metadata headers, ServerCallHandler<ReqT, RespT> next) {
-    return next.startCall(new SimpleForwardingServerCall<ReqT, RespT>(call) {
+    final class ServerCallHandlerWrap implements ServerCallHandler<ReqT, RespT> {
+
+      private final ServerCallHandler<ReqT, RespT> handler;
+
+      public ServerCallHandlerWrap(ServerCallHandler<ReqT, RespT> handler) {
+        this.handler = handler;
+      }
 
       @Override
-      public void request(int numMessages) {
+      public Listener<ReqT> startCall(ServerCall<ReqT, RespT> call, Metadata headers) {
+        try {
+          contextCopy();
+          return handler.startCall(call, headers);
+        } finally {
+          RpcContext.removeContext();
+        }
+      }
+
+      public void contextCopy() {
         copyMetadataToThreadLocal(headers);
         InetSocketAddress remoteAddress =
             (InetSocketAddress) call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
         RpcContext.getContext().setAttachment(Constants.REMOTE_ADDRESS,
             remoteAddress.getHostString());
+      }
+    }
+    ServerCallHandlerWrap nextWrap = new ServerCallHandlerWrap(next);
+
+    return nextWrap.startCall(new SimpleForwardingServerCall<ReqT, RespT>(call) {
+
+      @Override
+      public void request(int numMessages) {
+        nextWrap.contextCopy();
         super.request(numMessages);
       }
 
@@ -64,7 +88,10 @@ public class HeaderServerInterceptor implements ServerInterceptor {
       }
 
     }, headers);
+
+
   }
+
 
 
   private void copyMetadataToThreadLocal(Metadata headers) {
@@ -83,7 +110,9 @@ public class HeaderServerInterceptor implements ServerInterceptor {
           RpcContext.getContext().set(entry.getKey(), entry.getValue());
         }
       }
-    } catch (Throwable e) {
+    } catch (
+
+    Throwable e) {
       log.error(e.getMessage(), e);
     }
   }

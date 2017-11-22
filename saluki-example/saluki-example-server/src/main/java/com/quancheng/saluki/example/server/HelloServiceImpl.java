@@ -43,6 +43,7 @@ public class HelloServiceImpl implements HelloService {
   @Override
   public StreamObserver<HelloRequest> sayHelloClientStream(
       StreamObserver<HelloReply> responseObserver) {
+    System.out.println(RpcContext.getContext().get("123"));
     return new StreamObserver<HelloRequest>() {
 
 
@@ -50,7 +51,6 @@ public class HelloServiceImpl implements HelloService {
 
       @Override
       public void onNext(HelloRequest value) {
-        System.out.println(RpcContext.getContext().get("123"));
         sb.append(value.getName() + ", ");
       }
 

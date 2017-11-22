@@ -41,11 +41,11 @@ public class ProxyServiceController {
   public HelloReply clientstream(@RequestParam(value = "name", required = false) String name) {
     HelloRequest request = new HelloRequest();
     request.setName(name);
+    RpcContext.getContext().set("123", "123");
     StreamObserver<com.quancheng.examples.model.hello.HelloRequest> requestObserver =
         helloService.sayHelloClientStream(responseObserver());
     try {
       for (int i = 0; i < 10; i++) {
-        RpcContext.getContext().set("123", "123");
         requestObserver.onNext(request);
       }
     } catch (Exception e) {

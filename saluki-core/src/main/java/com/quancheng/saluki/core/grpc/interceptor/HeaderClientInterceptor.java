@@ -72,6 +72,8 @@ public class HeaderClientInterceptor implements ClientInterceptor {
       }
     } catch (Throwable e) {
       log.error(e.getMessage(), e);
+    } finally {
+      RpcContext.removeContext();
     }
   }
 }

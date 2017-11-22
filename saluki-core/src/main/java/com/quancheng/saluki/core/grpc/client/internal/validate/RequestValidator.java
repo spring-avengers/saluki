@@ -69,9 +69,9 @@ public class RequestValidator {
         validatorGroups.add(Class.forName(splitGroup));
       }
     }
-    Optional<Set<Class>> optional = RpcContext.getContext().getHoldenGroups();
-    if (optional.isPresent()) {
-      validatorGroups = optional.get();
+    Set<Class> optional = RpcContext.getContext().getHoldenGroups();
+    if (optional != null) {
+      validatorGroups.addAll(optional);
     }
     Set<ConstraintViolation<Object>> violations = validator.validate(request.getRequestParam(),
         (Class[]) validatorGroups.toArray(new Class[0]));

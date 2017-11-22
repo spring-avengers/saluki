@@ -40,7 +40,7 @@
 
 
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 		<appender-ref ref="dailyRollingFile" />
 		<appender-ref ref="railyFile" />

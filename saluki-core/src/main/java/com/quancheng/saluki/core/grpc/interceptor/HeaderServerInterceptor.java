@@ -40,9 +40,7 @@ public class HeaderServerInterceptor implements ServerInterceptor {
     return new HeaderServerInterceptor();
   }
 
-  private HeaderServerInterceptor() {
-
-  }
+  private HeaderServerInterceptor() {}
 
   @Override
   public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
@@ -50,22 +48,24 @@ public class HeaderServerInterceptor implements ServerInterceptor {
     return next.startCall(new SimpleForwardingServerCall<ReqT, RespT>(call) {
 
       @Override
-      public void sendMessage(RespT message) {
+      public void request(int numMessages) {
+        copyMetadataToThreadLocal(headers);
         InetSocketAddress remoteAddress =
             (InetSocketAddress) call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
         RpcContext.getContext().setAttachment(Constants.REMOTE_ADDRESS,
             remoteAddress.getHostString());
-        copyMetadataToThreadLocal(headers);
+        super.request(numMessages);
       }
 
       @Override
       public void close(Status status, Metadata trailers) {
-        super.close(status, trailers);
         RpcContext.removeContext();
+        super.close(status, trailers);
       }
 
     }, headers);
   }
+
 
   private void copyMetadataToThreadLocal(Metadata headers) {
     String attachments = headers.get(GrpcUtil.GRPC_CONTEXT_ATTACHMENTS);

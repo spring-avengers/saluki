@@ -59,6 +59,8 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
   private static final ExecutorService collectLogExecutor =
       Executors.newSingleThreadExecutor(new NamedThreadFactory("salukiCollectTask", true));
 
+  private volatile String remote;
+
   public ServerInvocation(Object serviceToInvoke, Method method, GrpcMethodType grpcMethodType,
       GrpcURL providerUrl, ConcurrentMap<String, AtomicInteger> concurrents,
       MonitorService salukiMonitor) {
@@ -87,8 +89,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
       responseObserver.onError(statusException);
     } finally {
       log.debug(String.format("Service: %s  Method: %s  RemoteAddress: %s",
-          providerUrl.getServiceInterface(), method.getName(),
-          RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS)));
+          providerUrl.getServiceInterface(), method.getName(), this.remote));
     }
     return null;
   }
@@ -96,6 +97,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
 
   @Override
   public void invoke(Message request, StreamObserver<Message> responseObserver) {
+    this.remote = RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS);
     switch (grpcMethodType.methodType()) {
       case UNARY:
         unaryCall(request, responseObserver);
@@ -124,8 +126,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
       responseObserver.onError(statusException);
     } finally {
       log.debug(String.format("Service: %s  Method: %s  RemoteAddress: %s",
-          providerUrl.getServiceInterface(), method.getName(),
-          RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS)));
+          providerUrl.getServiceInterface(), method.getName(), this.remote));
     }
   }
 
@@ -163,14 +164,12 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
           collect(reqProtoBufer, collectMessage, start, true);
         }
       });
-
       StatusRuntimeException statusException =
           Status.UNAVAILABLE.withDescription(stackTrace).asRuntimeException();
       responseObserver.onError(statusException);
     } finally {
-      log.debug(String.format("Service: %s  Method: %s  RemoteAddress: %s",
-          providerUrl.getServiceInterface(), method.getName(),
-          RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS)));
+      log.info(String.format("Service: %s  Method: %s  RemoteAddress: %s",
+          providerUrl.getServiceInterface(), method.getName(), this.remote));
       getConcurrent().decrementAndGet();
     }
   }
@@ -185,7 +184,7 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
       int concurrent = getConcurrent().get(); // 当前并发数
       String service = providerUrl.getServiceInterface(); // 获取服务名称
       String method = this.method.getName(); // 获取方法名
-      String consumer = RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS);// 远程服务器地址
+      String consumer = this.remote;// 远程服务器地址
       String host = providerUrl.getHost();
       int rpcPort = providerUrl.getPort();
       int registryRpcPort = providerUrl.getParameter(Constants.REGISTRY_RPC_PORT_KEY, rpcPort);

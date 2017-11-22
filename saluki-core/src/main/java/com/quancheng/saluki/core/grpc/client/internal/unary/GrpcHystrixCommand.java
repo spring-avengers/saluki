@@ -14,11 +14,15 @@
 package com.quancheng.saluki.core.grpc.client.internal.unary;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +65,9 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
 
   private final long start;
 
+  @SuppressWarnings("rawtypes")
+  private final Triple<Map<String, String>, Map<String, Object>, Set<Class>> rpcContext;
+
   private GrpcRequest request;
 
   private GrpcUnaryClientCall clientCall;
@@ -71,6 +78,7 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
       Executors.newSingleThreadExecutor(new NamedThreadFactory("salukiCollectTask", true));
 
 
+  @SuppressWarnings("rawtypes")
   public GrpcHystrixCommand(String serviceName, String methodName, Boolean isEnabledFallBack) {
     super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(serviceName))//
         .andCommandKey(HystrixCommandKey.Factory.asKey(serviceName + ":" + methodName))//
@@ -85,6 +93,9 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
     this.serviceName = serviceName;
     this.methodName = methodName;
     this.start = System.currentTimeMillis();
+    this.rpcContext = new ImmutableTriple<Map<String, String>, Map<String, Object>, Set<Class>>(
+        RpcContext.getContext().getAttachments(), RpcContext.getContext().get(),
+        RpcContext.getContext().getHoldenGroups());
   }
 
   public void setRequest(GrpcRequest request) {
@@ -111,6 +122,9 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
 
   @Override
   protected Object run() throws Exception {
+    RpcContext.getContext().setAttachments(rpcContext.getLeft());
+    RpcContext.getContext().set(rpcContext.getMiddle());
+    RpcContext.getContext().setHoldenGroups(rpcContext.getRight());
     MethodDescriptor<Message, Message> methodDesc = this.request.getMethodDescriptor();
     Integer timeOut = this.request.getCallTimeout();
     Message request = getRequestMessage();

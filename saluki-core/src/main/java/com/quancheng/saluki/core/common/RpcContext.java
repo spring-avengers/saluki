@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
 @SuppressWarnings("rawtypes")
@@ -34,13 +33,15 @@ public class RpcContext {
   private RpcContext() {}
 
 
-  public void setHoldenGroups(Set<Class> groups) {
-    validatorGroup.clear();
-    validatorGroup.addAll(groups);
+  public RpcContext setHoldenGroups(Set<Class> groups) {
+    if (groups != null && groups.size() > 0) {
+      validatorGroup.addAll(groups);
+    }
+    return this;
   }
 
-  public Optional<Set<Class>> getHoldenGroups() {
-    return validatorGroup.isEmpty() ? Optional.absent() : Optional.fromNullable(validatorGroup);
+  public Set<Class> getHoldenGroups() {
+    return validatorGroup;
   }
 
   public String getAttachment(String key) {
@@ -70,7 +71,6 @@ public class RpcContext {
   }
 
   public RpcContext setAttachments(Map<String, String> attachment) {
-    this.attachments.clear();
     if (attachment != null && attachment.size() > 0) {
       this.attachments.putAll(attachment);
     }
@@ -95,6 +95,13 @@ public class RpcContext {
     return this;
   }
 
+  public RpcContext set(Map<String, Object> value) {
+    if (value != null && value.size() > 0) {
+      values.putAll(value);
+    }
+    return this;
+  }
+
   public RpcContext remove(String key) {
     values.remove(key);
     return this;
@@ -107,4 +114,5 @@ public class RpcContext {
   public boolean contain(String key) {
     return values.containsKey(key);
   }
+
 }

@@ -45,6 +45,7 @@ public class ProxyServiceController {
         helloService.sayHelloClientStream(responseObserver());
     try {
       for (int i = 0; i < 10; i++) {
+        RpcContext.getContext().set("123", "123");
         requestObserver.onNext(request);
       }
     } catch (Exception e) {
@@ -100,7 +101,7 @@ public class ProxyServiceController {
     HelloRequest request = new HelloRequest();
     request.setName(name);
     HelloReply reply = helloService.sayHello(request);
-    //System.out.println(RpcContext.getContext().get("123"));
+    // System.out.println(RpcContext.getContext().get("123"));
     return reply;
   }
 

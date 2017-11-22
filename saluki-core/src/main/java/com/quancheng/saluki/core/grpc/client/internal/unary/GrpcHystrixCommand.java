@@ -96,6 +96,7 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
     this.rpcContext = new ImmutableTriple<Map<String, String>, Map<String, Object>, Set<Class>>(
         RpcContext.getContext().getAttachments(), RpcContext.getContext().get(),
         RpcContext.getContext().getHoldenGroups());
+    RpcContext.removeContext();
   }
 
   public void setRequest(GrpcRequest request) {

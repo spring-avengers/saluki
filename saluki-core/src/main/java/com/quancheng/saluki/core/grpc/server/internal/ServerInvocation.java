@@ -38,6 +38,7 @@ import io.netty.util.internal.ThrowableUtil;
  * @author shimingliu 2016年12月14日 下午10:14:18
  * @version ServerInvocation.java, v 0.0.1 2016年12月14日 下午10:14:18 shimingliu
  */
+@SuppressWarnings("unchecked")
 public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Message, Message>,
     ServerStreamingMethod<Message, Message>, ClientStreamingMethod<Message, Message>,
     BidiStreamingMethod<Message, Message> {
@@ -72,10 +73,10 @@ public class ServerInvocation implements io.grpc.stub.ServerCalls.UnaryMethod<Me
     this.concurrents = concurrents;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public StreamObserver<Message> invoke(StreamObserver<Message> responseObserver) {
     try {
+      this.remote = RpcContext.getContext().getAttachment(Constants.REMOTE_ADDRESS);
       Class<?> requestType = grpcMethodType.requestType();
       PoJo2ProtoStreamObserver servserResponseObserver =
           PoJo2ProtoStreamObserver.newObserverWrap(responseObserver);

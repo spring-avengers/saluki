@@ -53,6 +53,7 @@ import io.grpc.MethodDescriptor;
  * @author liushiming 2017年4月26日 下午6:16:32
  * @version $Id: GrpcHystrixObservableCommand.java, v 0.0.1 2017年4月26日 下午6:16:32 liushiming
  */
+@SuppressWarnings("rawtypes")
 public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
 
   private static final Logger logger = LoggerFactory.getLogger(GrpcHystrixCommand.class);
@@ -65,7 +66,6 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
 
   private final long start;
 
-  @SuppressWarnings("rawtypes")
   private final Triple<Map<String, String>, Map<String, Object>, Set<Class>> rpcContext;
 
   private GrpcRequest request;
@@ -78,7 +78,6 @@ public abstract class GrpcHystrixCommand extends HystrixCommand<Object> {
       Executors.newSingleThreadExecutor(new NamedThreadFactory("salukiCollectTask", true));
 
 
-  @SuppressWarnings("rawtypes")
   public GrpcHystrixCommand(String serviceName, String methodName, Boolean isEnabledFallBack) {
     super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(serviceName))//
         .andCommandKey(HystrixCommandKey.Factory.asKey(serviceName + ":" + methodName))//

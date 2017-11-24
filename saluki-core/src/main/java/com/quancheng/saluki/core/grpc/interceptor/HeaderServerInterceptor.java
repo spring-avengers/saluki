@@ -18,14 +18,12 @@ import com.quancheng.saluki.core.common.RpcContext;
 import com.quancheng.saluki.core.grpc.util.GrpcUtil;
 import com.quancheng.saluki.core.grpc.util.SerializerUtil;
 
-import io.grpc.ForwardingServerCall.SimpleForwardingServerCall;
 import io.grpc.Grpc;
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
 import io.grpc.ServerCall.Listener;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
-import io.grpc.Status;
 
 /**
  * @author shimingliu 2016年12月14日 下午10:29:37
@@ -56,43 +54,64 @@ public class HeaderServerInterceptor implements ServerInterceptor {
       @Override
       public Listener<ReqT> startCall(ServerCall<ReqT, RespT> call, Metadata headers) {
         try {
-          contextCopy();
+          contextCopy(call, headers);
           return handler.startCall(call, headers);
         } finally {
           RpcContext.removeContext();
         }
       }
 
-      public void contextCopy() {
-        copyMetadataToThreadLocal(headers);
-        InetSocketAddress remoteAddress =
-            (InetSocketAddress) call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
-        RpcContext.getContext().setAttachment(Constants.REMOTE_ADDRESS,
-            remoteAddress.getHostString());
-      }
     }
-    ServerCallHandlerWrap nextWrap = new ServerCallHandlerWrap(next);
 
-    return nextWrap.startCall(new SimpleForwardingServerCall<ReqT, RespT>(call) {
+    final class ListenerWrap extends Listener<ReqT> {
 
-      @Override
-      public void request(int numMessages) {
-        nextWrap.contextCopy();
-        super.request(numMessages);
+      private final Listener<ReqT> listener;
+
+      public ListenerWrap(Listener<ReqT> listener) {
+        this.listener = listener;
       }
 
       @Override
-      public void close(Status status, Metadata trailers) {
-        RpcContext.removeContext();
-        super.close(status, trailers);
+      public void onMessage(ReqT message) {
+        listener.onMessage(message);
       }
 
-    }, headers);
+      @Override
+      public void onHalfClose() {
+        try {
+          contextCopy(call, headers);
+          listener.onHalfClose();
+        } finally {
+          RpcContext.removeContext();
+        }
+      }
 
+      @Override
+      public void onCancel() {
+        listener.onCancel();
+      }
 
+      @Override
+      public void onComplete() {
+        listener.onComplete();
+      }
+
+      @Override
+      public void onReady() {
+        listener.onReady();
+      }
+
+    };
+    return new ListenerWrap(new ServerCallHandlerWrap(next).startCall(call, headers));
   }
 
 
+  private void contextCopy(ServerCall<?, ?> call, final Metadata headers) {
+    copyMetadataToThreadLocal(headers);
+    InetSocketAddress remoteAddress =
+        (InetSocketAddress) call.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
+    RpcContext.getContext().setAttachment(Constants.REMOTE_ADDRESS, remoteAddress.getHostString());
+  }
 
   private void copyMetadataToThreadLocal(Metadata headers) {
     String attachments = headers.get(GrpcUtil.GRPC_CONTEXT_ATTACHMENTS);

@@ -21,9 +21,6 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +41,6 @@ import io.grpc.EquivalentAddressGroup;
 import io.grpc.Internal;
 import io.grpc.NameResolver;
 import io.grpc.Status;
-import io.grpc.internal.GrpcUtil;
-import io.grpc.internal.LogExceptionRunnable;
-import io.grpc.internal.SharedResourceHolder;
 
 /**
  * @author liushiming 2017年5月19日 下午1:43:22
@@ -83,13 +77,6 @@ public class GrpcNameResolver extends NameResolver {
         }
       };
 
-  private ScheduledExecutorService timerService;
-
-  private ExecutorService executor;
-
-  private boolean shutdown;
-
-  private boolean resolving;
 
   private Listener listener;
 
@@ -101,8 +88,6 @@ public class GrpcNameResolver extends NameResolver {
     GrpcURL registryUrl = GrpcURL.valueOf(targetUri.toString());
     this.registry = RegistryProvider.asFactory().newRegistry(registryUrl);
     this.subscribeUrl = subscribeUrl;
-    this.timerService = SharedResourceHolder.get(GrpcUtil.TIMER_SERVICE);
-    this.executor = SharedResourceHolder.get(GrpcUtil.SHARED_CHANNEL_EXECUTOR);
   }
 
   @Override
@@ -116,9 +101,6 @@ public class GrpcNameResolver extends NameResolver {
     this.listener = listener;
     this.listener = Preconditions.checkNotNull(listener, "listener");
     resolve();
-    timerService.scheduleWithFixedDelay(new LogExceptionRunnable(resolutionRunnableOnExecutor), 1,
-        1, TimeUnit.MINUTES);
-
   }
 
   @Override
@@ -128,52 +110,13 @@ public class GrpcNameResolver extends NameResolver {
   }
 
   private void resolve() {
-    if (resolving || shutdown) {
-      return;
-    }
-    executor.execute(resolutionRunnable);
+    registry.subscribe(subscribeUrl, serviceListener);
+    registry.subscribe(subscribeUrl, routeListener);
   }
 
 
-  private final Runnable resolutionRunnable = new Runnable() {
-    @Override
-    public void run() {
-      synchronized (GrpcNameResolver.this) {
-        if (shutdown) {
-          return;
-        }
-        resolving = true;
-      }
-      try {
-        registry.subscribe(subscribeUrl, serviceListener);
-        registry.subscribe(subscribeUrl, routeListener);
-      } finally {
-        synchronized (GrpcNameResolver.this) {
-          resolving = false;
-        }
-      }
-    }
-  };
-
-
-
-  private final Runnable resolutionRunnableOnExecutor = new Runnable() {
-    @Override
-    public void run() {
-      synchronized (GrpcNameResolver.this) {
-        if (!shutdown) {
-          executor.execute(resolutionRunnable);
-        }
-      }
-    }
-  };
-
   @Override
   public void shutdown() {
-    if (shutdown) {
-      return;
-    }
-    shutdown = true;
     registry.unsubscribe(subscribeUrl, serviceListener);
     registry.unsubscribe(subscribeUrl, routeListener);
   }

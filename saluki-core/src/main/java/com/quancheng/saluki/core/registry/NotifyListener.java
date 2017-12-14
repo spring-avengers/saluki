@@ -23,7 +23,7 @@ public interface NotifyListener {
 
   public interface NotifyRouterListener {
 
-    void notify(String group, String routerCondition);
+    void notify(GrpcURL subscribeUrl, String routerCondition);
   }
 
 }

@@ -8,9 +8,10 @@ package com.quancheng.saluki.core.grpc;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -20,8 +21,6 @@ import javax.net.ssl.SSLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.quancheng.saluki.core.common.Constants;
 import com.quancheng.saluki.core.common.GrpcURL;
 import com.quancheng.saluki.core.common.NamedThreadFactory;
@@ -62,13 +61,13 @@ public final class GrpcEngine {
 
   private static final Logger log = LoggerFactory.getLogger(GrpcEngine.class);
 
+  private static final Map<String, Channel> CHANNEL_SERVICE_POOL =
+      Collections.synchronizedMap(new WeakHashMap<String, Channel>());
+
   private final GrpcURL registryUrl;
 
   private final Registry registry;
 
-  private final Map<String, Set<GrpcURL>> subscribeGroupCache = Maps.newConcurrentMap();
-
-  private final Map<String, Channel> channelPool = Maps.newConcurrentMap();
 
   public GrpcEngine(GrpcURL registryUrl) {
     this.registryUrl = registryUrl;
@@ -85,36 +84,18 @@ public final class GrpcEngine {
         if (subscribeUrl == null) {
           subscribeUrl = refUrl;
         }
-        String group = cacheSubscribeUrl(subscribeUrl);
-        if (channelPool.containsKey(group)) {
-          return channelPool.get(group);
-        } else {
-          Channel channel = create(group);
-          channelPool.put(group, channel);
-          return channel;
+        String serviceKey = subscribeUrl.getServiceKey();
+        Channel channel = CHANNEL_SERVICE_POOL.get(serviceKey);
+        if (channel == null) {
+          channel = this.create(subscribeUrl);
+          CHANNEL_SERVICE_POOL.put(serviceKey, channel);
         }
-
+        return channel;
       }
 
-      private String cacheSubscribeUrl(GrpcURL subscribeUrl) {
-        String group = subscribeUrl.getGroup();
-        Set<GrpcURL> refUrls = subscribeGroupCache.get(group);
-        if (refUrls == null) {
-          refUrls = Sets.newLinkedHashSet();
-          refUrls.add(subscribeUrl);
-          subscribeGroupCache.put(group, refUrls);
-        } else {
-          if (!refUrls.contains(subscribeUrl)) {
-            refUrls.add(subscribeUrl);
-          }
-        }
-        return group;
-      }
-
-      private Channel create(String group) {
-        Set<GrpcURL> subscribeUrls = subscribeGroupCache.get(group);
+      private Channel create(GrpcURL subscribeUrl) {
         Channel channel = NettyChannelBuilder.forTarget(registryUrl.toJavaURI().toString())//
-            .nameResolverFactory(new GrpcNameResolverProvider(subscribeUrls))//
+            .nameResolverFactory(new GrpcNameResolverProvider(subscribeUrl))//
             .loadBalancerFactory(buildLoadBalanceFactory())//
             .sslContext(buildClientSslContext())//
             .usePlaintext(false)//

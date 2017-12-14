@@ -90,7 +90,7 @@ public class GrpcRoutePicker extends SubchannelPicker {
   private boolean discard(GrpcURL refUrl, Subchannel subchannel) {
     boolean discard = false;
     if (refUrl != null) {
-      GrpcRouter grpcRouter = GrpcRouterFactory.getInstance().getGrpcRouter(refUrl.getGroup());
+      GrpcRouter grpcRouter = GrpcRouterFactory.getInstance().getGrpcRouter(refUrl.getServiceKey());
       if (grpcRouter != null) {
         grpcRouter.setRefUrl(refUrl);
         EquivalentAddressGroup addressGroup = subchannel.getAddresses();

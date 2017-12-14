@@ -21,7 +21,6 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.net.InetAddresses;
 import com.quancheng.saluki.core.common.GrpcURL;
 import com.quancheng.saluki.core.grpc.router.GrpcRouterFactory;
@@ -61,26 +59,28 @@ public class GrpcNameResolver extends NameResolver {
 
   private final Registry registry;
 
-  private final String currentGroup;
-
-  private final Set<GrpcURL> subscribeUrls;
-
-  private final Set<GrpcURL> submitedSubscribeUrls = Sets.newConcurrentHashSet();
+  private final GrpcURL subscribeUrl;
 
   private final NotifyListener.NotifyServiceListener serviceListener =
       new NotifyListener.NotifyServiceListener() {
 
         @Override
         public void notify(GrpcURL subscribeUrl, List<GrpcURL> urls) {
-          if (log.isInfoEnabled()) {
-            log.info(
-                "Grpc nameresolve started listener,Receive notify from registry, prividerUrl is"
-                    + Arrays.toString(urls.toArray()));
-          }
+          log.info("Grpc nameresolve started listener,Receive notify from registry, prividerUrl is"
+              + Arrays.toString(urls.toArray()));
           GrpcNameResolver.this.urls.put(subscribeUrl, urls);
           notifyLoadBalance(subscribeUrl, urls);
         }
 
+      };
+
+  private final NotifyListener.NotifyRouterListener routeListener =
+      new NotifyListener.NotifyRouterListener() {
+
+        @Override
+        public void notify(GrpcURL subscribeUrl, String routerCondition) {
+          GrpcRouterFactory.getInstance().cacheRoute(subscribeUrl.getServiceKey(), routerCondition);
+        }
       };
 
   private ScheduledExecutorService timerService;
@@ -97,18 +97,10 @@ public class GrpcNameResolver extends NameResolver {
 
   private volatile Map<GrpcURL, List<GrpcURL>> urls = Maps.newConcurrentMap();
 
-  public GrpcNameResolver(URI targetUri, Attributes params, Set<GrpcURL> subscribeUrls) {
+  public GrpcNameResolver(URI targetUri, Attributes params, GrpcURL subscribeUrl) {
     GrpcURL registryUrl = GrpcURL.valueOf(targetUri.toString());
     this.registry = RegistryProvider.asFactory().newRegistry(registryUrl);
-    this.subscribeUrls = subscribeUrls;
-    this.currentGroup = this.subscribeUrls.iterator().next().getGroup();
-    registry.subscribe(currentGroup, new NotifyListener.NotifyRouterListener() {
-
-      @Override
-      public void notify(String group, String routerCondition) {
-        GrpcRouterFactory.getInstance().cacheRoute(group, routerCondition);
-      }
-    });
+    this.subscribeUrl = subscribeUrl;
     this.timerService = SharedResourceHolder.get(GrpcUtil.TIMER_SERVICE);
     this.executor = SharedResourceHolder.get(GrpcUtil.SHARED_CHANNEL_EXECUTOR);
   }
@@ -153,12 +145,8 @@ public class GrpcNameResolver extends NameResolver {
         resolving = true;
       }
       try {
-        for (GrpcURL subscribeUrl : subscribeUrls) {
-          if (!submitedSubscribeUrls.contains(subscribeUrl)) {
-            registry.subscribe(subscribeUrl, serviceListener);
-            submitedSubscribeUrls.add(subscribeUrl);
-          }
-        }
+        registry.subscribe(subscribeUrl, serviceListener);
+        registry.subscribe(subscribeUrl, routeListener);
       } finally {
         synchronized (GrpcNameResolver.this) {
           resolving = false;
@@ -186,9 +174,8 @@ public class GrpcNameResolver extends NameResolver {
       return;
     }
     shutdown = true;
-    for (GrpcURL subscribeUrl : subscribeUrls) {
-      registry.unsubscribe(subscribeUrl, serviceListener);
-    }
+    registry.unsubscribe(subscribeUrl, serviceListener);
+    registry.unsubscribe(subscribeUrl, routeListener);
   }
 
 

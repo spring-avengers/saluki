@@ -10,7 +10,6 @@ import java.net.SocketAddress;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.quancheng.saluki.core.common.GrpcURL;
 
@@ -36,10 +35,10 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
   public static final Attributes.Key<NameResolver.Listener> NAMERESOVER_LISTENER =
       Attributes.Key.of("nameResolver-Listener");
 
-  private final Set<GrpcURL> subscribeUrls;
+  private final GrpcURL subscribeUrl;
 
-  public GrpcNameResolverProvider(Set<GrpcURL> subscribeUrls) {
-    this.subscribeUrls = subscribeUrls;
+  public GrpcNameResolverProvider(GrpcURL subscribeUrl) {
+    this.subscribeUrl = subscribeUrl;
   }
 
   @Override
@@ -54,7 +53,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
 
   @Override
   public NameResolver newNameResolver(URI targetUri, Attributes params) {
-    return new GrpcNameResolver(targetUri, params, subscribeUrls);
+    return new GrpcNameResolver(targetUri, params, subscribeUrl);
   }
 
   @Override

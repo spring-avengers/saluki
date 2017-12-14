@@ -42,22 +42,22 @@ public final class GrpcRouterFactory {
     return instance;
   }
 
-  public void cacheRoute(String group, String routerCondition) {
+  public void cacheRoute(String servicekey, String routerCondition) {
     if (!StringUtils.isEmpty(routerCondition)) {
-      ROUTE_CACHE.put(group, routerCondition);
+      ROUTE_CACHE.put(servicekey, routerCondition);
     } else {
-      ROUTE_CACHE.invalidate(group);
+      ROUTE_CACHE.invalidate(servicekey);
     }
   }
 
-  public GrpcRouter getGrpcRouter(String group) {
+  public GrpcRouter getGrpcRouter(String serivceKey) {
     String currentRouterRule = null;
     // 从线程上下文取路由规则
     if (RpcContext.getContext().containAttachment("routerRule")) {
       currentRouterRule = RpcContext.getContext().getAttachment("routerRule");
     }
     // 从配置中心获取路由规则并覆盖线程上下文的路由规则
-    String configRouterRule = ROUTE_CACHE.getIfPresent(group);
+    String configRouterRule = ROUTE_CACHE.getIfPresent(serivceKey);
     if (configRouterRule != null) {
       currentRouterRule = configRouterRule;
     }

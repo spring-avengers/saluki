@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the
- * confidential and proprietary information of Quancheng-ec.com ("Confidential
- * Information"). You shall not disclose such Confidential Information and shall
- * use it only in accordance with the terms of the license agreement you entered
- * into with Quancheng-ec.com.
+ * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and
+ * proprietary information of Quancheng-ec.com ("Confidential Information"). You shall not disclose
+ * such Confidential Information and shall use it only in accordance with the terms of the license
+ * agreement you entered into with Quancheng-ec.com.
  */
 package com.quancheng.plugin.common;
 
@@ -17,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
@@ -33,121 +33,129 @@ import com.google.protobuf.ProtocolStringList;
  */
 public class CommonProto2Java {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommonProto2Java.class);
+  private static final Logger logger = LoggerFactory.getLogger(CommonProto2Java.class);
 
-    private final String        discoveryRoot;
+  private final String discoveryRoot;
 
-    private final String        generatePath;
+  private final String generatePath;
 
-    private final CommandProtoc commondProtoc;
+  private final CommandProtoc commondProtoc;
 
-    private Map<String, String> pojoTypes;
+  private Map<String, String> pojoTypes;
 
-    private CommonProto2Java(String discoveryRoot, String generatePath, final File protocDependenciesPath){
-        this.discoveryRoot = discoveryRoot;
-        this.generatePath = generatePath;
-        this.commondProtoc = CommandProtoc.configProtoPath(discoveryRoot, protocDependenciesPath);
-    }
+  private CommonProto2Java(String discoveryRoot, String generatePath,
+      final File protocDependenciesPath) {
+    this.discoveryRoot = discoveryRoot;
+    this.generatePath = generatePath;
+    this.commondProtoc = CommandProtoc.configProtoPath(discoveryRoot, protocDependenciesPath);
+  }
 
-    public static CommonProto2Java forConfig(String discoveryRoot, String generatePath,
-        final File protocDependenciesPath) {
-        return new CommonProto2Java(discoveryRoot, generatePath, protocDependenciesPath);
-    }
+  public static CommonProto2Java forConfig(String discoveryRoot, String generatePath,
+      final File protocDependenciesPath) {
+    return new CommonProto2Java(discoveryRoot, generatePath, protocDependenciesPath);
+  }
 
-    public void generateFile(String protoPath) {
-        try {
-            if (pojoTypes == null) {
-                pojoTypes = Maps.newHashMap();
-            }
-        } finally {
-            if (!new File(protoPath).exists()) {
-                logger.warn("protoPath:" + protoPath + " not exist, it may be in the third party jars, so it can't be generate");
-                return;
-            }
-            FileDescriptorSet fileDescriptorSet = commondProtoc.invoke(protoPath);
-            for (FileDescriptorProto fdp : fileDescriptorSet.getFileList()) {
-                Pair<String, String> packageClassName = this.packageClassName(fdp.getOptions());
-                if (packageClassName == null) {
-                    continue;
-                }
-                ProtocolStringList dependencyList = fdp.getDependencyList();
-                for (Iterator<String> it = dependencyList.iterator(); it.hasNext();) {
-                    String dependencyPath = discoveryRoot + "/" + it.next();
-                    generateFile(dependencyPath);
-                }
-                doPrint(fdp, packageClassName.getLeft(), packageClassName.getRight());
-            }
+  public void generateFile(String protoPath) {
+    try {
+      if (pojoTypes == null) {
+        pojoTypes = Maps.newHashMap();
+      }
+    } finally {
+      if (!new File(protoPath).exists()) {
+        logger.warn("protoPath:" + protoPath
+            + " not exist, it may be in the third party jars, so it can't be generate");
+        return;
+      }
+      FileDescriptorSet fileDescriptorSet = commondProtoc.invoke(protoPath);
+      for (FileDescriptorProto fdp : fileDescriptorSet.getFileList()) {
+        Pair<String, String> packageClassName = this.packageClassName(fdp.getOptions());
+        if (packageClassName == null) {
+          continue;
         }
-    }
-
-    private Pair<String, String> packageClassName(FileOptions options) {
-        String packageName = null;
-        String className = null;
-        for (Map.Entry<FieldDescriptor, Object> entry : options.getAllFields().entrySet()) {
-            if (entry.getKey().getName().equals("java_package")) {
-                packageName = entry.getValue().toString();
-            }
-            if (entry.getKey().getName().equals("java_outer_classname")) {
-                className = entry.getValue().toString();
-            }
+        ProtocolStringList dependencyList = fdp.getDependencyList();
+        for (Iterator<String> it = dependencyList.iterator(); it.hasNext();) {
+          String dependencyPath = discoveryRoot + "/" + it.next();
+          generateFile(dependencyPath);
         }
-        if (packageName != null && className != null) {
-            return new ImmutablePair<String, String>(packageName, className);
-        }
-        return null;
+        doPrint(fdp, packageClassName.getLeft(), packageClassName.getRight());
+      }
     }
+  }
 
-    private void doPrint(FileDescriptorProto fdp, String javaPackage, String outerClassName) {
-        List<DescriptorProto> messageDescList = fdp.getMessageTypeList();
-        List<ServiceDescriptorProto> serviceDescList = fdp.getServiceList();
-        List<EnumDescriptorProto> enumDescList = fdp.getEnumTypeList();
-        printEnum(enumDescList, javaPackage, outerClassName);
-        printMessage(messageDescList, javaPackage, outerClassName);
-        printService(serviceDescList, javaPackage);
+  private Pair<String, String> packageClassName(FileOptions options) {
+    String packageName = null;
+    String className = null;
+    for (Map.Entry<FieldDescriptor, Object> entry : options.getAllFields().entrySet()) {
+      if (entry.getKey().getName().equals("java_package")) {
+        packageName = entry.getValue().toString();
+      }
+      if (entry.getKey().getName().equals("java_outer_classname")) {
+        className = entry.getValue().toString();
+      }
     }
+    if (packageName != null && className != null) {
+      return new ImmutablePair<String, String>(packageName, className);
+    }
+    return null;
+  }
 
-    private void printService(List<ServiceDescriptorProto> serviceDescList, String javaPackage) {
-        for (ServiceDescriptorProto serviceDesc : serviceDescList) {
-            PrintServiceFile serviceFile = new PrintServiceFile(generatePath, javaPackage, serviceDesc.getName());
-            try {
-                serviceFile.setServiceMethods(serviceDesc.getMethodList());
-                serviceFile.setPojoTypeCache(pojoTypes);
-            } finally {
-                serviceFile.print();
-            }
-        }
-    }
+  private void doPrint(FileDescriptorProto fdp, String javaPackage, String outerClassName) {
+    List<DescriptorProto> messageDescList = Lists.newArrayList(fdp.getMessageTypeList());
+    List<ServiceDescriptorProto> serviceDescList = Lists.newArrayList(fdp.getServiceList());
+    List<EnumDescriptorProto> enumDescList = Lists.newArrayList(fdp.getEnumTypeList());
+    messageDescList.stream().filter(temp -> temp.getEnumTypeList() != null)
+        .forEach(temp -> enumDescList.addAll(temp.getEnumTypeList()));
+    printEnum(enumDescList, javaPackage, outerClassName);
+    printMessage(messageDescList, javaPackage, outerClassName);
+    printService(serviceDescList, javaPackage);
+  }
 
-    private void printMessage(List<DescriptorProto> messageDescList, String javaPackage, String outerClassName) {
-        for (DescriptorProto messageDesc : messageDescList) {
-            String pojoClassType = messageDesc.getName();
-            String pojoPackageName = javaPackage + "." + outerClassName;
-            String fullpojoType = pojoPackageName.toLowerCase() + "." + pojoClassType;
-            pojoTypes.put(pojoClassType, fullpojoType);
-            PrintMessageFile messageFile = new PrintMessageFile(generatePath, pojoPackageName, pojoClassType);
-            try {
-                messageFile.setMessageFields(messageDesc.getFieldList());
-                messageFile.setPojoTypeCache(pojoTypes);
-                messageFile.setSourceMessageDesc(messageDesc);
-            } finally {
-                messageFile.print();
-            }
-        }
+  private void printService(List<ServiceDescriptorProto> serviceDescList, String javaPackage) {
+    for (ServiceDescriptorProto serviceDesc : serviceDescList) {
+      PrintServiceFile serviceFile =
+          new PrintServiceFile(generatePath, javaPackage, serviceDesc.getName());
+      try {
+        serviceFile.setServiceMethods(serviceDesc.getMethodList());
+        serviceFile.setPojoTypeCache(pojoTypes);
+      } finally {
+        serviceFile.print();
+      }
     }
+  }
 
-    private void printEnum(List<EnumDescriptorProto> enumDescList, String javaPackage, String outerClassName) {
-        for (EnumDescriptorProto enumDesc : enumDescList) {
-            String enumClassType = enumDesc.getName();
-            String enumPackageName = javaPackage + "." + outerClassName;
-            String fullpojoType = enumPackageName.toLowerCase() + "." + enumClassType;
-            pojoTypes.put(enumClassType, fullpojoType);
-            PrintEnumFile enumFile = new PrintEnumFile(generatePath, enumPackageName, enumClassType);
-            try {
-                enumFile.setEnumFields(enumDesc.getValueList());
-            } finally {
-                enumFile.print();
-            }
-        }
+  private void printMessage(List<DescriptorProto> messageDescList, String javaPackage,
+      String outerClassName) {
+    for (DescriptorProto messageDesc : messageDescList) {
+      String pojoClassType = messageDesc.getName();
+      String pojoPackageName = javaPackage + "." + outerClassName;
+      String fullpojoType = pojoPackageName.toLowerCase() + "." + pojoClassType;
+      pojoTypes.put(pojoClassType, fullpojoType);
+      PrintMessageFile messageFile =
+          new PrintMessageFile(generatePath, pojoPackageName, pojoClassType);
+      try {
+        messageFile.setMessageFields(messageDesc.getFieldList());
+        messageFile.setPojoTypeCache(pojoTypes);
+        messageFile.setSourceMessageDesc(messageDesc);
+      } finally {
+        messageFile.print();
+      }
     }
+  }
+
+  private void printEnum(List<EnumDescriptorProto> enumDescList, String javaPackage,
+      String outerClassName) {
+    for (EnumDescriptorProto enumDesc : enumDescList) {
+      String enumClassType = enumDesc.getName();
+      String enumPackageName = javaPackage + "." + outerClassName;
+      String fullpojoType = enumPackageName.toLowerCase() + "." + enumClassType;
+      pojoTypes.put(enumClassType, fullpojoType);
+      PrintEnumFile enumFile = new PrintEnumFile(generatePath, enumPackageName, enumClassType);
+      try {
+        enumFile.setEnumFields(enumDesc.getValueList());
+      } finally {
+        enumFile.print();
+      }
+    }
+  }
 
 }

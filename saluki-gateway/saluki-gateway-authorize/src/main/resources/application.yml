@@ -21,9 +21,6 @@ spring:
     multipart:
       max-file-size: 30Mb
       max-request-size: 30Mb
-  devtools:
-    restart:
-      enabled: true
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

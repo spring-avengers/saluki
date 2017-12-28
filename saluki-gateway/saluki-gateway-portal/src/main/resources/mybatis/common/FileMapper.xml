@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bootdo.common.dao.FileDao">
+<mapper namespace="com.quancheng.saluki.oauth2.common.dao.FileDao">
 
-	<select id="get" resultType="com.bootdo.common.domain.FileDO">
+	<select id="get" resultType="com.quancheng.saluki.oauth2.common.domain.FileDO">
 		select `id`,`type`,`url`,`create_date` from sys_file where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.bootdo.common.domain.FileDO">
+	<select id="list" resultType="com.quancheng.saluki.oauth2.common.domain.FileDO">
 		select `id`,`type`,`url`,`create_date` from sys_file
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
@@ -38,7 +38,7 @@
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.bootdo.common.domain.FileDO" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.quancheng.saluki.oauth2.common.domain.FileDO" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_file
 		(
 			`type`, 
@@ -53,7 +53,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.bootdo.common.domain.FileDO">
+	<update id="update" parameterType="com.quancheng.saluki.oauth2.common.domain.FileDO">
 		update sys_file 
 		<set>
 			<if test="type != null">`type` = #{type}, </if>

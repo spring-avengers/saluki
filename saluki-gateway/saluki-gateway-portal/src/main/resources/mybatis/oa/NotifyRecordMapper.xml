@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bootdo.oa.dao.NotifyRecordDao">
+<mapper namespace="com.quancheng.saluki.oauth2.oa.dao.NotifyRecordDao">
 
-	<select id="get" resultType="com.bootdo.oa.domain.NotifyRecordDO">
+	<select id="get" resultType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO">
 		select
 		`id`,`notify_id`,`user_id`,`is_read`,`read_date` from oa_notify_record
 		where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.bootdo.oa.domain.NotifyRecordDO">
+	<select id="list" resultType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO">
 		select `id`,`notify_id`,`user_id`,`is_read`,`read_date` from
 		oa_notify_record
 		<where>
@@ -43,7 +43,7 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.bootdo.oa.domain.NotifyRecordDO"
+	<insert id="save" parameterType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into oa_notify_record
 		(
@@ -61,7 +61,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.bootdo.oa.domain.NotifyRecordDO">
+	<update id="update" parameterType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO">
 		update oa_notify_record
 		<set>
 			<if test="notifyId != null">`notify_id` = #{notifyId}, </if>
@@ -85,7 +85,7 @@
 	</delete>
 
 
-	<insert id="batchSave" parameterType="com.bootdo.oa.domain.NotifyRecordDO"
+	<insert id="batchSave" parameterType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into oa_notify_record
 		(
@@ -130,7 +130,7 @@
 		</foreach>
 	</delete>
 
-	<update id="changeRead" parameterType="com.bootdo.oa.domain.NotifyRecordDO">
+	<update id="changeRead" parameterType="com.quancheng.saluki.oauth2.oa.domain.NotifyRecordDO">
 		update oa_notify_record
 		<set>
 			<if test="isRead != null">`is_read` = #{isRead}, </if>

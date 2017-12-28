@@ -8,8 +8,8 @@
 		<artifactId>saluki-gateway</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
-	<artifactId>saluki-gateway-authorize</artifactId>
-	<name>saluki-gateway-authorize</name>
+	<artifactId>saluki-gateway-portal</artifactId>
+	<name>saluki-gateway-portal</name>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>saluki-gateway</artifactId>
 	<inceptionYear>2017</inceptionYear>
@@ -18,9 +17,10 @@
 		</license>
 	</licenses>
 	<modules>
-		<module>saluki-gateway-authorize</module>
+		<module>saluki-gateway-portal</module>
 		<module>saluki-gateway-zuul</module>
-	</modules>
+    <module>saluki-gateway-oauth2</module>
+  </modules>
 	<properties>
 		<nekohtml.version>1.9.22</nekohtml.version>
 		<mysql.version>5.1.43</mysql.version>

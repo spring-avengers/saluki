@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.quancheng.saluki.oauth2.common.utils.R;
 import com.quancheng.saluki.oauth2.system.domain.UserOnline;
 import com.quancheng.saluki.oauth2.system.service.SessionService;
+import com.quancheng.saluki.oauth2.utils.R;
 
 @RequestMapping("/sys/online")
 @Controller

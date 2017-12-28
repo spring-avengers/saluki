@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.quancheng.saluki.oauth2.common.annotation.Log;
-import com.quancheng.saluki.oauth2.common.controller.BaseController;
-import com.quancheng.saluki.oauth2.common.domain.Tree;
-import com.quancheng.saluki.oauth2.common.utils.MD5Utils;
-import com.quancheng.saluki.oauth2.common.utils.R;
-import com.quancheng.saluki.oauth2.common.utils.ShiroUtils;
+import com.quancheng.saluki.oauth2.common.Log;
 import com.quancheng.saluki.oauth2.system.domain.MenuDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.service.MenuService;
+import com.quancheng.saluki.oauth2.utils.MD5Utils;
+import com.quancheng.saluki.oauth2.utils.R;
+import com.quancheng.saluki.oauth2.utils.ShiroUtils;
 
 @Controller
 public class LoginController extends BaseController {

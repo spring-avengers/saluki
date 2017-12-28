@@ -1,12 +1,12 @@
 package com.quancheng.saluki.oauth2.system.controller;
 
-import com.quancheng.saluki.oauth2.common.annotation.Log;
-import com.quancheng.saluki.oauth2.common.config.Constant;
-import com.quancheng.saluki.oauth2.common.controller.BaseController;
-import com.quancheng.saluki.oauth2.common.domain.Tree;
-import com.quancheng.saluki.oauth2.common.utils.R;
+import com.quancheng.saluki.oauth2.common.Constant;
+import com.quancheng.saluki.oauth2.common.Log;
 import com.quancheng.saluki.oauth2.system.domain.MenuDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.service.MenuService;
+import com.quancheng.saluki.oauth2.utils.R;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

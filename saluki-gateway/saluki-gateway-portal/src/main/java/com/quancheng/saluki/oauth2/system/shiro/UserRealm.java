@@ -16,11 +16,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.quancheng.saluki.oauth2.common.config.ApplicationContextRegister;
-import com.quancheng.saluki.oauth2.common.utils.ShiroUtils;
+import com.quancheng.saluki.oauth2.config.ApplicationContextRegister;
 import com.quancheng.saluki.oauth2.system.dao.UserDao;
 import com.quancheng.saluki.oauth2.system.domain.UserDO;
 import com.quancheng.saluki.oauth2.system.service.MenuService;
+import com.quancheng.saluki.oauth2.utils.ShiroUtils;
 
 public class UserRealm extends AuthorizingRealm {
 /*	@Autowired

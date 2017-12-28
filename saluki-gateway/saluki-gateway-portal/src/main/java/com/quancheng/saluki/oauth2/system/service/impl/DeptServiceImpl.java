@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.quancheng.saluki.oauth2.common.domain.Tree;
-import com.quancheng.saluki.oauth2.common.utils.BuildTree;
 import com.quancheng.saluki.oauth2.system.dao.DeptDao;
 import com.quancheng.saluki.oauth2.system.domain.DeptDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.service.DeptService;
+import com.quancheng.saluki.oauth2.utils.BuildTree;
 
 
 

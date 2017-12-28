@@ -6,8 +6,8 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.quancheng.saluki.oauth2.common.domain.Tree;
 import com.quancheng.saluki.oauth2.system.domain.DeptDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.domain.UserDO;
 
 @Service

@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.quancheng.saluki.oauth2.common.domain.Tree;
-import com.quancheng.saluki.oauth2.common.utils.BuildTree;
 import com.quancheng.saluki.oauth2.system.dao.DeptDao;
 import com.quancheng.saluki.oauth2.system.dao.UserDao;
 import com.quancheng.saluki.oauth2.system.dao.UserRoleDao;
 import com.quancheng.saluki.oauth2.system.domain.DeptDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.domain.UserDO;
 import com.quancheng.saluki.oauth2.system.domain.UserRoleDO;
 import com.quancheng.saluki.oauth2.system.service.UserService;
+import com.quancheng.saluki.oauth2.utils.BuildTree;
 
 @Transactional
 @Service

@@ -14,12 +14,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.quancheng.saluki.oauth2.common.domain.Tree;
-import com.quancheng.saluki.oauth2.common.utils.BuildTree;
 import com.quancheng.saluki.oauth2.system.dao.MenuDao;
 import com.quancheng.saluki.oauth2.system.dao.RoleMenuDao;
 import com.quancheng.saluki.oauth2.system.domain.MenuDO;
+import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.service.MenuService;
+import com.quancheng.saluki.oauth2.utils.BuildTree;
 
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)

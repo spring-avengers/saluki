@@ -1,11 +1,11 @@
-package com.quancheng.saluki.oauth2.utils;
+package com.quancheng.saluki.oauth2.common;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
  */
-public class PageUtils implements Serializable {
+public class Pageable implements Serializable {
 	private static final long serialVersionUID = 1L;
 	// 总记录数
 	private int total;
@@ -24,7 +24,7 @@ public class PageUtils implements Serializable {
 	 * @param currPage
 	 *            当前页数
 	 */
-	public PageUtils(List<?> list, int total) {
+	public Pageable(List<?> list, int total) {
 		this.rows = list;
 		this.total = total;
 	}

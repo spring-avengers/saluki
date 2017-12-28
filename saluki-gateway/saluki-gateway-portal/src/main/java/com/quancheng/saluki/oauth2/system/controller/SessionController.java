@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.system.domain.UserOnline;
 import com.quancheng.saluki.oauth2.system.service.SessionService;
-import com.quancheng.saluki.oauth2.utils.R;
 
 @RequestMapping("/sys/online")
 @Controller
@@ -35,13 +35,13 @@ public class SessionController {
 
 	@ResponseBody
 	@RequestMapping("/forceLogout/{sessionId}")
-	public R forceLogout(@PathVariable("sessionId") String sessionId, RedirectAttributes redirectAttributes) {
+	public CommonResponse forceLogout(@PathVariable("sessionId") String sessionId, RedirectAttributes redirectAttributes) {
 		try {
 			sessionService.forceLogout(sessionId);
-			return R.ok();
+			return CommonResponse.ok();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return R.error();
+			return CommonResponse.error();
 		}
 
 	}

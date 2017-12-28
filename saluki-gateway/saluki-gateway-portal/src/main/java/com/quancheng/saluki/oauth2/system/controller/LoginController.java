@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.quancheng.saluki.oauth2.common.Log;
+import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.system.domain.MenuDO;
 import com.quancheng.saluki.oauth2.system.domain.Tree;
 import com.quancheng.saluki.oauth2.system.service.MenuService;
 import com.quancheng.saluki.oauth2.utils.MD5Utils;
-import com.quancheng.saluki.oauth2.utils.R;
 import com.quancheng.saluki.oauth2.utils.ShiroUtils;
 
 @Controller
@@ -50,15 +50,15 @@ public class LoginController extends BaseController {
   @Log("登录")
   @PostMapping("/login")
   @ResponseBody
-  R ajaxLogin(String username, String password) {
+  CommonResponse ajaxLogin(String username, String password) {
     password = MD5Utils.encrypt(username, password);
     UsernamePasswordToken token = new UsernamePasswordToken(username, password);
     Subject subject = SecurityUtils.getSubject();
     try {
       subject.login(token);
-      return R.ok();
+      return CommonResponse.ok();
     } catch (AuthenticationException e) {
-      return R.error("用户或密码错误");
+      return CommonResponse.error("用户或密码错误");
     }
   }
 

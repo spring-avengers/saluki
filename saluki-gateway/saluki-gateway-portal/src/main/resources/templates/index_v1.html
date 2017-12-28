@@ -99,36 +99,6 @@
                     </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
-                    <li class="hidden-xs"><a href="/blog" target="_Blank"
-                                             class=""><i class="fa fa-rss-square"></i>博客</a></li>
-                    <li class="dropdown"><a class="dropdown-toggle count-info"
-                                            data-toggle="dropdown" href="#"> <i class="fa fa-envelope"></i>
-                        <span class="label label-warning">{{total}}</span>通知
-                    </a>
-                        <ul class="dropdown-menu dropdown-messages">
-                            <li v-for="row in rows" class="m-t-xs">
-                                <div class="dropdown-messages-box">
-                                    <a class="pull-left"> <i
-                                            class="fa fa-server"></i>
-                                    </a>
-                                    <div class="media-body">
-                                        <small class="pull-right">{{row.before}}</small>
-                                        <strong>{{row.sender}}</strong>
-                                        {{row.title}} <br>
-                                        <small class="text-muted">{{row.updateDate}}</small>
-                                    </div>
-                                </div>
-                                <div class="divider"></div>
-                            </li>
-                            <li>
-                                <div class="text-center link-block">
-                                    <a class="J_menuItem" href="/oa/notify/selfNotify"> <i
-                                            class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="hidden-xs"><a @click="personal" href="#" ><i class="fa fa-id-card"></i> 个人</a></li>
                     <li class="dropdown hidden-xs"><a
                             class="right-sidebar-toggle" aria-expanded="false"> <i

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.oauth2.utils;
+package com.quancheng.saluki.oauth2.common;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

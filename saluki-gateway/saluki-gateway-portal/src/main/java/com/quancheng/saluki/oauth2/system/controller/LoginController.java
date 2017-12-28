@@ -29,7 +29,7 @@ public class LoginController extends BaseController {
 
   @GetMapping({"/", ""})
   String welcome(Model model) {
-    return "redirect:/blog";
+    return "redirect:/index";
   }
 
   @Log("请求访问主页")
@@ -39,7 +39,7 @@ public class LoginController extends BaseController {
     model.addAttribute("menus", menus);
     model.addAttribute("name", getUser().getName());
     model.addAttribute("username", getUser().getUsername());
-    return "index_v1";
+    return "index";
   }
 
   @GetMapping("/login")

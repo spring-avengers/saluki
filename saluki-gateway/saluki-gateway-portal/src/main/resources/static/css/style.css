@@ -15,6 +15,31 @@
  *
  *
 */
+
+.logo {
+  height: 32px;
+  border-radius: 6px;
+}
+.logo img {
+  width: 32px;
+  float: left;
+}
+.logo span {
+  vertical-align: text-bottom;
+  font-size: 16px;
+  text-transform: uppercase;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.67);
+}
+.logo p {
+  font-size: 16px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.67);
+  line-height: 32px;
+  margin-left: 10px;
+  float: left;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: 100;
 }

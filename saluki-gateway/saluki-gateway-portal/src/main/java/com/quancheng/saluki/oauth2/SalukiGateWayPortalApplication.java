@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ServletComponentScan
 @MapperScan("com.quancheng.saluki.oauth2.*.dao")
 @SpringBootApplication
-public class SalukiPortalApplication {
+public class SalukiGateWayPortalApplication {
   public static void main(String[] args) {
-    SpringApplication.run(SalukiPortalApplication.class, args);
+    SpringApplication.run(SalukiGateWayPortalApplication.class, args);
   }
 
 }

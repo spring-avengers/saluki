@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>saluki-gateway</artifactId>
 	<inceptionYear>2017</inceptionYear>
@@ -19,8 +20,8 @@
 	<modules>
 		<module>saluki-gateway-portal</module>
 		<module>saluki-gateway-zuul</module>
-    <module>saluki-gateway-oauth2</module>
-  </modules>
+		<module>saluki-gateway-oauth2</module>
+	</modules>
 	<properties>
 		<nekohtml.version>1.9.22</nekohtml.version>
 		<mysql.version>5.1.43</mysql.version>
@@ -124,6 +125,11 @@
 						<groupId>org.slf4j</groupId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>1.7</version>
 			</dependency>
 			<!-- utils -->
 			<dependency>

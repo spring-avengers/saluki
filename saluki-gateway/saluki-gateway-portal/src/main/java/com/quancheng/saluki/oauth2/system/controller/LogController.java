@@ -19,39 +19,42 @@ import com.quancheng.saluki.oauth2.utils.Query;
 @RequestMapping("/common/log")
 @Controller
 public class LogController {
-	@Autowired
-	LogService logService;
-	String prefix = "common/log";
 
-	@GetMapping()
-	String log() {
-		return prefix + "/log";
-	}
+  private String prefix = "system/log";
 
-	@ResponseBody
-	@GetMapping("/list")
-	PageDO<LogDO> list(@RequestParam Map<String, Object> params) {
-		Query query = new Query(params);
-		PageDO<LogDO> page = logService.queryList(query);
-		return page;
-	}
-	
-	@ResponseBody
-	@PostMapping("/remove")
-	CommonResponse remove(Long id) {
-		if (logService.remove(id)>0) {
-			return CommonResponse.ok();
-		}
-		return CommonResponse.error();
-	}
+  @Autowired
+  LogService logService;
 
-	@ResponseBody
-	@PostMapping("/batchRemove")
-	CommonResponse batchRemove(@RequestParam("ids[]") Long[] ids) {
-		int r = logService.batchRemove(ids);
-		if (r > 0) {
-			return CommonResponse.ok();
-		}
-		return CommonResponse.error();
-	}
+
+  @GetMapping()
+  String log() {
+    return prefix + "/log";
+  }
+
+  @ResponseBody
+  @GetMapping("/list")
+  PageDO<LogDO> list(@RequestParam Map<String, Object> params) {
+    Query query = new Query(params);
+    PageDO<LogDO> page = logService.queryList(query);
+    return page;
+  }
+
+  @ResponseBody
+  @PostMapping("/remove")
+  CommonResponse remove(Long id) {
+    if (logService.remove(id) > 0) {
+      return CommonResponse.ok();
+    }
+    return CommonResponse.error();
+  }
+
+  @ResponseBody
+  @PostMapping("/batchRemove")
+  CommonResponse batchRemove(@RequestParam("ids[]") Long[] ids) {
+    int r = logService.batchRemove(ids);
+    if (r > 0) {
+      return CommonResponse.ok();
+    }
+    return CommonResponse.error();
+  }
 }

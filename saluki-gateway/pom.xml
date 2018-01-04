@@ -26,6 +26,7 @@
 		<nekohtml.version>1.9.22</nekohtml.version>
 		<mysql.version>5.1.43</mysql.version>
 		<ehcache.version>2.10.4</ehcache.version>
+		<spring-cloud.version>Dalston.SR4</spring-cloud.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -158,6 +159,13 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>4.3.10.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

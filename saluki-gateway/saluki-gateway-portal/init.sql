@@ -215,3 +215,35 @@ CREATE TABLE `sys_user_role` (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES ('1', '1', '1');
 INSERT INTO `sys_user_role` VALUES ('2', '2', '2');
+
+DROP TABLE IF EXISTS `gateway_route`;
+CREATE TABLE `gateway_route` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
+  `service_id` varchar(50) DEFAULT NULL COMMENT '服务ID',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
+  `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
+  `url` varchar(255) DEFAULT NULL COMMENT 'url',
+  `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
+  `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
+  `strip_prefix` int(11) DEFAULT NULL COMMENT '是否忽略后缀',
+  `rpc` tinyint(1) DEFAULT NULL COMMENT '是否rpc请求',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='网关路由表';
+
+DROP TABLE IF EXISTS `gateway_grpc`;
+CREATE TABLE `gateway_grpc` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
+  `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
+  `proto_context` blob DEFAULT NULL COMMENT 'proto内容',
+  `proto_req` blob DEFAULT NULL COMMENT 'proto请求',
+  `proto_rep` blob DEFAULT NULL COMMENT 'proto请求',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
+
+

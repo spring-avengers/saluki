@@ -13,6 +13,7 @@
  */
 package com.quancheng.saluki.oauth2.zuul.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,11 @@ import org.springframework.stereotype.Component;
 
 import com.github.os72.protocjar.Protoc;
 import com.google.common.collect.ImmutableList;
+import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
+import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
+import com.google.protobuf.DynamicMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 
 /**
  * @author liushiming
@@ -68,18 +74,18 @@ public class ProtocService {
   // protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
   // return messageBuilder.build();
   // }
-  //
-  // public static void main(String[] args) throws IOException {
-  // ProtocService service = new ProtocService();
-  // byte[] protoBytes = service.compileProtoFile(
-  // "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto",
-  // "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto/example/hello.proto");
-  // try {
-  // String jsonFormat = "{name:'liushiming'}";
-  // Message message = ProtocService.json2Protobuf(protoBytes, jsonFormat);
-  // System.out.println(message.getDefaultInstanceForType());
-  // } catch (InvalidProtocolBufferException e) {
-  // e.printStackTrace();
-  // }
-  // }
+
+  public static void main(String[] args) throws IOException {
+    ProtocService service = new ProtocService();
+    byte[] protoBytes = service.compileProtoFile(
+        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto",
+        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto/example/hello.proto");
+    // try {
+    // String jsonFormat = "{name:'liushiming'}";
+    // Message message = ProtocService.json2Protobuf(protoBytes, jsonFormat);
+    // System.out.println(message.getDefaultInstanceForType());
+    // } catch (InvalidProtocolBufferException e) {
+    // e.printStackTrace();
+    // }
+  }
 }

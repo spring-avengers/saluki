@@ -5,22 +5,18 @@
 
 	<select id="get" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
 		select
-		`id`
-		,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`
-		,`proto_req`
-		,`proto_rep`,`gmt_create` ,`gmt_modified` ,from
-		gateway_grpc
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`
+		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
+		from gateway_grpc
 		where id
 		=#{value}
 	</select>
 
 	<select id="list" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
 		select
-		`id`
-		,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`
-		,`proto_req`
-		,`proto_rep`,`gmt_create` ,`gmt_modified` ,from
-		gateway_grpc
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`
+		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
+		from gateway_grpc
 		<where>
 			<if test="id != null and id != ''"> and id = #{id} </if>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>

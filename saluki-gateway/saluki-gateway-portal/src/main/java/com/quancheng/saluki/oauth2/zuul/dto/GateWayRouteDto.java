@@ -210,7 +210,9 @@ public class GateWayRouteDto implements Serializable {
     grpc.setMethodName(this.methodName);
     grpc.setServiceGroup(this.serviceGroup);
     grpc.setServiceVersion(this.serviceVersion);
-    
+    grpc.setProtoContext(this.protoContext);
+    grpc.setProtoRep(this.protoReq);
+    grpc.setProtoRep(this.protoRep);
     return grpc;
   }
 

@@ -13,9 +13,7 @@
  */
 package com.quancheng.saluki.oauth2.zuul.service.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -25,12 +23,6 @@ import org.springframework.stereotype.Component;
 
 import com.github.os72.protocjar.Protoc;
 import com.google.common.collect.ImmutableList;
-import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
-import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
-import com.google.protobuf.DynamicMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.googlecode.protobuf.format.JsonFormat;
 
 /**
  * @author liushiming
@@ -40,7 +32,6 @@ import com.googlecode.protobuf.format.JsonFormat;
 public class ProtocService {
   private static final Logger logger = LoggerFactory.getLogger(ProtocService.class);
 
-  private static final JsonFormat protoBufJsonFormat = new JsonFormat();
 
   public byte[] compileProtoFile(String protoDirectyPath, String protoPath) {
     try {
@@ -69,25 +60,26 @@ public class ProtocService {
   }
 
 
-  public static final Message json2Protobuf(byte[] protoBytes, String jsonStr) throws IOException {
-    FileDescriptorSet protoCollection = FileDescriptorSet.parseFrom(protoBytes);
-    FileDescriptorProto protoFile = protoCollection.getFileList().get(0);
-    Message.Builder messageBuilder = DynamicMessage.newBuilder(protoFile);
-    protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
-    return messageBuilder.build();
-  }
-
-  public static void main(String[] args) throws IOException {
-    ProtocService service = new ProtocService();
-    byte[] protoBytes = service.compileProtoFile(
-        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto",
-        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto/example/hello.proto");
-    try {
-      String jsonFormat = "{name:'liushiming'}";
-      Message message = ProtocService.json2Protobuf(protoBytes, jsonFormat);
-      System.out.println(message.getDefaultInstanceForType());
-    } catch (InvalidProtocolBufferException e) {
-      e.printStackTrace();
-    }
-  }
+  // public static final Message json2Protobuf(byte[] protoBytes, String jsonStr) throws IOException
+  // {
+  // FileDescriptorSet protoCollection = FileDescriptorSet.parseFrom(protoBytes);
+  // FileDescriptorProto protoFile = protoCollection.getFileList().get(0);
+  // Message.Builder messageBuilder = DynamicMessage.newBuilder(protoFile);
+  // protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
+  // return messageBuilder.build();
+  // }
+  //
+  // public static void main(String[] args) throws IOException {
+  // ProtocService service = new ProtocService();
+  // byte[] protoBytes = service.compileProtoFile(
+  // "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto",
+  // "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto/example/hello.proto");
+  // try {
+  // String jsonFormat = "{name:'liushiming'}";
+  // Message message = ProtocService.json2Protobuf(protoBytes, jsonFormat);
+  // System.out.println(message.getDefaultInstanceForType());
+  // } catch (InvalidProtocolBufferException e) {
+  // e.printStackTrace();
+  // }
+  // }
 }

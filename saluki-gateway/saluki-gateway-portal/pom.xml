@@ -111,6 +111,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
+		<!-- protobbuf依赖 -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
@@ -119,14 +120,10 @@
 			<groupId>com.github.os72</groupId>
 			<artifactId>protoc-jar</artifactId>
 		</dependency>
+		<!-- 公共依赖 -->
 		<dependency>
-			<groupId>com.googlecode.protobuf-java-format</groupId>
-			<artifactId>protobuf-java-format</artifactId>
-		</dependency>
-		<!-- zuul -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-zuul</artifactId>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 		</dependency>
 	</dependencies>
 </project>

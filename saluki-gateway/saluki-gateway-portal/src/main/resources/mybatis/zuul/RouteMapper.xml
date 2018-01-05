@@ -83,46 +83,32 @@
 	</insert>
 
 	<update id="update" parameterType="com.quancheng.saluki.oauth2.zuul.domain.RouteDO">
-		update sys_dept
+		update gateway_route
 		<set>
-			`path`=#{path}
-			`service_id`=#{serviceId}
-			`service_name`=#{serviceName}
-			`method_name`=#{methodName}
-			`url`=#{url}
-			`retryable`=#{retryable}
-			`enabled`=#{enabled}
-			`strip_prefix`=#{stripPrefix}
-			`grpc`=#{grpc}
-			`dubbo`=#{dubbo}
+			<if test="path != null">`path`=#{path},</if>
+			<if test="serviceId != null">`service_id`=#{serviceId},</if>
+			<if test="parentId != null">`service_name`=#{serviceName},</if>
+			<if test="serviceName != null">`method_name`=#{methodName},</if>
+			<if test="url != null">`url`=#{url},</if>
+			<if test="retryable != null">`retryable`=#{retryable},</if>
+			<if test="enabled != null">`enabled`=#{enabled},</if>
+			<if test="stripPrefix != null">`strip_prefix`=#{stripPrefix},</if>
+			<if test="grpc != null">`grpc`=#{grpc},</if>
+			<if test="dubbo != null">`dubbo`=#{dubbo},</if>
 			`gmt_modified`=sysdate()
-			<if test="parentId != null">`parent_id` = #{parentId}, </if>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
-			<if test="delFlag != null">`del_flag` = #{delFlag}</if>
 		</set>
-		where dept_id = #{deptId}
+		where route_id = #{routeId}
 	</update>
 
 	<delete id="remove">
-		delete from sys_dept where dept_id = #{value}
+		delete from gateway_route where route_id = #{value}
 	</delete>
 
 	<delete id="batchRemove">
-		delete from sys_dept where dept_id in
-		<foreach item="deptId" collection="array" open="(" separator=","
+		delete from gateway_route where route_id in
+		<foreach item="routeId" collection="array" open="(" separator=","
 			close=")">
-			#{deptId}
+			#{routeId}
 		</foreach>
 	</delete>
-
-	<select id="listParentDept" resultType="long">
-		select DISTINCT parent_id
-		from sys_dept
-	</select>
-
-	<select id="getDeptUserNumber" resultType="int">
-		select count(*) from
-		sys_user where dept_id = #{value}
-	</select>
 </mapper>

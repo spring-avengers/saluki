@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.quancheng.saluki.oauth2.zuul.dao.GrpcDao">
+
+	<select id="get" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
+		select
+		`route_id`,`path`,`service_id`,`service_name`,`method_name`,`url`,`retryable`
+		,`enabled`,`strip_prefix`,`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
+		from gateway_route
+		where route_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
+		select
+		`route_id`,`path`,`service_id`,`service_name`,`method_name`,`url`,`retryable`
+		,`enabled`,`strip_prefix`,`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
+		from gateway_route
+		<where>
+			<if test="routeId != null and routeId != ''"> and route_id = #{routeId} </if>
+			<if test="path != null and path != ''"> and path = #{path} </if>
+			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
+			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
+			<if test="grpc != null and grpc != ''"> and grpc = #{grpc} </if>
+			<if test="dubbo != null and dubbo != ''"> and dubbo = #{dubbo} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by route_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from gateway_route
+		<where>
+			<if test="routeId != null and routeId != ''"> and route_id = #{routeId} </if>
+			<if test="path != null and path != ''"> and path = #{path} </if>
+			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
+			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
+			<if test="grpc != null and grpc != ''"> and grpc = #{grpc} </if>
+			<if test="dubbo != null and dubbo != ''"> and dubbo = #{dubbo} </if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO"
+		useGeneratedKeys="true" keyProperty="route_id">
+		insert into gateway_route
+		(
+		`path`,
+		`service_id`,
+		`service_name`,
+		`method_name`,
+		`url`,
+		`retryable`,
+		`enabled`,
+		`strip_prefix`,
+		`grpc`,
+		`dubbo`,
+		`gmt_create`,
+		`gmt_modified`
+		)
+		values
+		(
+		#{path},
+		#{serviceId},
+		#{retryable},
+		#{enabled},
+		#{stripPrefix},
+		#{serviceName},
+		#{methodName},
+		#{grpc},
+		#{dubbo},
+		sysdate(),
+		sysdate()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
+		update gateway_route
+		<set>
+			<if test="path != null">`path`=#{path},</if>
+			<if test="serviceId != null">`service_id`=#{serviceId},</if>
+			<if test="parentId != null">`service_name`=#{serviceName},</if>
+			<if test="serviceName != null">`method_name`=#{methodName},</if>
+			<if test="url != null">`url`=#{url},</if>
+			<if test="retryable != null">`retryable`=#{retryable},</if>
+			<if test="enabled != null">`enabled`=#{enabled},</if>
+			<if test="stripPrefix != null">`strip_prefix`=#{stripPrefix},</if>
+			<if test="grpc != null">`grpc`=#{grpc},</if>
+			<if test="dubbo != null">`dubbo`=#{dubbo},</if>
+			`gmt_modified`=sysdate()
+		</set>
+		where route_id = #{routeId}
+	</update>
+
+	<delete id="remove">
+		delete from gateway_route where route_id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from gateway_route where route_id in
+		<foreach item="routeId" collection="array" open="(" separator=","
+			close=")">
+			#{routeId}
+		</foreach>
+	</delete>
+</mapper>

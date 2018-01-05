@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.quancheng.saluki</groupId>
-			<artifactId>saluki-core</artifactId>
+			<artifactId>spring-boot-starter-saluki</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

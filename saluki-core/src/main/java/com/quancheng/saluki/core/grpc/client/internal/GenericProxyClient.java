@@ -9,12 +9,16 @@ package com.quancheng.saluki.core.grpc.client.internal;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import com.google.protobuf.DynamicMessage;
+import com.google.protobuf.Message;
 import com.quancheng.saluki.core.common.Constants;
 import com.quancheng.saluki.core.common.GrpcURL;
 import com.quancheng.saluki.core.grpc.client.GrpcProtocolClient;
 import com.quancheng.saluki.core.grpc.client.GrpcRequest;
 import com.quancheng.saluki.core.grpc.service.GenericService;
 import com.quancheng.saluki.core.utils.ClassHelper;
+
+import io.grpc.MethodDescriptor;
 
 /**
  * @author shimingliu 2016年12月14日 下午9:50:27
@@ -55,13 +59,36 @@ public class GenericProxyClient<T> implements GrpcProtocolClient<T> {
 
     @Override
     protected GrpcRequest buildGrpcRequest(Method method, Object[] args) {
-      GrpcURL resetRefUrl = GenericProxyClient.this.refUrl;
-      resetRefUrl = resetRefUrl.setPath(getServiceName(args));
-      resetRefUrl = resetRefUrl.addParameter(Constants.GROUP_KEY, getGroup(args));
-      resetRefUrl = resetRefUrl.addParameter(Constants.VERSION_KEY, getVersion(args));
-      GrpcRequest request = new GrpcRequest.Default(resetRefUrl, channelPool, this.getMethod(args),
-          this.getArg(args), callType, callTimeout);
-      return request;
+      if (!isDynamicCall(args)) {
+        GrpcURL resetRefUrl = GenericProxyClient.this.refUrl;
+        resetRefUrl = resetRefUrl.setPath(getServiceName(args));
+        resetRefUrl = resetRefUrl.addParameter(Constants.GROUP_KEY, getGroup(args));
+        resetRefUrl = resetRefUrl.addParameter(Constants.VERSION_KEY, getVersion(args));
+        GrpcRequest request = new GrpcRequest.Default(resetRefUrl, channelPool,
+            this.getMethod(args), this.getArg(args), callType, callTimeout);
+        return request;
+      } else {
+        GrpcURL resetRefUrl = GenericProxyClient.this.refUrl;
+        resetRefUrl = resetRefUrl.setPath(getServiceName(args));
+        resetRefUrl = resetRefUrl.addParameter(Constants.GROUP_KEY, getGroup(args));
+        resetRefUrl = resetRefUrl.addParameter(Constants.VERSION_KEY, getVersion(args));
+        @SuppressWarnings("unchecked")
+        MethodDescriptor<Message, Message> methodDesc =
+            (MethodDescriptor<Message, Message>) args[4];
+        DynamicMessage message = (DynamicMessage) args[5];
+        GrpcRequest request = new GrpcRequest.Dynamic(resetRefUrl, channelPool, methodDesc, message,
+            callType, callTimeout);
+        return request;
+      }
+    }
+
+    private Boolean isDynamicCall(Object[] args) {
+      for (Object obj : args) {
+        if (obj instanceof MethodDescriptor) {
+          return true;
+        }
+      }
+      return false;
     }
 
     private String getServiceName(Object[] args) {

@@ -6,9 +6,9 @@
  */
 package com.quancheng.saluki.core.grpc.client;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 
+import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
 import com.quancheng.saluki.core.common.Constants;
 import com.quancheng.saluki.core.common.GrpcURL;
@@ -24,34 +24,139 @@ import io.grpc.MethodDescriptor;
  * @author shimingliu 2016年12月14日 下午5:51:01
  * @version GrpcRequest.java, v 0.0.1 2016年12月14日 下午5:51:01 shimingliu
  */
-public interface GrpcRequest {
+public abstract class GrpcRequest {
 
-  public Class<?> getResponseType();
+  public Class<?> getResponseType() {
+    return null;
+  }
 
-  public MethodDescriptor<Message, Message> getMethodDescriptor();
+  public MethodDescriptor<Message, Message> getMethodDescriptor() {
+    return null;
+  }
 
-  public Channel getChannel();
+  public Channel getChannel() {
+    return null;
+  }
 
-  public String getServiceName();
+  public String getServiceName() {
+    return null;
+  }
 
-  public String getMethodName();
+  public String getMethodName() {
+    return null;
+  }
 
-  public Object getRequestParam();
+  public Object getRequestParam() {
+    return null;
+  }
 
-  public Object getResponseOberver();
+  public Object getResponseOberver() {
+    return null;
+  }
 
-  public GrpcURL getRefUrl();
+  public GrpcURL getRefUrl() {
+    return null;
+  }
 
-  public int getCallType();
+  public int getCallType() {
+    return 0;
+  }
 
-  public int getCallTimeout();
+  public int getCallTimeout() {
+    return 0;
+  }
 
-  public io.grpc.MethodDescriptor.MethodType getMethodType();
+  public io.grpc.MethodDescriptor.MethodType getMethodType() {
+    return null;
+  }
 
 
-  public static class Default implements GrpcRequest, Serializable {
+  public static class Dynamic extends GrpcRequest {
 
-    private static final long serialVersionUID = 1L;
+    private final GrpcURL refUrl;
+
+    private final String methodName;
+
+    private final Channel channel;
+
+    private final int callType;
+
+    private final int callTimeout;
+
+    private final MethodDescriptor<Message, Message> methodDesc;
+
+    private final DynamicMessage message;
+
+    public Dynamic(GrpcURL refUrl, GrpcProtocolClient.ChannelCall channelPool,
+        MethodDescriptor<Message, Message> methodDesc, DynamicMessage message, int callType,
+        int callTimeout) {
+      super();
+      this.methodName = MethodDescriptor.extractFullServiceName(methodDesc.getFullMethodName());
+      this.refUrl = refUrl.addParameter(Constants.METHOD_KEY, methodName);
+      this.channel = channelPool.getChannel(refUrl);
+      this.callType = callType;
+      this.callTimeout = callTimeout;
+      this.methodDesc = methodDesc;
+      this.message = message;
+    }
+
+
+    @Override
+    public MethodDescriptor<Message, Message> getMethodDescriptor() {
+      return this.methodDesc;
+    }
+
+    @Override
+    public Channel getChannel() {
+      return this.channel;
+    }
+
+    @Override
+    public String getServiceName() {
+      return refUrl.getServiceInterface();
+    }
+
+    @Override
+    public String getMethodName() {
+      return this.methodName;
+    }
+
+    @Override
+    public Object getRequestParam() {
+      return message;
+    }
+
+    @Override
+    public Class<?> getResponseType() {
+      return Message.class;
+    }
+
+    @Override
+    public GrpcURL getRefUrl() {
+      return this.refUrl;
+    }
+
+    @Override
+    public int getCallType() {
+      return this.callType;
+    }
+
+    @Override
+    public int getCallTimeout() {
+      return this.callTimeout;
+    }
+
+    @Override
+    public io.grpc.MethodDescriptor.MethodType getMethodType() {
+      return methodDesc.getType();
+    }
+
+
+  }
+
+
+  public static class Default extends GrpcRequest {
+
 
     private final GrpcURL refUrl;
 
@@ -120,7 +225,6 @@ public interface GrpcRequest {
     public GrpcURL getRefUrl() {
       return this.refUrl;
     }
-
 
     @Override
     public String getMethodName() {

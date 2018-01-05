@@ -13,130 +13,105 @@
  */
 package com.quancheng.saluki.zuul.grpc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.protobuf.Descriptors.MethodDescriptor;
+import org.springframework.stereotype.Component;
+
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
+import com.googlecode.protobuf.format.JsonFormat;
+import com.quancheng.saluki.boot.SalukiReference;
+import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
+import com.quancheng.saluki.core.grpc.service.GenericService;
 
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
 import io.grpc.MethodDescriptor.MethodType;
-import io.grpc.stub.ClientCalls;
-import io.grpc.stub.StreamObserver;
 
 /**
  * @author liushiming
- * @version DynamicGrpcClient.java, v 0.0.1 2018年1月5日 下午3:25:51 liushiming
+ * @version DynamicGrpcClient1.java, v 0.0.1 2018年1月5日 下午5:38:46 liushiming
  */
+@Component
 public class DynamicGrpcClient {
-  private static final Logger logger = LoggerFactory.getLogger(DynamicGrpcClient.class);
-  private final MethodDescriptor protoMethodDescriptor;
-  private final Channel channel;
 
-  /** Creates a client for the supplied method, talking to the supplied endpoint. */
-  public static DynamicGrpcClient create(MethodDescriptor protoMethod, Channel channel) {
-    return new DynamicGrpcClient(protoMethod, channel);
-  }
+  @SalukiReference
+  private GenericService genricService;
 
-  @VisibleForTesting
-  DynamicGrpcClient(MethodDescriptor protoMethodDescriptor, Channel channel) {
-    this.protoMethodDescriptor = protoMethodDescriptor;
-    this.channel = channel;
-  }
+  private static final JsonFormat protoBufJsonFormat = new JsonFormat();
 
-  /**
-   * Makes an rpc to the remote endpoint and respects the supplied callback. Returns a future which
-   * terminates once the call has ended. For calls which are single-request, this throws
-   * {@link IllegalArgumentException} if the size of {@code requests} is not exactly 1.
-   */
-  public ListenableFuture<Void> call(ImmutableList<DynamicMessage> requests,
-      StreamObserver<DynamicMessage> responseObserver, CallOptions callOptions) {
-    Preconditions.checkArgument(!requests.isEmpty(), "Can't make call without any requests");
-    MethodType methodType = getMethodType();
-    long numRequests = requests.size();
-    if (methodType == MethodType.UNARY) {
-      logger.info("Making unary call");
-      Preconditions.checkArgument(numRequests == 1,
-          "Need exactly 1 request for unary call, but got: " + numRequests);
-      return callUnary(requests.get(0), responseObserver, callOptions);
-    } else if (methodType == MethodType.SERVER_STREAMING) {
-      logger.info("Making server streaming call");
-      Preconditions.checkArgument(numRequests == 1,
-          "Need exactly 1 request for server streaming call, but got: " + numRequests);
-      return callServerStreaming(requests.get(0), responseObserver, callOptions);
-    } else if (methodType == MethodType.CLIENT_STREAMING) {
-      logger.info("Making client streaming call with " + requests.size() + " requests");
-      return callClientStreaming(requests, responseObserver, callOptions);
-    } else {
-      // Bidi streaming.
-      logger.info("Making bidi streaming call with " + requests.size() + " requests");
-      return callBidiStreaming(requests, responseObserver, callOptions);
+  public Object call(final String group, final String version,
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor,
+      final String jsonInput) {
+    try {
+      final String serviceName = this.getServiceName(protoMethodDescriptor);
+      final String methodName = this.getMethodName(protoMethodDescriptor);
+      final io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
+          this.createGrpcMethodDescriptor(protoMethodDescriptor);
+      final DynamicMessage message = this.json2Protobuf(protoMethodDescriptor, jsonInput);
+      return genricService.$invoke(serviceName, group, version, methodName, methodDesc, message);
+    } catch (Exception e) {
+      throw new RpcServiceException(e);
     }
   }
 
-  private ListenableFuture<Void> callBidiStreaming(ImmutableList<DynamicMessage> requests,
-      StreamObserver<DynamicMessage> responseObserver, CallOptions callOptions) {
-    DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
-    StreamObserver<DynamicMessage> requestObserver = ClientCalls.asyncBidiStreamingCall(
-        createCall(callOptions), CompositeStreamObserver.of(responseObserver, doneObserver));
-    requests.forEach(requestObserver::onNext);
-    requestObserver.onCompleted();
-    return doneObserver.getCompletionFuture();
+
+  public DynamicMessage json2Protobuf(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor, String jsonStr)
+      throws IOException {
+    DynamicMessage.Builder messageBuilder =
+        DynamicMessage.newBuilder(getRequestType(protoMethodDescriptor));
+    protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
+    return messageBuilder.build();
   }
 
-  private ListenableFuture<Void> callClientStreaming(ImmutableList<DynamicMessage> requests,
-      StreamObserver<DynamicMessage> responseObserver, CallOptions callOptions) {
-    DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
-    StreamObserver<DynamicMessage> requestObserver = ClientCalls.asyncClientStreamingCall(
-        createCall(callOptions), CompositeStreamObserver.of(responseObserver, doneObserver));
-    requests.forEach(requestObserver::onNext);
-    requestObserver.onCompleted();
-    return doneObserver.getCompletionFuture();
+  private io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> createGrpcMethodDescriptor(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
+    String fullMethodName = getFullMethodName(protoMethodDescriptor);
+    MethodType methodType = getMethodType(protoMethodDescriptor);
+    if (methodType != MethodType.UNARY) {
+      throw new IllegalArgumentException(
+          "gateway not support stream call, The MethodTYpe is:" + methodType);
+    }
+    return io.grpc.MethodDescriptor.<DynamicMessage, DynamicMessage>newBuilder().setType(methodType)//
+        .setFullMethodName(fullMethodName)//
+        .setRequestMarshaller(new DynamicMessageMarshaller(getRequestType(protoMethodDescriptor)))//
+        .setResponseMarshaller(new DynamicMessageMarshaller(getResponseType(protoMethodDescriptor)))//
+        .setSafe(false)//
+        .setIdempotent(false)//
+        .build();
   }
 
-  private ListenableFuture<Void> callServerStreaming(DynamicMessage request,
-      StreamObserver<DynamicMessage> responseObserver, CallOptions callOptions) {
-    DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
-    ClientCalls.asyncServerStreamingCall(createCall(callOptions), request,
-        CompositeStreamObserver.of(responseObserver, doneObserver));
-    return doneObserver.getCompletionFuture();
+  private Descriptor getRequestType(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
+    return protoMethodDescriptor.getInputType();
   }
 
-  private ListenableFuture<Void> callUnary(DynamicMessage request,
-      StreamObserver<DynamicMessage> responseObserver, CallOptions callOptions) {
-    DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
-    ClientCalls.asyncUnaryCall(createCall(callOptions), request,
-        CompositeStreamObserver.of(responseObserver, doneObserver));
-    return doneObserver.getCompletionFuture();
+  private Descriptor getResponseType(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
+    return protoMethodDescriptor.getOutputType();
   }
 
-  private ClientCall<DynamicMessage, DynamicMessage> createCall(CallOptions callOptions) {
-    return channel.newCall(createGrpcMethodDescriptor(), callOptions);
-  }
-
-  private io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> createGrpcMethodDescriptor() {
-    return io.grpc.MethodDescriptor.<DynamicMessage, DynamicMessage>create(getMethodType(),
-        getFullMethodName(), new DynamicMessageMarshaller(protoMethodDescriptor.getInputType()),
-        new DynamicMessageMarshaller(protoMethodDescriptor.getOutputType()));
-  }
-
-  private String getFullMethodName() {
+  private String getFullMethodName(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
     String serviceName = protoMethodDescriptor.getService().getFullName();
     String methodName = protoMethodDescriptor.getName();
     return io.grpc.MethodDescriptor.generateFullMethodName(serviceName, methodName);
   }
 
-  /** Returns the appropriate method type based on whether the client or server expect streams. */
-  private MethodType getMethodType() {
+  private String getServiceName(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
+    return protoMethodDescriptor.getService().getFullName();
+  }
+
+  private String getMethodName(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
+    return protoMethodDescriptor.getName();
+  }
+
+  private MethodType getMethodType(
+      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
     boolean clientStreaming = protoMethodDescriptor.toProto().getClientStreaming();
     boolean serverStreaming = protoMethodDescriptor.toProto().getServerStreaming();
-
     if (!clientStreaming && !serverStreaming) {
       return MethodType.UNARY;
     } else if (!clientStreaming && serverStreaming) {

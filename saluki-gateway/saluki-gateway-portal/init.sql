@@ -239,6 +239,8 @@ CREATE TABLE `gateway_grpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
+  `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
+  `service_version` varchar(50) DEFAULT NULL COMMENT '服务版本',
   `proto_context` blob DEFAULT NULL COMMENT 'proto内容',
   `proto_req` blob DEFAULT NULL COMMENT 'proto请求',
   `proto_rep` blob DEFAULT NULL COMMENT 'proto请求',

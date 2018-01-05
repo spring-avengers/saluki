@@ -85,16 +85,16 @@
 	<update id="update" parameterType="com.quancheng.saluki.oauth2.zuul.domain.RouteDO">
 		update gateway_route
 		<set>
-			<if test="path != null">`path`=#{path},</if>
-			<if test="serviceId != null">`service_id`=#{serviceId},</if>
-			<if test="parentId != null">`service_name`=#{serviceName},</if>
-			<if test="serviceName != null">`method_name`=#{methodName},</if>
-			<if test="url != null">`url`=#{url},</if>
-			<if test="retryable != null">`retryable`=#{retryable},</if>
-			<if test="enabled != null">`enabled`=#{enabled},</if>
-			<if test="stripPrefix != null">`strip_prefix`=#{stripPrefix},</if>
-			<if test="grpc != null">`grpc`=#{grpc},</if>
-			<if test="dubbo != null">`dubbo`=#{dubbo},</if>
+			<if test="path != null and path != ''">`path`=#{path},</if>
+			<if test="serviceId != null and serviceId != ''">`service_id`=#{serviceId},</if>
+			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
+			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
+			<if test="url != null and url != ''">`url`=#{url},</if>
+			<if test="retryable != null and retryable != ''">`retryable`=#{retryable},</if>
+			<if test="enabled != null and enabled != ''">`enabled`=#{enabled},</if>
+			<if test="stripPrefix != null and stripPrefix != ''">`strip_prefix`=#{stripPrefix},</if>
+			<if test="grpc != null and grpc != ''">`grpc`=#{grpc},</if>
+			<if test="dubbo != null and dubbo != ''">`dubbo`=#{dubbo},</if>
 			`gmt_modified`=sysdate()
 		</set>
 		where route_id = #{routeId}

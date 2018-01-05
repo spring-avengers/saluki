@@ -31,9 +31,9 @@ public class GrpcDO implements Serializable {
 
   private String methodName;
 
-  private String group;
+  private String serviceGroup;
 
-  private String version;
+  private String serviceVersion;
 
   private byte[] protoContext;
 
@@ -67,6 +67,22 @@ public class GrpcDO implements Serializable {
 
   public void setMethodName(String methodName) {
     this.methodName = methodName;
+  }
+
+  public String getServiceGroup() {
+    return serviceGroup;
+  }
+
+  public void setServiceGroup(String serviceGroup) {
+    this.serviceGroup = serviceGroup;
+  }
+
+  public String getServiceVersion() {
+    return serviceVersion;
+  }
+
+  public void setServiceVersion(String serviceVersion) {
+    this.serviceVersion = serviceVersion;
   }
 
   public byte[] getProtoContext() {
@@ -109,29 +125,13 @@ public class GrpcDO implements Serializable {
     this.gmtModified = gmtModified;
   }
 
-  public String getGroup() {
-    return group;
-  }
-
-  public void setGroup(String group) {
-    this.group = group;
-  }
-
-  public String getVersion() {
-    return version;
-  }
-
-  public void setVersion(String version) {
-    this.version = version;
-  }
-
   @Override
   public String toString() {
     return "GrpcDO [id=" + id + ", serviceName=" + serviceName + ", methodName=" + methodName
-        + ", group=" + group + ", version=" + version + ", protoContext="
-        + Arrays.toString(protoContext) + ", protoReq=" + Arrays.toString(protoReq) + ", protoRep="
-        + Arrays.toString(protoRep) + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified
-        + "]";
+        + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
+        + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
+        + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
+        + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
 
 }

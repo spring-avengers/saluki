@@ -4,7 +4,6 @@ option java_package = "com.quancheng.saluki.service";
 option java_outer_classname = "ServiceParam";
 
 package com.quancheng.saluki.service;
-import "saluki/validator.proto";
 
 service Health {
   rpc Check(stream HealthCheckRequest) returns (stream HealthCheckResponse);

@@ -13,10 +13,10 @@
  */
 package com.quancheng.saluki.oauth2.zuul.service;
 
-/** 
- * @author liushiming 
- * @version GateWayRouteService.java, v 0.0.1 2018年1月5日 上午10:44:41 liushiming 
+/**
+ * @author liushiming
+ * @version GateWayRouteService.java, v 0.0.1 2018年1月5日 上午10:44:41 liushiming
  */
-public class GateWayRouteService {
+public interface GateWayRouteService {
 
 }

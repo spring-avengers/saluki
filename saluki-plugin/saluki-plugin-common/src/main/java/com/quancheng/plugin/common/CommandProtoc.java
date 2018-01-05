@@ -67,7 +67,6 @@ public class CommandProtoc {
             try {
                 ByteArrayOutputStream protocStdout = new ByteArrayOutputStream();
                 System.setOut(new PrintStream(protocStdout));
-
                 status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
                 protocLogLines = protocStdout.toString().split("\n");
             } catch (IOException | InterruptedException e) {

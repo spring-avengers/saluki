@@ -16,14 +16,22 @@ package com.quancheng.saluki.zuul.grpc;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Component;
 
+import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
+import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
+import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
 
 import io.grpc.MethodDescriptor.MethodType;
 
@@ -37,14 +45,50 @@ public class DynamicGrpcClient {
   @SalukiReference
   private GenericService genricService;
 
+  @Autowired
+  private GrpcDao grpcDao;
+
+  @Autowired
+  private EhCacheCacheManager echacheMaanger;
+
+  private org.springframework.cache.Cache gRpcDynamicCache;
+
   private static final JsonFormat protoBufJsonFormat = new JsonFormat();
 
-  public Object call(final String group, final String version,
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor,
-      final String jsonInput) {
+  @PostConstruct
+  public void init() {
+    gRpcDynamicCache = echacheMaanger.getCache("grpcDynamic");
+  }
+
+  private com.google.protobuf.Descriptors.MethodDescriptor creatProtoMethodDescriptor(
+      final String packageName, String serviceName, final String methodName, final String group,
+      final String version) {
+    final String cacheKey = serviceName + ":" + methodName + ":" + group + ":" + version;
+    com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor =
+        (com.google.protobuf.Descriptors.MethodDescriptor) gRpcDynamicCache.get(cacheKey).get();
+    if (protoMethodDescriptor != null) {
+      return protoMethodDescriptor;
+    } else {
+      GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
+      byte[] protoBytes = grpcDo.getProtoContext();
+      try {
+        FileDescriptorSet descriptorSet = FileDescriptorSet.parseFrom(protoBytes);
+        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(descriptorSet);
+        ProtoMethodName protoMethodName = ProtoMethodName
+            .parseFullGrpcMethodName(packageName + "." + serviceName + "/" + methodName);
+        return serviceResolver.resolveServiceMethod(protoMethodName);
+      } catch (InvalidProtocolBufferException e) {
+        throw new RpcServiceException(e);
+      }
+    }
+
+  }
+
+  public Object call(final String packageName, final String serviceName, final String methodName,
+      final String group, final String version, final String jsonInput) {
     try {
-      final String serviceName = this.getServiceName(protoMethodDescriptor);
-      final String methodName = this.getMethodName(protoMethodDescriptor);
+      com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor =
+          this.creatProtoMethodDescriptor(packageName, serviceName, methodName, group, version);
       final io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
           this.createGrpcMethodDescriptor(protoMethodDescriptor);
       final DynamicMessage message = this.json2Protobuf(protoMethodDescriptor, jsonInput);
@@ -55,7 +99,7 @@ public class DynamicGrpcClient {
   }
 
 
-  public DynamicMessage json2Protobuf(
+  private DynamicMessage json2Protobuf(
       final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor, String jsonStr)
       throws IOException {
     DynamicMessage.Builder messageBuilder =
@@ -93,8 +137,8 @@ public class DynamicGrpcClient {
 
   private String getFullMethodName(
       final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    String serviceName = protoMethodDescriptor.getService().getFullName();
-    String methodName = protoMethodDescriptor.getName();
+    String serviceName = getServiceName(protoMethodDescriptor);
+    String methodName = getMethodName(protoMethodDescriptor);
     return io.grpc.MethodDescriptor.generateFullMethodName(serviceName, methodName);
   }
 

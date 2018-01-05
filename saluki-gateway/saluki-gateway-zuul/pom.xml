@@ -19,6 +19,11 @@
 	</licenses>
 	<dependencies>
 		<dependency>
+			<groupId>com.quancheng.saluki</groupId>
+			<artifactId>saluki-gateway-portal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.googlecode.protobuf-java-format</groupId>
 			<artifactId>protobuf-java-format</artifactId>
 		</dependency>

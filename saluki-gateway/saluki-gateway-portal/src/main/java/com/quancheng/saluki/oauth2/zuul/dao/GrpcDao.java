@@ -26,7 +26,7 @@ import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
  */
 @Mapper
 public interface GrpcDao {
-  GrpcDO get(String serviceName, String methodName);
+  GrpcDO get(String serviceName, String methodName, String group, String version);
 
   List<GrpcDO> list(Map<String, Object> map);
 

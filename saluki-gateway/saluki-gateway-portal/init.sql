@@ -218,7 +218,7 @@ INSERT INTO `sys_user_role` VALUES ('2', '2', '2');
 
 DROP TABLE IF EXISTS `gateway_route`;
 CREATE TABLE `gateway_route` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `route_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
   `service_id` varchar(50) DEFAULT NULL COMMENT '服务ID',
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
@@ -227,7 +227,8 @@ CREATE TABLE `gateway_route` (
   `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
   `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
   `strip_prefix` int(11) DEFAULT NULL COMMENT '是否忽略后缀',
-  `rpc` tinyint(1) DEFAULT NULL COMMENT '是否rpc请求',
+  `grpc` tinyint(1) DEFAULT NULL COMMENT '是否grpc请求',
+  `dubbo` tinyint(1) DEFAULT NULL COMMENT '是否dubbo请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
  PRIMARY KEY (`id`)

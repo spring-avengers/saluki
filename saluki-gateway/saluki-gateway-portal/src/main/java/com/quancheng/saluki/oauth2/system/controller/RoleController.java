@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.quancheng.saluki.oauth2.common.Log;
+import com.quancheng.saluki.oauth2.common.BaseController;
 import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.system.domain.RoleDO;
 import com.quancheng.saluki.oauth2.system.service.RoleService;

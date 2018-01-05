@@ -1,6 +1,7 @@
 package com.quancheng.saluki.oauth2.system.controller;
 
 import com.quancheng.saluki.oauth2.common.Constant;
+import com.quancheng.saluki.oauth2.common.BaseController;
 import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.system.domain.DeptDO;
 import com.quancheng.saluki.oauth2.system.domain.Tree;

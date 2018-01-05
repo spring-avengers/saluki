@@ -1,4 +1,4 @@
-package com.quancheng.saluki.oauth2.system.controller;
+package com.quancheng.saluki.oauth2.common;
 
 import org.springframework.stereotype.Controller;
 

@@ -29,7 +29,7 @@ import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
-import com.quancheng.saluki.zuul.grpc.protobuf.ProtobufDescSerivce;
+import com.quancheng.saluki.zuul.grpc.protobuf.ProtobufSerivce;
 
 import io.grpc.MethodDescriptor;
 import io.grpc.MethodDescriptor.Marshaller;
@@ -46,7 +46,7 @@ public class DynamicGrpcClient {
   private GenericService genricService;
 
   @Autowired
-  private ProtobufDescSerivce protobufService;
+  private ProtobufSerivce protobufService;
 
   private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 

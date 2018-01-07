@@ -35,9 +35,9 @@ import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
  * @version GrpcRouteService.java, v 0.0.1 2018年1月7日 下午12:59:14 liushiming
  */
 @Service
-public class ProtobufDescSerivce {
+public class ProtobufSerivce {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProtobufDescSerivce.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProtobufSerivce.class);
 
   @Autowired
   private GrpcDao grpcDao;

@@ -1,7 +1,6 @@
-package com.quancheng.saluki.zuul.grpc;
+package com.quancheng.saluki.zuul.grpc.protobuf;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,12 +16,10 @@ import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Descriptors.ServiceDescriptor;
 
-/** A locator used to read proto file descriptors and extract method definitions. */
 public class ServiceResolver {
   private static final Logger logger = LoggerFactory.getLogger(ServiceResolver.class);
   private final ImmutableList<FileDescriptor> fileDescriptors;
 
-  /** Creates a resolver which searches the supplied {@link FileDescriptorSet}. */
   public static ServiceResolver fromFileDescriptorSet(FileDescriptorSet descriptorSet) {
     ImmutableMap<String, FileDescriptorProto> descriptorProtoIndex =
         computeDescriptorProtoIndex(descriptorSet);
@@ -40,7 +37,6 @@ public class ServiceResolver {
     return new ServiceResolver(result.build());
   }
 
-  /** Lists all of the services found in the file descriptors */
   public Iterable<ServiceDescriptor> listServices() {
     ArrayList<ServiceDescriptor> serviceDescriptors = new ArrayList<ServiceDescriptor>();
     for (FileDescriptor fileDescriptor : fileDescriptors) {
@@ -53,10 +49,7 @@ public class ServiceResolver {
     this.fileDescriptors = ImmutableList.copyOf(fileDescriptors);
   }
 
-  /**
-   * Returns the descriptor of a protobuf method with the supplied grpc method name. If the method
-   * cannot be found, this throws {@link IllegalArgumentException}.
-   */
+
   public MethodDescriptor resolveServiceMethod(ProtoMethodName method) {
     return resolveServiceMethod(method.getServiceName(), method.getMethodName(),
         method.getPackageName());
@@ -74,10 +67,8 @@ public class ServiceResolver {
   }
 
   private ServiceDescriptor findService(String serviceName, String packageName) {
-    // TODO(dino): Consider creating an index.
     for (FileDescriptor fileDescriptor : fileDescriptors) {
       if (!fileDescriptor.getPackage().equals(packageName)) {
-        // Package does not match this file, ignore.
         continue;
       }
 
@@ -89,9 +80,7 @@ public class ServiceResolver {
     throw new IllegalArgumentException("Unable to find service with name: " + serviceName);
   }
 
-  /**
-   * Returns a map from descriptor proto name as found inside the descriptors to protos.
-   */
+
   private static ImmutableMap<String, FileDescriptorProto> computeDescriptorProtoIndex(
       FileDescriptorSet fileDescriptorSet) {
     ImmutableMap.Builder<String, FileDescriptorProto> resultBuilder = ImmutableMap.builder();
@@ -101,21 +90,15 @@ public class ServiceResolver {
     return resultBuilder.build();
   }
 
-  /**
-   * Recursively constructs file descriptors for all dependencies of the supplied proto and returns
-   * a {@link FileDescriptor} for the supplied proto itself. For maximal efficiency, reuse the
-   * descriptorCache argument across calls.
-   */
+
   private static FileDescriptor descriptorFromProto(FileDescriptorProto descriptorProto,
       ImmutableMap<String, FileDescriptorProto> descriptorProtoIndex,
       Map<String, FileDescriptor> descriptorCache) throws DescriptorValidationException {
-    // First, check the cache.
     String descritorName = descriptorProto.getName();
     if (descriptorCache.containsKey(descritorName)) {
       return descriptorCache.get(descritorName);
     }
 
-    // Then, fetch all the required dependencies recursively.
     ImmutableList.Builder<FileDescriptor> dependencies = ImmutableList.builder();
     for (String dependencyName : descriptorProto.getDependencyList()) {
       if (!descriptorProtoIndex.containsKey(dependencyName)) {
@@ -125,7 +108,6 @@ public class ServiceResolver {
       dependencies.add(descriptorFromProto(dependencyProto, descriptorProtoIndex, descriptorCache));
     }
 
-    // Finally, construct the actual descriptor.
     FileDescriptor[] empty = new FileDescriptor[0];
     return FileDescriptor.buildFrom(descriptorProto, dependencies.build().toArray(empty));
   }

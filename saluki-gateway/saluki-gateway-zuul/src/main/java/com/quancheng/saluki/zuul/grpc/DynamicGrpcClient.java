@@ -15,27 +15,24 @@ package com.quancheng.saluki.zuul.grpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Component;
 
-import com.google.protobuf.DescriptorProtos.DescriptorProto;
-import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.ExtensionRegistryLite;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.quancheng.saluki.boot.SalukiReference;
+import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
-import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
-import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
+import com.quancheng.saluki.zuul.grpc.protobuf.ProtobufDescSerivce;
 
+import io.grpc.MethodDescriptor;
+import io.grpc.MethodDescriptor.Marshaller;
 import io.grpc.MethodDescriptor.MethodType;
 
 /**
@@ -49,192 +46,76 @@ public class DynamicGrpcClient {
   private GenericService genricService;
 
   @Autowired
-  private GrpcDao grpcDao;
+  private ProtobufDescSerivce protobufService;
 
-  @Autowired
-  private EhCacheCacheManager echacheMaanger;
+  private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 
-  private org.springframework.cache.Cache gRpcServiceDynamicCache;
-
-  private org.springframework.cache.Cache gRpcMessageDynamicCache;
-
-  private static final JsonFormat protoBufJsonFormat = new JsonFormat();
-
-  @PostConstruct
-  public void init() {
-    gRpcServiceDynamicCache = echacheMaanger.getCache("gRpcServiceDynamic");
-    gRpcMessageDynamicCache = echacheMaanger.getCache("gRpcMessageDynamic");
-  }
-
-  private com.google.protobuf.Descriptors.MethodDescriptor creatProtoMethodDescriptor(
-      final String packageName, String serviceName, final String methodName, final String group,
-      final String version) {
-    final String cacheKey = serviceName + ":" + methodName + ":" + group + ":" + version;
-    com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor =
-        (com.google.protobuf.Descriptors.MethodDescriptor) gRpcServiceDynamicCache.get(cacheKey)
-            .get();
-    if (protoMethodDescriptor != null) {
-      return protoMethodDescriptor;
-    } else {
-      GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
-      byte[] protoBytes = grpcDo.getProtoContext();
-      if (protoBytes == null)
-        return null;
-      try {
-        FileDescriptorSet descriptorSet = FileDescriptorSet.parseFrom(protoBytes);
-        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(descriptorSet);
-        ProtoMethodName protoMethodName = ProtoMethodName
-            .parseFullGrpcMethodName(packageName + "." + serviceName + "/" + methodName);
-        return serviceResolver.resolveServiceMethod(protoMethodName);
-      } catch (InvalidProtocolBufferException e) {
-        throw new RpcServiceException(e);
-      }
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private Pair<com.google.protobuf.DescriptorProtos.DescriptorProto, com.google.protobuf.DescriptorProtos.DescriptorProto> createProtoMessageDescriptor(
-      final String packageName, String serviceName, final String methodName, final String group,
-      final String version) {
-    final String cacheKey = serviceName + ":" + methodName + ":" + group + ":" + version;
-
-    Pair<com.google.protobuf.DescriptorProtos.DescriptorProto, com.google.protobuf.DescriptorProtos.DescriptorProto> protoMessageDescs =
-        (Pair<com.google.protobuf.DescriptorProtos.DescriptorProto, com.google.protobuf.DescriptorProtos.DescriptorProto>) gRpcMessageDynamicCache
-            .get(cacheKey).get();
-    if (protoMessageDescs != null) {
-      return protoMessageDescs;
-    } else {
-      GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
-      byte[] protoReq = grpcDo.getProtoReq();
-      byte[] protoRep = grpcDo.getProtoRep();
-      if (protoReq == null || protoRep == null) {
-        return null;
-      }
-      try {
-        DescriptorProto descReq = DescriptorProto.parseFrom(protoReq);
-        DescriptorProto descRep = DescriptorProto.parseFrom(protoRep);
-        return new ImmutablePair<com.google.protobuf.DescriptorProtos.DescriptorProto, com.google.protobuf.DescriptorProtos.DescriptorProto>(
-            descReq, descRep);
-      } catch (InvalidProtocolBufferException e) {
-        throw new RpcServiceException(e);
-      }
-    }
-  }
 
   public Object call(final String packageName, final String serviceName, final String methodName,
       final String group, final String version, final String jsonInput) {
     try {
-      com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor =
-          this.creatProtoMethodDescriptor(packageName, serviceName, methodName, group, version);
-      if (protoMethodDescriptor != null) {
-        final io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
-            this.createGrpcMethodDescriptor(protoMethodDescriptor);
-        final DynamicMessage message = this.json2Protobuf(protoMethodDescriptor, jsonInput);
-        return genricService.$invoke(serviceName, group, version, methodName, methodDesc, message);
-      } else {
-        Pair<com.google.protobuf.DescriptorProtos.DescriptorProto, com.google.protobuf.DescriptorProtos.DescriptorProto> protoMessageDesciptor =
-            this.createProtoMessageDescriptor(packageName, serviceName, methodName, group, version);
-        final DescriptorProto requestType = protoMessageDesciptor.getLeft();
-        final DescriptorProto resposeType = protoMessageDesciptor.getRight();
-        final io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
-            this.createGrpcMethodDescriptor(
-                io.grpc.MethodDescriptor.generateFullMethodName(serviceName, methodName),
-                requestType, resposeType);
-        final DynamicMessage message = this.json2Protobuf(requestType, jsonInput);
-        return genricService.$invoke(serviceName, group, version, methodName, methodDesc, message);
-      }
-
+      Pair<Descriptor, Descriptor> inOutType =
+          protobufService.resolveServiceInputOutputType(packageName, serviceName, methodName, group, version);
+      Descriptor inPutType = inOutType.getLeft();
+      Descriptor outPutType = inOutType.getRight();
+      MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
+          this.createGrpcMethodDescriptor(serviceName, methodName, inPutType, outPutType);
+      DynamicMessage message = this.createGrpcDynamicMessage(inPutType, jsonInput);
+      return genricService.$invoke(serviceName, group, version, methodName, methodDesc, message);
+    } catch (IOException e) {
+      throw new RpcServiceException(String.format(
+          "json covert to DynamicMessage failed! the json is :%s, the protobuf type is: %s",
+          jsonInput), e);
     } catch (Exception e) {
-      throw new RpcServiceException(e);
+      throw new RpcFrameworkException(String.format(
+          "service definition is wrong,please check the proto file you update,packageName is %s,service is %s, method is %s",
+          packageName, serviceName, methodName), e);
     }
   }
 
 
-  private DynamicMessage json2Protobuf(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor, String jsonStr)
+  private DynamicMessage createGrpcDynamicMessage(final Descriptor messageDefine, String json)
       throws IOException {
-    DynamicMessage.Builder messageBuilder =
-        DynamicMessage.newBuilder(getRequestType(protoMethodDescriptor));
-    protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
+    DynamicMessage.Builder messageBuilder = DynamicMessage.newBuilder(messageDefine);
+    JSON2PROTOBUF.merge(new ByteArrayInputStream(json.getBytes()), messageBuilder);
     return messageBuilder.build();
   }
 
-  private DynamicMessage json2Protobuf(final DescriptorProto protoMessageDescriptor, String jsonStr)
-      throws IOException {
-    DynamicMessage.Builder messageBuilder =
-        DynamicMessage.newBuilder(protoMessageDescriptor.getDescriptorForType());
-    protoBufJsonFormat.merge(new ByteArrayInputStream(jsonStr.getBytes()), messageBuilder);
-    return messageBuilder.build();
-  }
 
-  private io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> createGrpcMethodDescriptor(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    String fullMethodName = getFullMethodName(protoMethodDescriptor);
-    MethodType methodType = getMethodType(protoMethodDescriptor);
-    if (methodType != MethodType.UNARY) {
-      throw new IllegalArgumentException(
-          "gateway not support stream call, The MethodTYpe is:" + methodType);
-    }
-    return io.grpc.MethodDescriptor.<DynamicMessage, DynamicMessage>newBuilder().setType(methodType)//
-        .setFullMethodName(fullMethodName)//
-        .setRequestMarshaller(new DynamicMessageMarshaller(getRequestType(protoMethodDescriptor)))//
-        .setResponseMarshaller(new DynamicMessageMarshaller(getResponseType(protoMethodDescriptor)))//
-        .setSafe(false)//
-        .setIdempotent(false)//
-        .build();
-  }
-
-  private io.grpc.MethodDescriptor<DynamicMessage, DynamicMessage> createGrpcMethodDescriptor(
-      String fullMethodName, DescriptorProto requestDesc, DescriptorProto responseDesc) {
+  private MethodDescriptor<DynamicMessage, DynamicMessage> createGrpcMethodDescriptor(
+      String serviceName, String methodName, Descriptor inPutType, Descriptor outPutType) {
+    String fullMethodName = MethodDescriptor.generateFullMethodName(serviceName, methodName);
     return io.grpc.MethodDescriptor.<DynamicMessage, DynamicMessage>newBuilder()
         .setType(MethodType.UNARY)//
         .setFullMethodName(fullMethodName)//
-        .setRequestMarshaller(new DynamicMessageMarshaller(requestDesc.getDescriptorForType()))//
-        .setResponseMarshaller(new DynamicMessageMarshaller(responseDesc.getDescriptorForType()))//
+        .setRequestMarshaller(new DynamicMessageMarshaller(inPutType))//
+        .setResponseMarshaller(new DynamicMessageMarshaller(outPutType))//
         .setSafe(false)//
         .setIdempotent(false)//
         .build();
   }
 
-  private Descriptor getRequestType(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    return protoMethodDescriptor.getInputType();
-  }
+  protected class DynamicMessageMarshaller implements Marshaller<DynamicMessage> {
+    private final Descriptor messageDescriptor;
 
-  private Descriptor getResponseType(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    return protoMethodDescriptor.getOutputType();
-  }
+    public DynamicMessageMarshaller(Descriptor messageDescriptor) {
+      this.messageDescriptor = messageDescriptor;
+    }
 
-  private String getFullMethodName(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    String serviceName = getServiceName(protoMethodDescriptor);
-    String methodName = getMethodName(protoMethodDescriptor);
-    return io.grpc.MethodDescriptor.generateFullMethodName(serviceName, methodName);
-  }
+    @Override
+    public DynamicMessage parse(InputStream inputStream) {
+      try {
+        return DynamicMessage.newBuilder(messageDescriptor)
+            .mergeFrom(inputStream, ExtensionRegistryLite.getEmptyRegistry()).build();
+      } catch (IOException e) {
+        throw new RuntimeException("Unable to merge from the supplied input stream", e);
+      }
+    }
 
-  private String getServiceName(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    return protoMethodDescriptor.getService().getFullName();
-  }
-
-  private String getMethodName(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    return protoMethodDescriptor.getName();
-  }
-
-  private MethodType getMethodType(
-      final com.google.protobuf.Descriptors.MethodDescriptor protoMethodDescriptor) {
-    boolean clientStreaming = protoMethodDescriptor.toProto().getClientStreaming();
-    boolean serverStreaming = protoMethodDescriptor.toProto().getServerStreaming();
-    if (!clientStreaming && !serverStreaming) {
-      return MethodType.UNARY;
-    } else if (!clientStreaming && serverStreaming) {
-      return MethodType.SERVER_STREAMING;
-    } else if (clientStreaming && !serverStreaming) {
-      return MethodType.CLIENT_STREAMING;
-    } else {
-      return MethodType.BIDI_STREAMING;
+    @Override
+    public InputStream stream(DynamicMessage abstractMessage) {
+      return abstractMessage.toByteString().newInput();
     }
   }
+
 }

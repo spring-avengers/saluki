@@ -22,7 +22,7 @@ import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
  * @author liushiming
  * @version GateWayRouteDto.java, v 0.0.1 2018年1月5日 上午10:47:04 liushiming
  */
-public class GateWayRouteDto implements Serializable {
+public class ZuulDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

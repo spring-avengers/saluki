@@ -13,10 +13,34 @@
  */
 package com.quancheng.saluki.oauth2.zuul.service;
 
+import java.util.List;
+import java.util.Map;
+
+import com.quancheng.saluki.oauth2.system.domain.PageDO;
+import com.quancheng.saluki.oauth2.utils.Query;
+import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
+import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
+
 /**
  * @author liushiming
  * @version GateWayRouteService.java, v 0.0.1 2018年1月5日 上午10:44:41 liushiming
  */
-public interface GateWayRouteService {
+public interface ZuulService {
+
+  PageDO<RouteDO> queryList(Query query);
+
+  ZuulDto get(Long routeId);
+
+  List<ZuulDto> list(Map<String, Object> map);
+
+  int count(Map<String, Object> map);
+
+  int save(ZuulDto zuulDto);
+
+  int update(ZuulDto zuulDto);
+
+  int remove(Long routeId);
+
+  int batchRemove(Long[] routeIds);
 
 }

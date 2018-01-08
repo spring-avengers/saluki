@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.Query;
 import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
@@ -64,37 +65,83 @@ public class ZuulServiceImpl implements ZuulService {
 
   @Override
   public List<ZuulDto> list(Map<String, Object> map) {
-    // TODO Auto-generated method stub
-    return null;
+    List<RouteDO> routes = routeDao.list(map);
+    List<ZuulDto> zuulDtos = Lists.newArrayList();
+    for (RouteDO route : routes) {
+      String packageName = route.getPackageName();
+      String serviceName = route.getServiceName();
+      String methodName = route.getMethodName();
+      String group = route.getGroup();
+      String version = route.getVersion();
+      GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+      ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
+      zuulDtos.add(zuulDto);
+    }
+    return zuulDtos;
   }
 
   @Override
   public int count(Map<String, Object> map) {
-    // TODO Auto-generated method stub
-    return 0;
+    int total = routeDao.count(map);
+    return total;
   }
 
   @Override
   public int save(ZuulDto zuulDto) {
-    // TODO Auto-generated method stub
-    return 0;
+    RouteDO routeDo = zuulDto.buildRoute();
+    GrpcDO grpcDo = zuulDto.buildGrpc();
+    int success1 = grpcDao.save(grpcDo);
+    int success2 = routeDao.save(routeDo);
+    if (success1 == 0 && success2 == 0) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 
   @Override
   public int update(ZuulDto zuulDto) {
-    // TODO Auto-generated method stub
-    return 0;
+    RouteDO routeDo = zuulDto.buildRoute();
+    GrpcDO grpcDo = zuulDto.buildGrpc();
+    int success1 = grpcDao.update(grpcDo);
+    int success2 = routeDao.update(routeDo);
+    if (success1 == 0 && success2 == 0) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 
   @Override
   public int remove(Long routeId) {
-    // TODO Auto-generated method stub
+    RouteDO route = routeDao.get(routeId);
+    String packageName = route.getPackageName();
+    String serviceName = route.getServiceName();
+    String methodName = route.getMethodName();
+    String group = route.getGroup();
+    String version = route.getVersion();
+    GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+    routeDao.remove(routeId);
+    grpcDao.remove(grpc.getId());
     return 0;
   }
 
   @Override
   public int batchRemove(Long[] routeIds) {
-    // TODO Auto-generated method stub
+    List<Long> ids = Lists.newArrayList();
+    for (Long routeId : routeIds) {
+      RouteDO route = routeDao.get(routeId);
+      String packageName = route.getPackageName();
+      String serviceName = route.getServiceName();
+      String methodName = route.getMethodName();
+      String group = route.getGroup();
+      String version = route.getVersion();
+      GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+      ids.add(grpc.getId());
+    }
+    routeDao.batchRemove(routeIds);
+    Long[] idArray = new Long[ids.size()];
+    grpcDao.batchRemove(ids.toArray(idArray));
     return 0;
   }
 

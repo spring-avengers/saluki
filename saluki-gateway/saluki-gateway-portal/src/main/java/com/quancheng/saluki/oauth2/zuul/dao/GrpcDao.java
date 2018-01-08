@@ -37,7 +37,7 @@ public interface GrpcDao {
 
   int update(GrpcDO route);
 
-  int remove(Long routeId);
+  int remove(Long id);
 
   int batchRemove(Long[] routeIds);
 

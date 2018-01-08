@@ -57,6 +57,7 @@ public class GenericProxyClient<T> implements GrpcProtocolClient<T> {
       this.callTimeout = callTimeout;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected GrpcRequest buildGrpcRequest(Method method, Object[] args) {
       if (!isDynamicCall(args)) {
@@ -72,7 +73,6 @@ public class GenericProxyClient<T> implements GrpcProtocolClient<T> {
         resetRefUrl = resetRefUrl.setPath(getServiceName(args));
         resetRefUrl = resetRefUrl.addParameter(Constants.GROUP_KEY, getGroup(args));
         resetRefUrl = resetRefUrl.addParameter(Constants.VERSION_KEY, getVersion(args));
-        @SuppressWarnings("unchecked")
         MethodDescriptor<Message, Message> methodDesc =
             (MethodDescriptor<Message, Message>) args[4];
         DynamicMessage message = (DynamicMessage) args[5];

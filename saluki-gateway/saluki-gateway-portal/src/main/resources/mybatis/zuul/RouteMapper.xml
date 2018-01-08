@@ -5,16 +5,18 @@
 
 	<select id="get" resultType="com.quancheng.saluki.oauth2.zuul.domain.RouteDO">
 		select
-		`route_id`,`path`,`service_id`,`service_name`,`method_name`,`url`,`retryable`
-		,`enabled`,`strip_prefix`,`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
+		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
+		`package_name`,`service_name`,`method_name`,`service_group`,`service_version`,
+		`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
 		from gateway_route
 		where route_id = #{value}
 	</select>
 
 	<select id="list" resultType="com.quancheng.saluki.oauth2.zuul.domain.RouteDO">
 		select
-		`route_id`,`path`,`service_id`,`service_name`,`method_name`,`url`,`retryable`
-		,`enabled`,`strip_prefix`,`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
+		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
+		`package_name`,`service_name`,`method_name`,`service_group`,`service_version`,
+		`grpc`,`dubbo`,`gmt_create`,`gmt_modified`
 		from gateway_route
 		<where>
 			<if test="routeId != null and routeId != ''"> and route_id = #{routeId} </if>
@@ -55,8 +57,11 @@
 		(
 		`path`,
 		`service_id`,
+		`package_name`
 		`service_name`,
 		`method_name`,
+		`service_group`,
+		`service_version`
 		`url`,
 		`retryable`,
 		`enabled`,
@@ -70,11 +75,15 @@
 		(
 		#{path},
 		#{serviceId},
+		#{packageName},
+		#{serviceName},
+		#{methodName},
+		#{group},
+		#{version},
+		#{url},
 		#{retryable},
 		#{enabled},
 		#{stripPrefix},
-		#{serviceName},
-		#{methodName},
 		#{grpc},
 		#{dubbo},
 		sysdate(),
@@ -87,6 +96,7 @@
 		<set>
 			<if test="path != null and path != ''">`path`=#{path},</if>
 			<if test="serviceId != null and serviceId != ''">`service_id`=#{serviceId},</if>
+			<if test="packageName != null and packageName != ''">`package_name`=#{packageName},</if>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
 			<if test="url != null and url != ''">`url`=#{url},</if>

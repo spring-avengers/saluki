@@ -27,13 +27,13 @@ public class GrpcDO implements Serializable {
 
   private Long id;
 
-  private String servicePackageName;
+  private String packageName;
 
   private String serviceName;
 
   private String methodName;
 
-  private String serviceGroup;
+  private String serivceGroup;
 
   private String serviceVersion;
 
@@ -55,12 +55,12 @@ public class GrpcDO implements Serializable {
     this.id = id;
   }
 
-  public String getServicePackageName() {
-    return servicePackageName;
+  public String getPackageName() {
+    return packageName;
   }
 
-  public void setServicePackageName(String servicePackageName) {
-    this.servicePackageName = servicePackageName;
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
   }
 
   public String getServiceName() {
@@ -79,12 +79,12 @@ public class GrpcDO implements Serializable {
     this.methodName = methodName;
   }
 
-  public String getServiceGroup() {
-    return serviceGroup;
+  public String getSerivceGroup() {
+    return serivceGroup;
   }
 
-  public void setServiceGroup(String serviceGroup) {
-    this.serviceGroup = serviceGroup;
+  public void setSerivceGroup(String serivceGroup) {
+    this.serivceGroup = serivceGroup;
   }
 
   public String getServiceVersion() {
@@ -137,12 +137,13 @@ public class GrpcDO implements Serializable {
 
   @Override
   public String toString() {
-    return "GrpcDO [id=" + id + ", servicePackageName=" + servicePackageName + ", serviceName="
-        + serviceName + ", methodName=" + methodName + ", serviceGroup=" + serviceGroup
-        + ", serviceVersion=" + serviceVersion + ", protoContext=" + Arrays.toString(protoContext)
-        + ", protoReq=" + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep)
-        + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
+    return "GrpcDO [id=" + id + ", packageName=" + packageName + ", serviceName=" + serviceName
+        + ", methodName=" + methodName + ", serivceGroup=" + serivceGroup + ", serviceVersion="
+        + serviceVersion + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
+        + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
+        + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
+
 
 
 }

@@ -5,7 +5,7 @@
 
 	<select id="get" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
 		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`
+		`id`,`package_name`,`service_name`,`method_name`,`service_group`,`service_version`
 		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
 		from gateway_grpc
 		where id
@@ -14,11 +14,12 @@
 
 	<select id="list" resultType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
 		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`
+		`id`,`package_name`,`service_name`,`method_name`,`service_group`,`service_version`
 		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
 		from gateway_grpc
 		<where>
 			<if test="id != null and id != ''"> and id = #{id} </if>
+			<if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
 		</where>
@@ -38,6 +39,7 @@
 	<select id="count" resultType="int">
 		select count(*) from gateway_grpc
 		<where>
+		    <if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
 		</where>
@@ -47,6 +49,7 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into gateway_grpc
 		(
+		`package_name`,
 		`service_name`,
 		`method_name` ,
 		`service_group`,
@@ -59,17 +62,14 @@
 		)
 		values
 		(
+		#{packageName},
 		#{serviceName},
 		#{methodName},
 		#{serviceGroup},
 		#{serviceVersion},
-		#{retryable},
-		#{enabled},
-		#{stripPrefix},
-		#{serviceName},
-		#{methodName},
-		#{grpc},
-		#{dubbo},
+		#{protoContext},
+		#{protoReq},
+		#{protoRep},
 		sysdate(),
 		sysdate()
 		)
@@ -78,6 +78,7 @@
 	<update id="update" parameterType="com.quancheng.saluki.oauth2.zuul.domain.GrpcDO">
 		update gateway_grpc
 		<set>
+		    <if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
 			<if test="serviceGroup != null and serviceGroup != ''">`service_group`=#{serviceGroup},</if>

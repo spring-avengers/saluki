@@ -44,9 +44,9 @@ public class RouteDO implements Serializable {
 
   private String methodName;
 
-  private String group;
+  private String serivceGroup;
 
-  private String version;
+  private String serviceVersion;
 
   private Boolean grpc;
 
@@ -136,20 +136,20 @@ public class RouteDO implements Serializable {
     this.packageName = packageName;
   }
 
-  public String getGroup() {
-    return group;
+  public String getSerivceGroup() {
+    return serivceGroup;
   }
 
-  public void setGroup(String group) {
-    this.group = group;
+  public void setSerivceGroup(String serivceGroup) {
+    this.serivceGroup = serivceGroup;
   }
 
-  public String getVersion() {
-    return version;
+  public String getServiceVersion() {
+    return serviceVersion;
   }
 
-  public void setVersion(String version) {
-    this.version = version;
+  public void setServiceVersion(String serviceVersion) {
+    this.serviceVersion = serviceVersion;
   }
 
   public Boolean isDubbo() {
@@ -189,8 +189,10 @@ public class RouteDO implements Serializable {
     return "RouteDO [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
         + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
         + ", packageName=" + packageName + ", serviceName=" + serviceName + ", methodName="
-        + methodName + ", group=" + group + ", version=" + version + ", grpc=" + grpc + ", dubbo="
-        + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
+        + methodName + ", serivceGroup=" + serivceGroup + ", serviceVersion=" + serviceVersion
+        + ", grpc=" + grpc + ", dubbo=" + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified="
+        + gmtModified + "]";
   }
+
 
 }

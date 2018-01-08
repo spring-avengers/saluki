@@ -40,7 +40,7 @@ public class ZuulDto implements Serializable {
 
   private String stripPrefix;
 
-  private String servicePackageName;
+  private String packageName;
 
   private String serviceName;
 
@@ -108,12 +108,12 @@ public class ZuulDto implements Serializable {
     this.stripPrefix = stripPrefix;
   }
 
-  public String getServicePackageName() {
-    return servicePackageName;
+  public String getPackageName() {
+    return packageName;
   }
 
-  public void setServicePackageName(String servicePackageName) {
-    this.servicePackageName = servicePackageName;
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
   }
 
   public String getServiceName() {
@@ -216,9 +216,10 @@ public class ZuulDto implements Serializable {
 
   public GrpcDO buildGrpc() {
     GrpcDO grpc = new GrpcDO();
+    grpc.setPackageName(this.packageName);
     grpc.setServiceName(this.serviceName);
     grpc.setMethodName(this.methodName);
-    grpc.setServiceGroup(this.serviceGroup);
+    grpc.setSerivceGroup(this.serviceGroup);
     grpc.setServiceVersion(this.serviceVersion);
     grpc.setProtoContext(this.protoContext);
     grpc.setProtoRep(this.protoReq);
@@ -238,7 +239,7 @@ public class ZuulDto implements Serializable {
     zuulDto.setGrpc(route.isGrpc());
     zuulDto.setDubbo(route.isDubbo());
 
-    zuulDto.setServicePackageName(grpc.getServicePackageName());
+    zuulDto.setPackageName(grpc.getPackageName());
     zuulDto.setServiceName(grpc.getServiceName());
     zuulDto.setServiceGroup(grpc.getServiceName());
     zuulDto.setServiceVersion(grpc.getServiceVersion());

@@ -221,8 +221,11 @@ CREATE TABLE `gateway_route` (
   `route_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
   `service_id` varchar(50) DEFAULT NULL COMMENT '服务ID',
+  `package_name` varchar(50) DEFAULT NULL COMMENT '服务包名',
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
+  `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
+  `service_version` varchar(50) DEFAULT NULL COMMENT '服务版本',
   `url` varchar(255) DEFAULT NULL COMMENT 'url',
   `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
   `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
@@ -237,6 +240,7 @@ CREATE TABLE `gateway_route` (
 DROP TABLE IF EXISTS `gateway_grpc`;
 CREATE TABLE `gateway_grpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `package_name` varchar(50) DEFAULT NULL COMMENT '服务包名',
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
   `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',

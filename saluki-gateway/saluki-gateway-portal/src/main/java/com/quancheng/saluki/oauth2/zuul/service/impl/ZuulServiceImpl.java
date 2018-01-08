@@ -56,8 +56,8 @@ public class ZuulServiceImpl implements ZuulService {
     String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
-    String group = route.getGroup();
-    String version = route.getVersion();
+    String group = route.getSerivceGroup();
+    String version = route.getServiceVersion();
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
     ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
     return zuulDto;
@@ -71,8 +71,8 @@ public class ZuulServiceImpl implements ZuulService {
       String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
-      String group = route.getGroup();
-      String version = route.getVersion();
+      String group = route.getSerivceGroup();
+      String version = route.getServiceVersion();
       GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
       ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
       zuulDtos.add(zuulDto);
@@ -118,8 +118,8 @@ public class ZuulServiceImpl implements ZuulService {
     String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
-    String group = route.getGroup();
-    String version = route.getVersion();
+    String group = route.getSerivceGroup();
+    String version = route.getServiceVersion();
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
     routeDao.remove(routeId);
     grpcDao.remove(grpc.getId());
@@ -134,8 +134,8 @@ public class ZuulServiceImpl implements ZuulService {
       String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
-      String group = route.getGroup();
-      String version = route.getVersion();
+      String group = route.getSerivceGroup();
+      String version = route.getServiceVersion();
       GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
       ids.add(grpc.getId());
     }

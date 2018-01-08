@@ -21,10 +21,10 @@ import java.io.InputStream;
  */
 public interface ProtobufService {
 
-  public byte[] protobufService(InputStream serviceStream, String serviceName);
+  public byte[] compileProtoService(InputStream serviceStream, String serviceName);
 
 
-  public byte[] protobufInputOutput(InputStream inputStream, InputStream outputStream);
+  public byte[] compileProtoInputOutput(InputStream inputStream, InputStream outputStream);
 
 
 }

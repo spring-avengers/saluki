@@ -16,8 +16,12 @@ package com.quancheng.saluki.oauth2.zuul.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.Query;
+import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
+import com.quancheng.saluki.oauth2.zuul.dao.RouteDao;
 import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
 import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
 import com.quancheng.saluki.oauth2.zuul.service.ZuulService;
@@ -28,15 +32,25 @@ import com.quancheng.saluki.oauth2.zuul.service.ZuulService;
  */
 public class ZuulServiceImpl implements ZuulService {
 
+  @Autowired
+  private RouteDao routeDao;
+
+  @Autowired
+  private GrpcDao grpcDao;
+
   @Override
   public PageDO<RouteDO> queryList(Query query) {
-    // TODO Auto-generated method stub
-    return null;
+    int total = routeDao.count(query);
+    List<RouteDO> routes = routeDao.list(query);
+    PageDO<RouteDO> page = new PageDO<>();
+    page.setTotal(total);
+    page.setRows(routes);
+    return page;
   }
 
   @Override
   public ZuulDto get(Long routeId) {
-    // TODO Auto-generated method stub
+    RouteDO route = routeDao.get(routeId);
     return null;
   }
 
@@ -76,6 +90,6 @@ public class ZuulServiceImpl implements ZuulService {
     return 0;
   }
 
-   
+
 
 }

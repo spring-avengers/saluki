@@ -27,7 +27,7 @@ import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
 @Mapper
 public interface RouteDao {
 
-  RouteDO get(String path);
+  RouteDO get(Long routeId);
 
   List<RouteDO> list(Map<String, Object> map);
 

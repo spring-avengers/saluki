@@ -3,7 +3,6 @@ syntax = "proto3";
 option java_package = "com.quancheng.examples.model";
 option java_outer_classname = "Hello";
 package com.quancheng.examples.model;
-import "saluki/validator.proto";
 
 // The request message containing the user's name.
 message HelloRequest {

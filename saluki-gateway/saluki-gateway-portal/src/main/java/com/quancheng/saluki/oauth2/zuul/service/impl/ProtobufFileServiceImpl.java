@@ -20,11 +20,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import com.github.os72.protocjar.Protoc;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.zuul.service.ProtobufFileService;
 
 /**
@@ -33,20 +44,64 @@ import com.quancheng.saluki.oauth2.zuul.service.ProtobufFileService;
  */
 public class ProtobufFileServiceImpl implements ProtobufFileService {
 
-  private static final String PROTOBUF_FILE_DIRECYTORY = "/var/protofiles/";
-
+  private static final String PROTOBUF_FILE_DIRECYTORY = "/var/protos/";
 
   @Override
-  public byte[] protobufService(MultipartFile multipartFile, String serviceFileName) {
-    return null;
+  public byte[] protobufService(InputStream serviceStream, String protoServiceFileName) {
+    try {
+      String includePath = this.uploadZipFile(serviceStream, protoServiceFileName);
+      Path descriptorPath = Files.createTempFile("descriptor", ".pb.bin");
+      ImmutableList.Builder<String> builder = ImmutableList.<String>builder()//
+          .add("--include_std_types")//
+          .add("-I" + includePath)
+          .add("--descriptor_set_out=" + descriptorPath.toAbsolutePath().toString())//
+      ;
+      List<String> protoServiceFilePath = Lists.newArrayList();
+      Files.walkFileTree(Paths.get(includePath), new FileVisitor<Path>() {
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+            throws IOException {
+          return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+          if (file.getFileName().startsWith(protoServiceFileName)) {
+            protoServiceFilePath.add(file.toFile().getAbsolutePath());
+          }
+          return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+          return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+          return FileVisitResult.CONTINUE;
+        }
+
+      });
+      ImmutableList<String> protocArgs = builder.add(protoServiceFilePath.get(0)).build();
+      int status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
+      if (status != 0) {
+        throw new IllegalArgumentException(
+            String.format("Got exit code [%d] from protoc with args [%s]", status, protocArgs));
+      }
+      return Files.readAllBytes(descriptorPath);
+    } catch (IOException | InterruptedException e) {
+      throw new BDException(e.getMessage(), e);
+    }
   }
 
   @Override
-  public byte[] protobufInputOutput(MultipartFile inputFile, MultipartFile outputFile) {
+  public byte[] protobufInputOutput(InputStream inputStream, InputStream outputStream) {
     return null;
   }
 
-  private String uploadZipFile(InputStream fileStream, String serviceName) throws IOException {
+  private String uploadZipFile(InputStream serviceStream, String serviceName) throws IOException {
     String unZipRealPath = PROTOBUF_FILE_DIRECYTORY + serviceName;
     File unZipFile = new File(unZipRealPath);
     if (!unZipFile.exists()) {
@@ -54,7 +109,7 @@ public class ProtobufFileServiceImpl implements ProtobufFileService {
     }
     ZipInputStream zipInputStream = null;
     try {
-      zipInputStream = new ZipInputStream(fileStream);
+      zipInputStream = new ZipInputStream(serviceStream);
       ZipEntry zipEntry;
       while ((zipEntry = zipInputStream.getNextEntry()) != null) {
         String zipEntryName = zipEntry.getName();
@@ -88,20 +143,19 @@ public class ProtobufFileServiceImpl implements ProtobufFileService {
     return unZipRealPath;
   }
 
-  // public static void main(String[] args) {
-  // File file = new File(
-  // "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/proto.zip");
-  // ProtobufFileServiceImpl service = new ProtobufFileServiceImpl();
-  // try {
-  // service.uploadZipFile(new FileInputStream(file), "helloService");
-  // } catch (FileNotFoundException e) {
-  // // TODO Auto-generated catch block
-  // e.printStackTrace();
-  // } catch (IOException e) {
-  // // TODO Auto-generated catch block
-  // e.printStackTrace();
-  // }
-  //
-  // }
+  public static void main(String[] args) {
+    String file =
+        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/example.zip";
+    ProtobufFileServiceImpl service = new ProtobufFileServiceImpl();
+    try {
+      byte[] protobytes = service.protobufService(new FileInputStream(file), "hello_service.proto");
+      System.out.println(FileDescriptorSet.parseFrom(protobytes));
+    } catch (FileNotFoundException | InvalidProtocolBufferException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+
+  }
 
 }

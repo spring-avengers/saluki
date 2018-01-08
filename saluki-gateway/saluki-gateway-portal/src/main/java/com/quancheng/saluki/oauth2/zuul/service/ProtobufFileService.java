@@ -13,7 +13,7 @@
  */
 package com.quancheng.saluki.oauth2.zuul.service;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.io.InputStream;
 
 /**
  * @author liushiming
@@ -21,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ProtobufFileService {
 
-  public byte[] protobufService(MultipartFile file, String serviceFileName);
+  public byte[] protobufService(InputStream serviceStream, String serviceName);
 
 
-  public byte[] protobufInputOutput(MultipartFile inputFile, MultipartFile outputFile);
+  public byte[] protobufInputOutput(InputStream inputStream, InputStream outputStream);
 
 
 }

@@ -40,6 +40,8 @@ public class ZuulDto implements Serializable {
 
   private String stripPrefix;
 
+  private String servicePackageName;
+
   private String serviceName;
 
   private String methodName;
@@ -104,6 +106,14 @@ public class ZuulDto implements Serializable {
 
   public void setStripPrefix(String stripPrefix) {
     this.stripPrefix = stripPrefix;
+  }
+
+  public String getServicePackageName() {
+    return servicePackageName;
+  }
+
+  public void setServicePackageName(String servicePackageName) {
+    this.servicePackageName = servicePackageName;
   }
 
   public String getServiceName() {
@@ -214,6 +224,28 @@ public class ZuulDto implements Serializable {
     grpc.setProtoRep(this.protoReq);
     grpc.setProtoRep(this.protoRep);
     return grpc;
+  }
+
+  public static ZuulDto buildZuulDto(RouteDO route, GrpcDO grpc) {
+    ZuulDto zuulDto = new ZuulDto();
+    zuulDto.setRouteId(route.getRouteId());
+    zuulDto.setPath(route.getPath());
+    zuulDto.setUrl(route.getUrl());
+    zuulDto.setServiceId(route.getServiceId());
+    zuulDto.setRetryable(route.getRetryable());
+    zuulDto.setEnabled(route.isEnabled());
+    zuulDto.setStripPrefix(route.getStripPrefix());
+    zuulDto.setGrpc(route.isGrpc());
+    zuulDto.setDubbo(route.isDubbo());
+
+    zuulDto.setServicePackageName(grpc.getServicePackageName());
+    zuulDto.setServiceName(grpc.getServiceName());
+    zuulDto.setServiceGroup(grpc.getServiceName());
+    zuulDto.setServiceVersion(grpc.getServiceVersion());
+    zuulDto.setProtoContext(grpc.getProtoContext());
+    zuulDto.setProtoRep(grpc.getProtoReq());
+    zuulDto.setProtoRep(grpc.getProtoRep());
+    return zuulDto;
   }
 
 

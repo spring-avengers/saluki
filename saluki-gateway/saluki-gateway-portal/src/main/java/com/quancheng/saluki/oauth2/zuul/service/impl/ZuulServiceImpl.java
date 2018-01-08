@@ -22,6 +22,7 @@ import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.Query;
 import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
 import com.quancheng.saluki.oauth2.zuul.dao.RouteDao;
+import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
 import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
 import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
 import com.quancheng.saluki.oauth2.zuul.service.ZuulService;
@@ -51,7 +52,14 @@ public class ZuulServiceImpl implements ZuulService {
   @Override
   public ZuulDto get(Long routeId) {
     RouteDO route = routeDao.get(routeId);
-    return null;
+    String packageName = route.getPackageName();
+    String serviceName = route.getServiceName();
+    String methodName = route.getMethodName();
+    String group = route.getGroup();
+    String version = route.getVersion();
+    GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+    ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
+    return zuulDto;
   }
 
   @Override

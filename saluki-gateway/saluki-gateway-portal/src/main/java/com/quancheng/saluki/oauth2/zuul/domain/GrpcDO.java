@@ -27,6 +27,8 @@ public class GrpcDO implements Serializable {
 
   private Long id;
 
+  private String servicePackageName;
+
   private String serviceName;
 
   private String methodName;
@@ -51,6 +53,14 @@ public class GrpcDO implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getServicePackageName() {
+    return servicePackageName;
+  }
+
+  public void setServicePackageName(String servicePackageName) {
+    this.servicePackageName = servicePackageName;
   }
 
   public String getServiceName() {
@@ -127,11 +137,12 @@ public class GrpcDO implements Serializable {
 
   @Override
   public String toString() {
-    return "GrpcDO [id=" + id + ", serviceName=" + serviceName + ", methodName=" + methodName
-        + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
-        + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
-        + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
-        + gmtCreate + ", gmtModified=" + gmtModified + "]";
+    return "GrpcDO [id=" + id + ", servicePackageName=" + servicePackageName + ", serviceName="
+        + serviceName + ", methodName=" + methodName + ", serviceGroup=" + serviceGroup
+        + ", serviceVersion=" + serviceVersion + ", protoContext=" + Arrays.toString(protoContext)
+        + ", protoReq=" + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep)
+        + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
+
 
 }

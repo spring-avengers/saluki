@@ -25,6 +25,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -56,35 +57,9 @@ public class ProtobufServiceImpl implements ProtobufService {
           .add("-I" + includePath)
           .add("--descriptor_set_out=" + descriptorPath.toAbsolutePath().toString())//
       ;
-      List<String> protoServiceFilePath = Lists.newArrayList();
-      Files.walkFileTree(Paths.get(includePath), new FileVisitor<Path>() {
-
-        @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-            throws IOException {
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-          if (file.getFileName().startsWith(protoServiceFileName)) {
-            protoServiceFilePath.add(file.toFile().getAbsolutePath());
-          }
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-          return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-          return FileVisitResult.CONTINUE;
-        }
-
-      });
-      ImmutableList<String> protocArgs = builder.add(protoServiceFilePath.get(0)).build();
+      ProtoFileServiceFilter filter = new ProtoFileServiceFilter(protoServiceFileName);
+      Files.walkFileTree(Paths.get(includePath), filter);
+      ImmutableList<String> protocArgs = builder.add(filter.getProtoServiceFilePath()).build();
       int status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
       if (status != 0) {
         throw new IllegalArgumentException(
@@ -143,6 +118,31 @@ public class ProtobufServiceImpl implements ProtobufService {
     return unZipRealPath;
   }
 
+
+  private static class ProtoFileServiceFilter extends SimpleFileVisitor<Path> {
+
+    private final String protoServiceFileName;
+
+    private String protoServiceFilePath;
+
+    public ProtoFileServiceFilter(String protoServiceFileName) {
+      this.protoServiceFileName = protoServiceFileName;
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+      if (file.getFileName().startsWith(protoServiceFileName)) {
+        protoServiceFilePath = file.toFile().getAbsolutePath();
+      }
+      return FileVisitResult.CONTINUE;
+    }
+
+    public String getProtoServiceFilePath() {
+      return protoServiceFilePath;
+    }
+
+  }
+
   public static void main(String[] args) {
     String file =
         "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/example.zip";
@@ -154,7 +154,6 @@ public class ProtobufServiceImpl implements ProtobufService {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
 
   }
 

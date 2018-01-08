@@ -19,7 +19,7 @@ import java.io.InputStream;
  * @author liushiming
  * @version ProtobufFileService.java, v 0.0.1 2018年1月8日 下午3:59:38 liushiming
  */
-public interface ProtobufFileService {
+public interface ProtobufService {
 
   public byte[] protobufService(InputStream serviceStream, String serviceName);
 

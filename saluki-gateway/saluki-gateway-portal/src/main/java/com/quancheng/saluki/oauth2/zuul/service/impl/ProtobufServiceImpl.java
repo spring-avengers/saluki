@@ -36,13 +36,13 @@ import com.google.common.collect.Lists;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.quancheng.saluki.oauth2.common.BDException;
-import com.quancheng.saluki.oauth2.zuul.service.ProtobufFileService;
+import com.quancheng.saluki.oauth2.zuul.service.ProtobufService;
 
 /**
  * @author liushiming
  * @version ProtobufFileServiceImpl.java, v 0.0.1 2018年1月8日 下午4:16:18 liushiming
  */
-public class ProtobufFileServiceImpl implements ProtobufFileService {
+public class ProtobufServiceImpl implements ProtobufService {
 
   private static final String PROTOBUF_FILE_DIRECYTORY = "/var/protos/";
 
@@ -146,7 +146,7 @@ public class ProtobufFileServiceImpl implements ProtobufFileService {
   public static void main(String[] args) {
     String file =
         "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/example.zip";
-    ProtobufFileServiceImpl service = new ProtobufFileServiceImpl();
+    ProtobufServiceImpl service = new ProtobufServiceImpl();
     try {
       byte[] protobytes = service.protobufService(new FileInputStream(file), "hello_service.proto");
       System.out.println(FileDescriptorSet.parseFrom(protobytes));

@@ -18,7 +18,6 @@ import java.util.Map;
 
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.Query;
-import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
 import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
 
 /**
@@ -27,7 +26,7 @@ import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
  */
 public interface ZuulService {
 
-  PageDO<RouteDO> queryList(Query query);
+  PageDO<ZuulDto> queryList(Query query);
 
   ZuulDto get(Long routeId);
 

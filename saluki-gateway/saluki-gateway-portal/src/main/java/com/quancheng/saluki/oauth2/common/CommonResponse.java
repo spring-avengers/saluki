@@ -6,6 +6,9 @@ import java.util.Map;
 public class CommonResponse extends HashMap<String, Object> {
   private static final long serialVersionUID = 1L;
 
+  public static int SUCCESS = 1;
+  public static int ERROR = 0;
+
   public CommonResponse() {
     put("code", 0);
     put("msg", "操作成功");

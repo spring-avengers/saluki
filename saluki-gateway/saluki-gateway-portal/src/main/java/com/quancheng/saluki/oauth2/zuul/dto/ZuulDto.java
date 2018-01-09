@@ -15,8 +15,12 @@ package com.quancheng.saluki.oauth2.zuul.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.beanutils.BeanUtils;
+
+import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.zuul.domain.GrpcDO;
 import com.quancheng.saluki.oauth2.zuul.domain.RouteDO;
+import com.quancheng.saluki.oauth2.zuul.vo.ZuulVo;
 
 /**
  * @author liushiming
@@ -247,6 +251,30 @@ public class ZuulDto implements Serializable {
     zuulDto.setProtoRep(grpc.getProtoReq());
     zuulDto.setProtoRep(grpc.getProtoRep());
     return zuulDto;
+  }
+
+  public static ZuulDto buildZuulDto(RouteDO route) {
+    ZuulDto zuulDto = new ZuulDto();
+    zuulDto.setRouteId(route.getRouteId());
+    zuulDto.setPath(route.getPath());
+    zuulDto.setUrl(route.getUrl());
+    zuulDto.setServiceId(route.getServiceId());
+    zuulDto.setRetryable(route.getRetryable());
+    zuulDto.setEnabled(route.isEnabled());
+    zuulDto.setStripPrefix(route.getStripPrefix());
+    zuulDto.setGrpc(route.isGrpc());
+    zuulDto.setDubbo(route.isDubbo());
+    return zuulDto;
+  }
+
+  public ZuulVo buildZuulVo() {
+    ZuulVo vo = new ZuulVo();
+    try {
+      BeanUtils.copyProperties(vo, this);
+    } catch (Exception e) {
+      throw new BDException("构建zuulDto失败", e);
+    }
+    return vo;
   }
 
 

@@ -15,6 +15,7 @@ package com.quancheng.saluki.oauth2.zuul.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,12 +30,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.collect.Lists;
 import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.common.BaseController;
 import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.common.Log;
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.FileType;
+import com.quancheng.saluki.oauth2.utils.Query;
 import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
 import com.quancheng.saluki.oauth2.zuul.service.ProtobufService;
 import com.quancheng.saluki.oauth2.zuul.service.ZuulService;
@@ -72,8 +75,9 @@ public class ZuulController extends BaseController {
   @RequiresPermissions("gateway:zuul:edit")
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
-    // ZuulDto zuulDto = zuulService.get(id);
-    // model.addAttribute("route", zuulDto);
+    ZuulDto zuulDto = zuulService.get(id);
+    ZuulVo zuulVo = zuulDto.buildZuulVo();
+    model.addAttribute("zuul", zuulVo);
     return prefix + "/edit";
   }
 
@@ -82,9 +86,17 @@ public class ZuulController extends BaseController {
   @GetMapping("/list")
   @ResponseBody
   PageDO<ZuulVo> list(@RequestParam Map<String, Object> params) {
-    // Query query = new Query(params);
-    // PageDO<RouteDO> page = zuulService.queryList(query);
-    return null;
+    Query query = new Query(params);
+    PageDO<ZuulDto> pageDto = zuulService.queryList(query);
+    PageDO<ZuulVo> pageVo = new PageDO<>();
+    pageVo.setTotal(pageDto.getTotal());
+    List<ZuulDto> dtos = pageDto.getRows();
+    List<ZuulVo> vos = Lists.newArrayListWithCapacity(dtos.size());
+    for (ZuulDto dto : dtos) {
+      vos.add(dto.buildZuulVo());
+    }
+    pageVo.setRows(vos);
+    return pageVo;
   }
 
   @Log("保存路由")
@@ -150,39 +162,80 @@ public class ZuulController extends BaseController {
   }
 
 
-  // @Log("更新角色")
-  // @RequiresPermissions("gateway:zuul:edit")
-  // @PostMapping("/update")
-  // @ResponseBody()
-  // CommonResponse update(RoleDO role) {
-  // if (roleService.update(role) > 0) {
-  // return CommonResponse.ok();
-  // } else {
-  // return CommonResponse.error(1, "保存失败");
-  // }
-  // }
-  //
-  // @Log("删除角色")
-  // @RequiresPermissions("gateway:zuul:remove")
-  // @PostMapping("/remove")
-  // @ResponseBody()
-  // CommonResponse save(Long id) {
-  // if (roleService.remove(id) > 0) {
-  // return CommonResponse.ok();
-  // } else {
-  // return CommonResponse.error(1, "删除失败");
-  // }
-  // }
-  //
-  // @RequiresPermissions("gateway:zuul:batchRemove")
-  // @Log("批量删除角色")
-  // @PostMapping("/batchRemove")
-  // @ResponseBody
-  // CommonResponse batchRemove(@RequestParam("ids[]") Long[] ids) {
-  // int r = roleService.batchremove(ids);
-  // if (r > 0) {
-  // return CommonResponse.ok();
-  // }
-  // return CommonResponse.error();
-  // }
+  @Log("更新路由")
+  @RequiresPermissions("gateway:zuul:edit")
+  @PostMapping("/update")
+  @ResponseBody()
+  CommonResponse update(ZuulVo zuulVo,
+      @RequestParam(name = "input", required = false) MultipartFile inputFile,
+      @RequestParam(name = "output", required = false) MultipartFile outputFile,
+      @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
+    try {
+      // grpc路由
+      if (zipFile != null) {
+        InputStream directoryZipStream = zipFile.getInputStream();
+        CommonResponse response = judgeFileType(directoryZipStream, "zip");
+        if (response != null) {
+          return response;
+        } else {
+          String serviceFileName = zuulVo.getServiceFileName();
+          byte[] protoContext =
+              protobufService.compileDirectoryProto(directoryZipStream, serviceFileName);
+          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          zuulDto.setProtoContext(protoContext);
+          zuulService.update(zuulDto);
+        }
+      } else if (inputFile != null && outputFile != null) {
+        InputStream inputStream = inputFile.getInputStream();
+        InputStream outputStream = outputFile.getInputStream();
+        CommonResponse responseInput = judgeFileType(inputStream, "proto");
+        CommonResponse responseOutput = judgeFileType(outputStream, "proto");
+        if (responseInput != null) {
+          return responseInput;
+        } else if (responseOutput != null) {
+          return responseOutput;
+        } else {
+          String fileNameInput = inputFile.getOriginalFilename();
+          byte[] protoInput = protobufService.compileFileProto(inputStream, fileNameInput);
+          String fileNameOutput = outputFile.getOriginalFilename();
+          byte[] protoOutput = protobufService.compileFileProto(outputStream, fileNameOutput);
+          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          zuulDto.setProtoReq(protoInput);
+          zuulDto.setProtoRep(protoOutput);
+          zuulService.update(zuulDto);
+        }
+      } // rest路由
+      else {
+        ZuulDto zuulDto = zuulVo.buildZuulDto();
+        zuulService.update(zuulDto);
+      }
+    } catch (IOException e) {
+      throw new BDException("保存路由失败", e);
+    }
+    return CommonResponse.ok();
+  }
+
+  @Log("删除路由")
+  @RequiresPermissions("gateway:zuul:remove")
+  @PostMapping("/remove")
+  @ResponseBody()
+  CommonResponse save(Long id) {
+    if (zuulService.remove(id) > 0) {
+      return CommonResponse.ok();
+    } else {
+      return CommonResponse.error(1, "删除失败");
+    }
+  }
+
+  @RequiresPermissions("gateway:zuul:batchRemove")
+  @Log("批量删除路由")
+  @PostMapping("/batchRemove")
+  @ResponseBody
+  CommonResponse batchRemove(@RequestParam("ids[]") Long[] ids) {
+    int response = zuulService.batchRemove(ids);
+    if (response > 0) {
+      return CommonResponse.ok();
+    }
+    return CommonResponse.error();
+  }
 }

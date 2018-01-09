@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
 import com.quancheng.saluki.oauth2.utils.Query;
 import com.quancheng.saluki.oauth2.zuul.dao.GrpcDao;
@@ -43,12 +44,17 @@ public class ZuulServiceImpl implements ZuulService {
   private GrpcDao grpcDao;
 
   @Override
-  public PageDO<RouteDO> queryList(Query query) {
+  public PageDO<ZuulDto> queryList(Query query) {
     int total = routeDao.count(query);
     List<RouteDO> routes = routeDao.list(query);
-    PageDO<RouteDO> page = new PageDO<>();
+    List<ZuulDto> dtos = Lists.newArrayListWithCapacity(routes.size());
+    for (RouteDO routeDo : routes) {
+      ZuulDto dto = ZuulDto.buildZuulDto(routeDo);
+      dtos.add(dto);
+    }
+    PageDO<ZuulDto> page = new PageDO<>();
     page.setTotal(total);
-    page.setRows(routes);
+    page.setRows(dtos);
     return page;
   }
 
@@ -94,10 +100,10 @@ public class ZuulServiceImpl implements ZuulService {
     GrpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.save(grpcDo);
     int success2 = routeDao.save(routeDo);
-    if (success1 == 0 && success2 == 0) {
-      return 0;
+    if (success1 > 0 && success2 > 0) {
+      return CommonResponse.SUCCESS;
     } else {
-      return 1;
+      return CommonResponse.ERROR;
     }
   }
 
@@ -107,10 +113,10 @@ public class ZuulServiceImpl implements ZuulService {
     GrpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.update(grpcDo);
     int success2 = routeDao.update(routeDo);
-    if (success1 == 0 && success2 == 0) {
-      return 0;
+    if (success1 > 0 && success2 > 0) {
+      return CommonResponse.SUCCESS;
     } else {
-      return 1;
+      return CommonResponse.ERROR;
     }
   }
 
@@ -125,7 +131,7 @@ public class ZuulServiceImpl implements ZuulService {
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
     routeDao.remove(routeId);
     grpcDao.remove(grpc.getId());
-    return 0;
+    return 1;
   }
 
   @Override
@@ -144,7 +150,7 @@ public class ZuulServiceImpl implements ZuulService {
     routeDao.batchRemove(routeIds);
     Long[] idArray = new Long[ids.size()];
     grpcDao.batchRemove(ids.toArray(idArray));
-    return 0;
+    return CommonResponse.SUCCESS;;
   }
 
 

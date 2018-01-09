@@ -31,7 +31,7 @@
 		function getTreeData() {
 			$.ajax({
 				type : "GET",
-				url : "/system/sysDept/tree",
+				url : "/sys/dept/tree",
 				success : function(tree) {
 					loadTree(tree);
 				}
@@ -47,14 +47,13 @@
 			$('#deptTree').jstree().open_all();
 		}
 		$('#deptTree').on("changed.jstree", function(e, data) {
-			if(data.node.id!=-1){
-				parent.loadDept(data.node.id,data.node.text);
+			if (data.node.id != -1) {
+				parent.loadDept(data.node.id, data.node.text);
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 				parent.layer.close(index);
 			}
-			
+
 		});
-		
 	</script>
 </body>
 

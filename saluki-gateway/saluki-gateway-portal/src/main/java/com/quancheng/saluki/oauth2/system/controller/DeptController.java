@@ -19,21 +19,21 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/system/sysDept")
+@RequestMapping("/sys/dept")
 public class DeptController extends BaseController {
   private String prefix = "system/dept";
   @Autowired
   private DeptService sysDeptService;
 
   @GetMapping()
-  @RequiresPermissions("system:sysDept:sysDept")
+  @RequiresPermissions("sys:dept:dept")
   String dept() {
     return prefix + "/dept";
   }
 
   @ResponseBody
   @GetMapping("/list")
-  @RequiresPermissions("system:sysDept:sysDept")
+  @RequiresPermissions("sys:dept:dept")
   public List<DeptDO> list() {
     Map<String, Object> query = new HashMap<>(16);
     List<DeptDO> sysDeptList = sysDeptService.list(query);
@@ -41,7 +41,7 @@ public class DeptController extends BaseController {
   }
 
   @GetMapping("/add/{pId}")
-  @RequiresPermissions("system:sysDept:add")
+  @RequiresPermissions("sys:dept:add")
   String add(@PathVariable("pId") Long pId, Model model) {
     model.addAttribute("pId", pId);
     if (pId == 0) {
@@ -53,7 +53,7 @@ public class DeptController extends BaseController {
   }
 
   @GetMapping("/edit/{deptId}")
-  @RequiresPermissions("system:sysDept:edit")
+  @RequiresPermissions("sys:dept:edit")
   String edit(@PathVariable("deptId") Long deptId, Model model) {
     DeptDO sysDept = sysDeptService.get(deptId);
     model.addAttribute("sysDept", sysDept);
@@ -71,7 +71,7 @@ public class DeptController extends BaseController {
    */
   @ResponseBody
   @PostMapping("/save")
-  @RequiresPermissions("system:sysDept:add")
+  @RequiresPermissions("sys:dept:add")
   public CommonResponse save(DeptDO sysDept) {
     if (sysDeptService.save(sysDept) > 0) {
       return CommonResponse.ok();
@@ -84,7 +84,7 @@ public class DeptController extends BaseController {
    */
   @ResponseBody
   @RequestMapping("/update")
-  @RequiresPermissions("system:sysDept:edit")
+  @RequiresPermissions("sys:dept:edit")
   public CommonResponse update(DeptDO sysDept) {
     if (sysDeptService.update(sysDept) > 0) {
       return CommonResponse.ok();
@@ -97,7 +97,7 @@ public class DeptController extends BaseController {
    */
   @PostMapping("/remove")
   @ResponseBody
-  @RequiresPermissions("system:sysDept:remove")
+  @RequiresPermissions("sys:dept:remove")
   public CommonResponse remove(Long deptId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("parentId", deptId);
@@ -119,7 +119,7 @@ public class DeptController extends BaseController {
    */
   @PostMapping("/batchRemove")
   @ResponseBody
-  @RequiresPermissions("system:sysDept:batchRemove")
+  @RequiresPermissions("sys:dept:batchRemove")
   public CommonResponse remove(@RequestParam("ids[]") Long[] deptIds) {
     sysDeptService.batchRemove(deptIds);
     return CommonResponse.ok();

@@ -114,7 +114,7 @@ function forceLogout(id) {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url : prefix+"/forceLogout/" + id,
+			url : prefix + "/forceLogout/" + id,
 			type : "post",
 			data : {
 				'id' : id

@@ -111,15 +111,15 @@ function validateRule() {
 		}
 	})
 }
-var openDept = function(){
+var openDept = function() {
 	layer.open({
-		type:2,
-		title:"选择部门",
+		type : 2,
+		title : "选择部门",
 		area : [ '300px', '450px' ],
-		content:"/system/sysDept/treeView"
+		content : "/sys/dept/treeView"
 	})
 }
-function loadDept( deptId,deptName){
+function loadDept(deptId, deptName) {
 	$("#deptId").val(deptId);
 	$("#deptName").val(deptName);
 }

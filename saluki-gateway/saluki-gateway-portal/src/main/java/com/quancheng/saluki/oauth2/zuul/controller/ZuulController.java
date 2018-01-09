@@ -48,9 +48,9 @@ import com.quancheng.saluki.oauth2.zuul.vo.ZuulVo;
  * @version ZuulController.java, v 0.0.1 2018年1月9日 上午11:19:14 liushiming
  */
 @Controller
-@RequestMapping("/gateway/zuul")
+@RequestMapping("/zuul/route")
 public class ZuulController extends BaseController {
-  String prefix = "gateway/zuul";
+  String prefix = "zuul/route";
 
   @Autowired
   private ProtobufService protobufService;
@@ -61,7 +61,7 @@ public class ZuulController extends BaseController {
   @RequiresPermissions("gateway:zuul:zuul")
   @GetMapping()
   String role() {
-    return prefix + "/zuul";
+    return prefix + "/route";
   }
 
   @Log("添加路由")

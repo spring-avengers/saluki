@@ -3,10 +3,13 @@ $(function() {
 	load();
 
 });
-$('#exampleTable').on('load-success.bs.table', function (e, data) {
-		    if (data.total && !data.rows.length) {
-		    	$('#exampleTable').bootstrapTable('selectPage').bootstrapTable('refresh');
-		    }
+$('#exampleTable').on(
+		'load-success.bs.table',
+		function(e, data) {
+			if (data.total && !data.rows.length) {
+				$('#exampleTable').bootstrapTable('selectPage').bootstrapTable(
+						'refresh');
+			}
 		});
 
 function load() {

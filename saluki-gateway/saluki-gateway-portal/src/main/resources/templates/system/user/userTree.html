@@ -40,18 +40,18 @@
 			});
 			$('#jsTree').jstree().open_all();
 		}
-		function loadUser(){
-			var userNames,userIds;
+		function loadUser() {
+			var userNames, userIds;
 			var ref = $('#jsTree').jstree(true); // 获得整个树
 			userIds = ref.get_bottom_selected();
 			users = ref.get_bottom_checked('true');
-			var txt="";
-			for(var user in users){
-				if(users[user].state.mType=="user"){
-					txt=txt+users[user].text+",";
+			var txt = "";
+			for ( var user in users) {
+				if (users[user].state.mType == "user") {
+					txt = txt + users[user].text + ",";
 				}
 			}
-			parent.loadUser(userIds,txt);
+			parent.loadUser(userIds, txt);
 			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 			parent.layer.close(index);
 		}

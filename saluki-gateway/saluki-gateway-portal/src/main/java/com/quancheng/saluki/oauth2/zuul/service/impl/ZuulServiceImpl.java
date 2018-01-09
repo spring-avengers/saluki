@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.quancheng.saluki.oauth2.system.domain.PageDO;
@@ -32,6 +33,7 @@ import com.quancheng.saluki.oauth2.zuul.service.ZuulService;
  * @author liushiming
  * @version ZuulServiceImpl.java, v 0.0.1 2018年1月8日 上午11:38:49 liushiming
  */
+@Service
 public class ZuulServiceImpl implements ZuulService {
 
   @Autowired

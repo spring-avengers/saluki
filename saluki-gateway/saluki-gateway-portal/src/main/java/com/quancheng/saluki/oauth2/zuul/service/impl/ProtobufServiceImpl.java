@@ -14,8 +14,6 @@
 package com.quancheng.saluki.oauth2.zuul.service.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +23,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.github.os72.protocjar.Protoc;
 import com.google.common.collect.ImmutableList;
-import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.zuul.service.ProtobufService;
 
@@ -40,36 +40,62 @@ import com.quancheng.saluki.oauth2.zuul.service.ProtobufService;
  * @author liushiming
  * @version ProtobufFileServiceImpl.java, v 0.0.1 2018年1月8日 下午4:16:18 liushiming
  */
+@Service
 public class ProtobufServiceImpl implements ProtobufService {
 
-  private static final String PROTOBUF_FILE_DIRECYTORY =
-      "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/protos/";
+  @Value("${saluki.gateway.protoFile}")
+  private String protoFileDirectory;
 
   @Override
-  public byte[] compileProtoService(InputStream serviceStream, String protoFileName) {
+  public byte[] compileDirectoryProto(InputStream directoryZipStream, String serviceFileName) {
+    String fileDirectory = null;
     try {
-      String includePath = this.uploadZipFile(serviceStream, protoFileName);
-      ProtoFileServiceFilter filter = new ProtoFileServiceFilter(protoFileName);
-      Files.walkFileTree(Paths.get(includePath), filter);
+      fileDirectory = this.uploadZipFile(directoryZipStream, serviceFileName);
+      ProtoFileServiceFilter filter = new ProtoFileServiceFilter(serviceFileName);
+      Files.walkFileTree(Paths.get(fileDirectory), filter);
       String protoFilePath = filter.getProtoFilePath();
-      return this.runProtoc(includePath, protoFilePath);
+      return this.runProtoc(fileDirectory, protoFilePath);
     } catch (IOException e) {
       throw new BDException(e.getMessage(), e);
+    } finally {
+      if (fileDirectory != null) {
+        try {
+          Files.deleteIfExists(Paths.get(fileDirectory));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 
   @Override
-  public byte[] compileProtoInputOutput(InputStream inputStream, InputStream outputStream) {
-    return null;
+  public byte[] compileFileProto(InputStream inputStream, String fileName) {
+    String filePath = null;
+    try {
+      filePath = this.uploadSimpleFile(inputStream, fileName);
+      return this.runProtoc(null, filePath);
+    } catch (IOException e) {
+      throw new BDException(e.getMessage(), e);
+    } finally {
+      if (filePath != null) {
+        try {
+          Files.deleteIfExists(Paths.get(filePath));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
   }
 
   private byte[] runProtoc(String includePath, String protoFilePath) {
     try {
       Path descriptorPath = Files.createTempFile("descriptor", ".pb.bin");
-      ImmutableList.Builder<String> builder = ImmutableList.<String>builder()//
-          .add("-I" + includePath)
-          .add("--descriptor_set_out=" + descriptorPath.toAbsolutePath().toString())//
-      ;
+      ImmutableList.Builder<String> builder = ImmutableList.<String>builder();
+      if (includePath != null) {
+        builder.add("-I" + includePath);
+      }
+      builder.add("--descriptor_set_out=" + descriptorPath.toAbsolutePath().toString());
       ImmutableList<String> protocArgs = builder.add(protoFilePath).build();
       int status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
       if (status != 0) {
@@ -82,8 +108,20 @@ public class ProtobufServiceImpl implements ProtobufService {
     }
   }
 
+
+  private String uploadSimpleFile(InputStream argStream, String fileName) throws IOException {
+    String argRealPath = Paths.get(protoFileDirectory, "argsProtos").toFile().getAbsolutePath();
+    File argDirectory = new File(argRealPath);
+    if (!argDirectory.exists()) {
+      argDirectory.mkdirs();
+    }
+    Path filePath = Paths.get(argRealPath, fileName);
+    Files.copy(argStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+    return filePath.toFile().getAbsolutePath();
+  }
+
   private String uploadZipFile(InputStream serviceStream, String serviceName) throws IOException {
-    String unZipRealPath = PROTOBUF_FILE_DIRECYTORY + serviceName;
+    String unZipRealPath = Paths.get(protoFileDirectory, serviceName).toFile().getAbsolutePath();
     File unZipFile = new File(unZipRealPath);
     if (!unZipFile.exists()) {
       unZipFile.mkdirs();
@@ -149,19 +187,5 @@ public class ProtobufServiceImpl implements ProtobufService {
 
   }
 
-  public static void main(String[] args) {
-    String file =
-        "/Users/liushiming/project/java/saluki/saluki-example/saluki-example-api/src/main/example.zip";
-    ProtobufServiceImpl service = new ProtobufServiceImpl();
-    try {
-      byte[] protobytes =
-          service.compileProtoService(new FileInputStream(file), "hello_service.proto");
-      System.out.println(FileDescriptorSet.parseFrom(protobytes));
-    } catch (FileNotFoundException | InvalidProtocolBufferException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-  }
 
 }

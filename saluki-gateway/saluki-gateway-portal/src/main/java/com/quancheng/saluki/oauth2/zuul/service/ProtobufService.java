@@ -21,10 +21,9 @@ import java.io.InputStream;
  */
 public interface ProtobufService {
 
-  public byte[] compileProtoService(InputStream serviceStream, String serviceName);
+  public byte[] compileDirectoryProto(InputStream directoryZipStream, String serviceFileName);
 
-
-  public byte[] compileProtoInputOutput(InputStream inputStream, InputStream outputStream);
+  public byte[] compileFileProto(InputStream inputStream, String fileName);
 
 
 }

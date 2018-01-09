@@ -3,6 +3,7 @@ package com.quancheng.saluki.oauth2.system.controller;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,36 +20,43 @@ import com.quancheng.saluki.oauth2.system.service.SessionService;
 @RequestMapping("/sys/online")
 @Controller
 public class SessionController {
-	@Autowired
-	SessionService sessionService;
+  @Autowired
+  SessionService sessionService;
 
-	@GetMapping()
-	public String online() {
-		return "system/online/online";
-	}
+  @GetMapping()
+  @RequiresPermissions("sys:monitor:online")
+  public String online() {
+    return "system/online/online";
+  }
 
-	@ResponseBody
-	@RequestMapping("/list")
-	public List<UserOnline> list() {
-		return sessionService.list();
-	}
+  @ResponseBody
+  @RequestMapping("/list")
+  @RequiresPermissions("sys:monitor:online")
+  public List<UserOnline> list() {
+    return sessionService.list();
+  }
 
-	@ResponseBody
-	@RequestMapping("/forceLogout/{sessionId}")
-	public CommonResponse forceLogout(@PathVariable("sessionId") String sessionId, RedirectAttributes redirectAttributes) {
-		try {
-			sessionService.forceLogout(sessionId);
-			return CommonResponse.ok();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return CommonResponse.error();
-		}
+  @ResponseBody
+  @RequestMapping("/sessionList")
+  @RequiresPermissions("sys:monitor:online")
+  public Collection<Session> sessionList() {
+    return sessionService.sessionList();
+  }
 
-	}
+  @ResponseBody
+  @RequestMapping("/forceLogout/{sessionId}")
+  @RequiresPermissions("sys:monitor:online")
+  public CommonResponse forceLogout(@PathVariable("sessionId") String sessionId,
+      RedirectAttributes redirectAttributes) {
+    try {
+      sessionService.forceLogout(sessionId);
+      return CommonResponse.ok();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return CommonResponse.error();
+    }
 
-	@ResponseBody
-	@RequestMapping("/sessionList")
-	public Collection<Session> sessionList() {
-		return sessionService.sessionList();
-	}
+  }
+
+
 }

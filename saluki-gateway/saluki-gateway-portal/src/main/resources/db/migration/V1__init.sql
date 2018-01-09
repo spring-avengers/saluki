@@ -64,6 +64,10 @@ INSERT INTO `sys_menu` VALUES ('1', '0', '系统管理', null, null, '0', 'fa fa
 INSERT INTO `sys_menu` VALUES ('2', '0', '系统监控', null, null, '0', 'fa fa-video-camera', '5', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('3', '0', '网关管理', null, null, '0', 'fa fa-bar-chart', '7', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
+
+-- ----------------------------
+-- 系统管理
+-- ----------------------------
 INSERT INTO `sys_menu` VALUES ('4', '1', '系统菜单', 'sys/menu', 'sys:menu:menu', '1', 'fa fa-th-list', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('5', '1', '用户管理', 'sys/user', 'sys:user:user', '1', 'fa fa-user', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('6', '1', '角色管理', 'sys/role', 'sys:role:role', '1', 'fa fa-paw', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
@@ -94,16 +98,25 @@ INSERT INTO `sys_menu` VALUES ('22', '8', '增加', '', 'sys:dept:add', '2', '',
 INSERT INTO `sys_menu` VALUES ('23', '8', '刪除', '', 'sys:dept:remove', '2', '', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('24', '8', '编辑', '', 'sys:dept:edit', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
-INSERT INTO `sys_menu` VALUES ('25', '2', '在线用户', 'sys/online', '', '1', 'fa fa-user', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('26', '2', '系统日志', 'common/log', 'common:log', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('27', '2', '运行监控', '/druid/index.html', '', '1', 'fa fa-caret-square-o-right', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('28', '26', '刷新', '', 'sys:log:list', '2', '', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('29', '26', '删除', '', 'sys:log:remove', '2','', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('30', '26', '清空', '', 'sys:log:clear', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
-INSERT INTO `sys_menu` VALUES ('32', '3', '路由管理', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('33', '3', '策略管理', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('34', '3', '动态过滤', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+-- ----------------------------
+-- 系统监控
+-- ----------------------------
+INSERT INTO `sys_menu` VALUES ('25', '2', '在线用户', 'sys/online', 'sys:monitor:online', '1', 'fa fa-user', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('26', '2', '系统日志', 'sys/log', 'sys:monitor:log', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('27', '2', '运行监控', 'sys/log/run', 'sys:monitor:run', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+
+
+
+
+
+
+-- ----------------------------
+-- zuul管理
+-- ----------------------------
+INSERT INTO `sys_menu` VALUES ('32', '3', '路由管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('33', '3', '策略管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('34', '3', '动态过滤', '/zuul/route', 'zuul:route:route', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
 

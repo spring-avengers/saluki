@@ -58,21 +58,21 @@ public class ZuulController extends BaseController {
   @Autowired
   private ZuulService zuulService;
 
-  @RequiresPermissions("gateway:zuul:zuul")
+  @RequiresPermissions("zuul:route:route")
   @GetMapping()
-  String role() {
+  String route() {
     return prefix + "/route";
   }
 
   @Log("添加路由")
-  @RequiresPermissions("gateway:zuul:add")
+  @RequiresPermissions("zuul:route:add")
   @GetMapping("/add")
   String add() {
     return prefix + "/add";
   }
 
   @Log("编辑路由")
-  @RequiresPermissions("gateway:zuul:edit")
+  @RequiresPermissions("zuul:route:edit")
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
     ZuulDto zuulDto = zuulService.get(id);
@@ -82,7 +82,7 @@ public class ZuulController extends BaseController {
   }
 
 
-  @RequiresPermissions("gateway:zuul:zuul")
+  @RequiresPermissions("zuul:route:zuul")
   @GetMapping("/list")
   @ResponseBody
   PageDO<ZuulVo> list(@RequestParam Map<String, Object> params) {
@@ -100,7 +100,7 @@ public class ZuulController extends BaseController {
   }
 
   @Log("保存路由")
-  @RequiresPermissions("gateway:zuul:add")
+  @RequiresPermissions("zuul:route:add")
   @PostMapping("/save")
   @ResponseBody()
   CommonResponse save(ZuulVo zuulVo,
@@ -163,7 +163,7 @@ public class ZuulController extends BaseController {
 
 
   @Log("更新路由")
-  @RequiresPermissions("gateway:zuul:edit")
+  @RequiresPermissions("zuul:route:edit")
   @PostMapping("/update")
   @ResponseBody()
   CommonResponse update(ZuulVo zuulVo,
@@ -216,7 +216,7 @@ public class ZuulController extends BaseController {
   }
 
   @Log("删除路由")
-  @RequiresPermissions("gateway:zuul:remove")
+  @RequiresPermissions("zuul:route:remove")
   @PostMapping("/remove")
   @ResponseBody()
   CommonResponse save(Long id) {
@@ -227,7 +227,7 @@ public class ZuulController extends BaseController {
     }
   }
 
-  @RequiresPermissions("gateway:zuul:batchRemove")
+  @RequiresPermissions("zuul:route:batchRemove")
   @Log("批量删除路由")
   @PostMapping("/batchRemove")
   @ResponseBody

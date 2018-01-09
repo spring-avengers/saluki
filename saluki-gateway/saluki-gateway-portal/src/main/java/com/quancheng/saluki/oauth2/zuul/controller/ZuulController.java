@@ -15,7 +15,6 @@ package com.quancheng.saluki.oauth2.zuul.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.common.BaseController;
 import com.quancheng.saluki.oauth2.common.CommonResponse;
 import com.quancheng.saluki.oauth2.common.Log;
@@ -96,6 +96,7 @@ public class ZuulController extends BaseController {
       @RequestParam(name = "output", required = false) MultipartFile outputFile,
       @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
     try {
+      // grpc路由
       if (zipFile != null) {
         InputStream directoryZipStream = zipFile.getInputStream();
         CommonResponse response = judgeFileType(directoryZipStream, "zip");
@@ -128,9 +129,13 @@ public class ZuulController extends BaseController {
           zuulDto.setProtoRep(protoOutput);
           zuulService.save(zuulDto);
         }
+      } // rest路由
+      else {
+        ZuulDto zuulDto = zuulVo.buildZuulDto();
+        zuulService.save(zuulDto);
       }
-    } catch (IOException | IllegalAccessException | InvocationTargetException e) {
-      return CommonResponse.error(1, e.getMessage());
+    } catch (IOException e) {
+      throw new BDException("保存路由失败", e);
     }
     return CommonResponse.ok();
   }

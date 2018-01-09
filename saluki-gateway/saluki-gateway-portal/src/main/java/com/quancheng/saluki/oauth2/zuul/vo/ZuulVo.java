@@ -14,10 +14,10 @@
 package com.quancheng.saluki.oauth2.zuul.vo;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.quancheng.saluki.oauth2.common.BDException;
 import com.quancheng.saluki.oauth2.zuul.dto.ZuulDto;
 
 /**
@@ -177,9 +177,13 @@ public class ZuulVo implements Serializable {
     this.dubbo = dubbo;
   }
 
-  public ZuulDto buildZuulDto() throws IllegalAccessException, InvocationTargetException {
+  public ZuulDto buildZuulDto() {
     ZuulDto dto = new ZuulDto();
-    BeanUtils.copyProperties(dto, this);
+    try {
+      BeanUtils.copyProperties(dto, this);
+    } catch (Exception e) {
+      throw new BDException("构建zuulDto失败", e);
+    }
     return dto;
   }
 

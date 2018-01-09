@@ -62,7 +62,7 @@ CREATE TABLE `sys_menu` (
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES ('1', '0', '系统管理', null, null, '0', 'fa fa-desktop', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('2', '0', '系统监控', null, null, '0', 'fa fa-video-camera', '5', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('3', '0', '图表管理', null, null, '0', 'fa fa-bar-chart', '7', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('3', '0', '网关管理', null, null, '0', 'fa fa-bar-chart', '7', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 INSERT INTO `sys_menu` VALUES ('4', '1', '系统菜单', 'sys/menu/', 'sys:menu:menu', '1', 'fa fa-th-list', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('5', '1', '用户管理', 'sys/user/', 'sys:user:user', '1', 'fa fa-user', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
@@ -101,7 +101,7 @@ INSERT INTO `sys_menu` VALUES ('28', '26', '刷新', '', 'sys:log:list', '2', ''
 INSERT INTO `sys_menu` VALUES ('29', '26', '删除', '', 'sys:log:remove', '2','', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 INSERT INTO `sys_menu` VALUES ('30', '26', '清空', '', 'sys:log:clear', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
-INSERT INTO `sys_menu` VALUES ('32', '3', '百度chart', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('32', '3', '路由管理', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
 

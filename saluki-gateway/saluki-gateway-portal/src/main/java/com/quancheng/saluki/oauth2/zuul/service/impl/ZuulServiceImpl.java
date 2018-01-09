@@ -129,9 +129,13 @@ public class ZuulServiceImpl implements ZuulService {
     String group = route.getSerivceGroup();
     String version = route.getServiceVersion();
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
-    routeDao.remove(routeId);
-    grpcDao.remove(grpc.getId());
-    return 1;
+    int success1 = routeDao.remove(routeId);
+    int success2 = grpcDao.remove(grpc.getId());
+    if (success1 > 0 && success2 > 0) {
+      return CommonResponse.SUCCESS;
+    } else {
+      return CommonResponse.ERROR;
+    }
   }
 
   @Override
@@ -149,10 +153,6 @@ public class ZuulServiceImpl implements ZuulService {
     }
     routeDao.batchRemove(routeIds);
     Long[] idArray = new Long[ids.size()];
-    grpcDao.batchRemove(ids.toArray(idArray));
-    return CommonResponse.SUCCESS;;
+    return grpcDao.batchRemove(ids.toArray(idArray));
   }
-
-
-
 }

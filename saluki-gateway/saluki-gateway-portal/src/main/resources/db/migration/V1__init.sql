@@ -102,7 +102,8 @@ INSERT INTO `sys_menu` VALUES ('29', '26', '删除', '', 'sys:log:remove', '2','
 INSERT INTO `sys_menu` VALUES ('30', '26', '清空', '', 'sys:log:clear', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 INSERT INTO `sys_menu` VALUES ('32', '3', '路由管理', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-
+INSERT INTO `sys_menu` VALUES ('33', '3', '策略管理', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('34', '3', '动态过滤', '/chart/graph_echarts.html', '', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
 

@@ -43,7 +43,7 @@ import com.quancheng.saluki.oauth2.zuul.service.ProtobufService;
 @Service
 public class ProtobufServiceImpl implements ProtobufService {
 
-  @Value("${saluki.gateway.protoFile}")
+  @Value("${saluki.gateway.protos}")
   private String protoFileDirectory;
 
   @Override

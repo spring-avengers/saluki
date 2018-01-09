@@ -125,5 +125,11 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+		<!-- 管理数据库初始化 -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>5.0.3</version>
+		</dependency>
 	</dependencies>
 </project>

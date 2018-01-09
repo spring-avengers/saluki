@@ -84,18 +84,20 @@ public class ProtobufSerivce {
     GrpcDO grpcDo = grpcDao.get(packageName, serviceName, methodName, group, version);
     byte[] in = grpcDo.getProtoReq();
     byte[] out = grpcDo.getProtoRep();
-    DescriptorProto inputDesc = null;
-    DescriptorProto outputDesc = null;
+    FileDescriptorSet inputDescriptorSet = null;
+    FileDescriptorSet outputDescriptorSet = null;
     if (in != null && in.length > 0 && out != null && out.length > 0) {
       try {
-        inputDesc = DescriptorProto.parseFrom(in);
-        outputDesc = DescriptorProto.parseFrom(out);
-        return new ImmutablePair<Descriptor, Descriptor>(inputDesc.getDescriptorForType(),
-            outputDesc.getDescriptorForType());
+        inputDescriptorSet = FileDescriptorSet.parseFrom(in);
+        outputDescriptorSet = FileDescriptorSet.parseFrom(out);
+        DescriptorProto fileInputDesc = inputDescriptorSet.getFile(0).getMessageType(0);
+        DescriptorProto fileOutputDesc = outputDescriptorSet.getFile(0).getMessageType(0);
+        return new ImmutablePair<Descriptor, Descriptor>(fileInputDesc.getDescriptorForType(),
+            fileOutputDesc.getDescriptorForType());
       } catch (InvalidProtocolBufferException e) {
         LOG.error(e.getMessage(), e);
         throw new RpcBizException("protobuf service definition is invalid,the input type is: "
-            + inputDesc + " the output ytpe is:" + outputDesc, e);
+            + inputDescriptorSet + " the output ytpe is:" + outputDescriptorSet, e);
       }
     }
     return null;

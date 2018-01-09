@@ -234,7 +234,7 @@ CREATE TABLE `gateway_route` (
   `dubbo` tinyint(1) DEFAULT NULL COMMENT '是否dubbo请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`route_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='网关路由表';
 
 DROP TABLE IF EXISTS `gateway_grpc`;

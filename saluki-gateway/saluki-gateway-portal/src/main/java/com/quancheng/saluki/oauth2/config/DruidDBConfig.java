@@ -1,8 +1,10 @@
 package com.quancheng.saluki.oauth2.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
+import com.alibaba.druid.filter.Filter;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.support.http.StatViewServlet;
+import com.alibaba.druid.support.http.WebStatFilter;
+import com.alibaba.druid.wall.WallConfig;
+import com.alibaba.druid.wall.WallFilter;
+import com.google.common.collect.Lists;
 
 /**
  * Created by PrimaryKey on 17/2/4.
@@ -99,6 +106,7 @@ public class DruidDBConfig {
     datasource.setPoolPreparedStatements(poolPreparedStatements);
     datasource
         .setMaxPoolPreparedStatementPerConnectionSize(maxPoolPreparedStatementPerConnectionSize);
+    datasource.setProxyFilters(getProxyFilters());
     try {
       datasource.setFilters(filters);
     } catch (SQLException e) {
@@ -130,6 +138,20 @@ public class DruidDBConfig {
     filterRegistrationBean.addInitParameter("principalSessionName", "USER_SESSION");
     filterRegistrationBean.addInitParameter("DruidWebStatFilter", "/*");
     return filterRegistrationBean;
+  }
+
+
+  private List<Filter> getProxyFilters() {
+    List<Filter> proxyFilters = Lists.newArrayList();
+    WallConfig wallConfig = new WallConfig();
+    wallConfig.setDir("");
+    wallConfig.setCommentAllow(true);
+    wallConfig.init();
+    WallFilter wallFilter = new WallFilter();
+    wallFilter.setDbType("mysql");
+    wallFilter.setConfig(wallConfig);
+    proxyFilters.add(wallFilter);
+    return proxyFilters;
   }
 }
 

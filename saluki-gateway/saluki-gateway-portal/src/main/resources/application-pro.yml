@@ -1,6 +1,9 @@
 logging:
   level:
     root: error
+saluki:
+  gateway:
+    protos: /Users/liushiming/project/java/saluki/protos
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

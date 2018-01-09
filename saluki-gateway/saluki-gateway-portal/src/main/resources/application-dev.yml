@@ -1,6 +1,9 @@
 logging:
   level:
-    com.bootdo: debug
+    com.quancheng: debug
+saluki:
+  gateway:
+    protos: /Users/liushiming/project/java/saluki/protos
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

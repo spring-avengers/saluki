@@ -15,12 +15,8 @@ package com.quancheng.saluki.gateway.zuul.dto;
 
 import java.io.Serializable;
 
-import org.apache.commons.beanutils.BeanUtils;
-
-import com.quancheng.saluki.gateway.common.BDException;
 import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
 import com.quancheng.saluki.gateway.zuul.domain.RouteDO;
-import com.quancheng.saluki.gateway.zuul.vo.ZuulVo;
 
 /**
  * @author liushiming
@@ -38,11 +34,11 @@ public class ZuulDto implements Serializable {
 
   private String url;
 
-  private String retryable;
+  private Boolean retryable;
 
   private Boolean enabled;
 
-  private String stripPrefix;
+  private Boolean stripPrefix;
 
   private String packageName;
 
@@ -88,15 +84,15 @@ public class ZuulDto implements Serializable {
     this.url = url;
   }
 
-  public String getRetryable() {
+  public Boolean isRetryable() {
     return retryable;
   }
 
-  public void setRetryable(String retryable) {
+  public void setRetryable(Boolean retryable) {
     this.retryable = retryable;
   }
 
-  public Boolean getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
@@ -104,11 +100,11 @@ public class ZuulDto implements Serializable {
     this.enabled = enabled;
   }
 
-  public String getStripPrefix() {
+  public Boolean isStripPrefix() {
     return stripPrefix;
   }
 
-  public void setStripPrefix(String stripPrefix) {
+  public void setStripPrefix(Boolean stripPrefix) {
     this.stripPrefix = stripPrefix;
   }
 
@@ -176,7 +172,7 @@ public class ZuulDto implements Serializable {
     this.protoRep = protoRep;
   }
 
-  public Boolean getGrpc() {
+  public Boolean isGrpc() {
     return grpc;
   }
 
@@ -184,7 +180,7 @@ public class ZuulDto implements Serializable {
     this.grpc = grpc;
   }
 
-  public Boolean getDubbo() {
+  public Boolean isDubbo() {
     return dubbo;
   }
 
@@ -237,9 +233,9 @@ public class ZuulDto implements Serializable {
     zuulDto.setPath(route.getPath());
     zuulDto.setUrl(route.getUrl());
     zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRetryable(route.getRetryable());
+    zuulDto.setRetryable(route.isRetryable());
     zuulDto.setEnabled(route.isEnabled());
-    zuulDto.setStripPrefix(route.getStripPrefix());
+    zuulDto.setStripPrefix(route.isStripPrefix());
     zuulDto.setGrpc(route.isGrpc());
     zuulDto.setDubbo(route.isDubbo());
 
@@ -259,22 +255,17 @@ public class ZuulDto implements Serializable {
     zuulDto.setPath(route.getPath());
     zuulDto.setUrl(route.getUrl());
     zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRetryable(route.getRetryable());
+    zuulDto.setRetryable(route.isRetryable());
     zuulDto.setEnabled(route.isEnabled());
-    zuulDto.setStripPrefix(route.getStripPrefix());
+    zuulDto.setStripPrefix(route.isStripPrefix());
     zuulDto.setGrpc(route.isGrpc());
     zuulDto.setDubbo(route.isDubbo());
+    zuulDto.setPackageName(route.getPackageName());
+    zuulDto.setServiceName(route.getServiceName());
+    zuulDto.setMethodName(route.getMethodName());
+    zuulDto.setServiceGroup(route.getServiceGroup());
+    zuulDto.setServiceVersion(route.getServiceVersion());
     return zuulDto;
-  }
-
-  public ZuulVo buildZuulVo() {
-    ZuulVo vo = new ZuulVo();
-    try {
-      BeanUtils.copyProperties(vo, this);
-    } catch (Exception e) {
-      throw new BDException("构建zuulDto失败", e);
-    }
-    return vo;
   }
 
 

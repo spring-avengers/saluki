@@ -64,7 +64,7 @@ public class ZuulServiceImpl implements ZuulService {
     String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
-    String group = route.getSerivceGroup();
+    String group = route.getServiceGroup();
     String version = route.getServiceVersion();
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
     ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
@@ -79,7 +79,7 @@ public class ZuulServiceImpl implements ZuulService {
       String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
-      String group = route.getSerivceGroup();
+      String group = route.getServiceGroup();
       String version = route.getServiceVersion();
       GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
       ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
@@ -126,7 +126,7 @@ public class ZuulServiceImpl implements ZuulService {
     String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
-    String group = route.getSerivceGroup();
+    String group = route.getServiceGroup();
     String version = route.getServiceVersion();
     GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
     int success1 = routeDao.remove(routeId);
@@ -146,7 +146,7 @@ public class ZuulServiceImpl implements ZuulService {
       String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
-      String group = route.getSerivceGroup();
+      String group = route.getServiceGroup();
       String version = route.getServiceVersion();
       GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
       ids.add(grpc.getId());

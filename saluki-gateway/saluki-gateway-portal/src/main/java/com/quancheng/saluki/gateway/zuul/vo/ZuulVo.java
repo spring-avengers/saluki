@@ -15,9 +15,6 @@ package com.quancheng.saluki.gateway.zuul.vo;
 
 import java.io.Serializable;
 
-import org.apache.commons.beanutils.BeanUtils;
-
-import com.quancheng.saluki.gateway.common.BDException;
 import com.quancheng.saluki.gateway.zuul.dto.ZuulDto;
 
 /**
@@ -35,11 +32,11 @@ public class ZuulVo implements Serializable {
 
   private String url;
 
-  private String retryable;
+  private Boolean retryable;
 
   private Boolean enabled;
 
-  private String stripPrefix;
+  private Boolean stripPrefix;
 
   private String packageName;
 
@@ -56,6 +53,8 @@ public class ZuulVo implements Serializable {
   private Boolean grpc;
 
   private Boolean dubbo;
+
+  private Boolean httpRest;
 
   public Long getRouteId() {
     return routeId;
@@ -89,11 +88,11 @@ public class ZuulVo implements Serializable {
     this.url = url;
   }
 
-  public String getRetryable() {
+  public Boolean isRetryable() {
     return retryable;
   }
 
-  public void setRetryable(String retryable) {
+  public void setRetryable(Boolean retryable) {
     this.retryable = retryable;
   }
 
@@ -105,11 +104,11 @@ public class ZuulVo implements Serializable {
     this.enabled = enabled;
   }
 
-  public String getStripPrefix() {
+  public Boolean isStripPrefix() {
     return stripPrefix;
   }
 
-  public void setStripPrefix(String stripPrefix) {
+  public void setStripPrefix(Boolean stripPrefix) {
     this.stripPrefix = stripPrefix;
   }
 
@@ -177,14 +176,51 @@ public class ZuulVo implements Serializable {
     this.dubbo = dubbo;
   }
 
+  public Boolean isHttpRest() {
+    return httpRest;
+  }
+
+  public void setHttpRest(Boolean httpRest) {
+    this.httpRest = httpRest;
+  }
+
   public ZuulDto buildZuulDto() {
-    ZuulDto dto = new ZuulDto();
-    try {
-      BeanUtils.copyProperties(dto, this);
-    } catch (Exception e) {
-      throw new BDException("构建zuulDto失败", e);
-    }
-    return dto;
+    ZuulDto zuulDto = new ZuulDto();
+    zuulDto.setRouteId(this.routeId);
+    zuulDto.setPath(this.path);
+    zuulDto.setUrl(this.url);
+    zuulDto.setServiceId(this.serviceId);
+    zuulDto.setRetryable(this.retryable);
+    zuulDto.setEnabled(this.enabled);
+    zuulDto.setStripPrefix(this.stripPrefix);
+    zuulDto.setGrpc(this.grpc);
+    zuulDto.setDubbo(this.dubbo);
+    zuulDto.setPackageName(this.packageName);
+    zuulDto.setServiceName(this.serviceName);
+    zuulDto.setMethodName(this.methodName);
+    zuulDto.setServiceGroup(this.getServiceGroup());
+    zuulDto.setServiceVersion(this.serviceVersion);
+    return zuulDto;
+  }
+
+  public static ZuulVo buildZuulVo(ZuulDto zuulDto) {
+    ZuulVo zuulVo = new ZuulVo();
+    zuulVo.setRouteId(zuulDto.getRouteId());
+    zuulVo.setPath(zuulDto.getPath());
+    zuulVo.setUrl(zuulDto.getUrl());
+    zuulVo.setServiceId(zuulDto.getServiceId());
+    zuulVo.setRetryable(zuulDto.isRetryable());
+    zuulVo.setEnabled(zuulDto.isEnabled());
+    zuulVo.setStripPrefix(zuulDto.isStripPrefix());
+    zuulVo.setGrpc(zuulDto.isGrpc());
+    zuulVo.setDubbo(zuulDto.isDubbo());
+    zuulVo.setPackageName(zuulDto.getPackageName());
+    zuulVo.setServiceName(zuulDto.getServiceName());
+    zuulVo.setMethodName(zuulDto.getMethodName());
+    zuulVo.setServiceGroup(zuulDto.getServiceGroup());
+    zuulVo.setServiceVersion(zuulDto.getServiceVersion());
+    zuulVo.setHttpRest(!zuulDto.isDubbo() && !zuulDto.isGrpc());
+    return zuulVo;
   }
 
   @Override

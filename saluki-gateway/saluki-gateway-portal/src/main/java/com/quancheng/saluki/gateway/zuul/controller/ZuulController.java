@@ -76,13 +76,13 @@ public class ZuulController extends BaseController {
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
     ZuulDto zuulDto = zuulService.get(id);
-    ZuulVo zuulVo = zuulDto.buildZuulVo();
+    ZuulVo zuulVo = ZuulVo.buildZuulVo(zuulDto);
     model.addAttribute("zuul", zuulVo);
     return prefix + "/edit";
   }
 
 
-  @RequiresPermissions("zuul:route:zuul")
+  @RequiresPermissions("zuul:route:route")
   @GetMapping("/list")
   @ResponseBody
   PageDO<ZuulVo> list(@RequestParam Map<String, Object> params) {
@@ -90,10 +90,10 @@ public class ZuulController extends BaseController {
     PageDO<ZuulDto> pageDto = zuulService.queryList(query);
     PageDO<ZuulVo> pageVo = new PageDO<>();
     pageVo.setTotal(pageDto.getTotal());
-    List<ZuulDto> dtos = pageDto.getRows();
-    List<ZuulVo> vos = Lists.newArrayListWithCapacity(dtos.size());
-    for (ZuulDto dto : dtos) {
-      vos.add(dto.buildZuulVo());
+    List<ZuulDto> zuulDtos = pageDto.getRows();
+    List<ZuulVo> vos = Lists.newArrayListWithCapacity(zuulDtos.size());
+    for (ZuulDto zuulDto : zuulDtos) {
+      vos.add(ZuulVo.buildZuulVo(zuulDto));
     }
     pageVo.setRows(vos);
     return pageVo;

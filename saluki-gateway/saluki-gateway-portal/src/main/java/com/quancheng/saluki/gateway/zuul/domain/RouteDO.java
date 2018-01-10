@@ -32,11 +32,11 @@ public class RouteDO implements Serializable {
 
   private String url;
 
-  private String retryable;
+  private Boolean retryable;
 
   private Boolean enabled;
 
-  private String stripPrefix;
+  private Boolean stripPrefix;
 
   private String packageName;
 
@@ -44,13 +44,13 @@ public class RouteDO implements Serializable {
 
   private String methodName;
 
-  private String serivceGroup;
+  private String serviceGroup;
 
   private String serviceVersion;
 
-  private Boolean grpc;
+  private Boolean grpc = false;
 
-  private Boolean dubbo;
+  private Boolean dubbo = false;
 
   private Timestamp gmtCreate;
 
@@ -88,11 +88,11 @@ public class RouteDO implements Serializable {
     this.url = url;
   }
 
-  public String getRetryable() {
+  public Boolean isRetryable() {
     return retryable;
   }
 
-  public void setRetryable(String retryable) {
+  public void setRetryable(Boolean retryable) {
     this.retryable = retryable;
   }
 
@@ -104,11 +104,11 @@ public class RouteDO implements Serializable {
     this.enabled = enabled;
   }
 
-  public String getStripPrefix() {
+  public Boolean isStripPrefix() {
     return stripPrefix;
   }
 
-  public void setStripPrefix(String stripPrefix) {
+  public void setStripPrefix(Boolean stripPrefix) {
     this.stripPrefix = stripPrefix;
   }
 
@@ -136,12 +136,13 @@ public class RouteDO implements Serializable {
     this.packageName = packageName;
   }
 
-  public String getSerivceGroup() {
-    return serivceGroup;
+
+  public String getServiceGroup() {
+    return serviceGroup;
   }
 
-  public void setSerivceGroup(String serivceGroup) {
-    this.serivceGroup = serivceGroup;
+  public void setServiceGroup(String serviceGroup) {
+    this.serviceGroup = serviceGroup;
   }
 
   public String getServiceVersion() {
@@ -189,10 +190,11 @@ public class RouteDO implements Serializable {
     return "RouteDO [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
         + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
         + ", packageName=" + packageName + ", serviceName=" + serviceName + ", methodName="
-        + methodName + ", serivceGroup=" + serivceGroup + ", serviceVersion=" + serviceVersion
+        + methodName + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
         + ", grpc=" + grpc + ", dubbo=" + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified="
         + gmtModified + "]";
   }
+
 
 
 }

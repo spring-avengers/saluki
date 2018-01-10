@@ -244,7 +244,7 @@ CREATE TABLE `gateway_route` (
   `url` varchar(255) DEFAULT NULL COMMENT 'url',
   `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
   `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
-  `strip_prefix` int(11) DEFAULT NULL COMMENT '是否忽略后缀',
+  `strip_prefix` tinyint(1) DEFAULT NULL COMMENT '是否忽略后缀',
   `grpc` tinyint(1) DEFAULT NULL COMMENT '是否grpc请求',
   `dubbo` tinyint(1) DEFAULT NULL COMMENT '是否dubbo请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
@@ -260,12 +260,15 @@ CREATE TABLE `gateway_grpc` (
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
   `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
   `service_version` varchar(50) DEFAULT NULL COMMENT '服务版本',
-  `proto_context` blob DEFAULT NULL COMMENT 'proto内容',
-  `proto_req` blob DEFAULT NULL COMMENT 'proto请求',
-  `proto_rep` blob DEFAULT NULL COMMENT 'proto请求',
+  `proto_context` blob COMMENT 'proto内容',
+  `proto_req` blob COMMENT 'proto请求',
+  `proto_rep` blob COMMENT 'proto请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `serviceDefinition` (`package_name`,`service_name`,`method_name`,`service_group`,`service_version`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
 
+
+INSERT INTO `gateway_route` (`route_id`, `path`, `service_id`, `package_name`, `service_name`, `method_name`, `service_group`, `service_version`, `url`, `retryable`, `enabled`, `strip_prefix`, `grpc`, `dubbo`, `gmt_create`, `gmt_modified`)VALUES(1, '/example/**', NULL, 'com.quancheng.examples.service', 'com.quancheng.examples.service.HelloService', 'sayHello', 'example', '1.0.0', NULL, NULL, NULL, 1, 1, NULL, '2018-01-08 00:00:00', '2018-01-08 00:00:00');
 

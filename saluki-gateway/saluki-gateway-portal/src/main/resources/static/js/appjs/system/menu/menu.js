@@ -16,7 +16,6 @@ var load = function() {
 						striped : true, // 是否各行渐变色
 						bordered : true, // 是否显示边框
 						expandAll : false, // 是否全部展开
-						// toolbar : '#exampleToolbar',
 						columns : [
 								{
 									title : '编号',
@@ -137,6 +136,4 @@ function edit(id) {
 	});
 }
 function batchRemove() {
-	// var rows = $('#exampleTable').bootstrapTable('getSelections');
-
 }

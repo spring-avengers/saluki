@@ -1,4 +1,3 @@
-// 以下为官方示例
 $().ready(function() {
 	validateRule();
 	// $("#signupForm").validate();
@@ -15,7 +14,7 @@ function update() {
 		cache : true,
 		type : "POST",
 		url : "/sys/user/update",
-		data : $('#signupForm').serialize(),// 你的formid
+		data : $('#signupForm').serialize(),
 		async : false,
 		error : function(request) {
 			alert("Connection error");

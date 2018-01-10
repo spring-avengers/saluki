@@ -1,40 +1,36 @@
 package com.quancheng.saluki.gateway.system.domain;
 
 public class UserRoleDO {
-    private Long id;
-    private Long userId;
-    private Long roleId;
+  private Long id;
+  private Long userId;
+  private Long roleId;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getUserId() {
-        return userId;
-    }
+  public Long getUserId() {
+    return userId;
+  }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-    public Long getRoleId() {
-        return roleId;
-    }
+  public Long getRoleId() {
+    return roleId;
+  }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
+  public void setRoleId(Long roleId) {
+    this.roleId = roleId;
+  }
 
-    @Override
-    public String toString() {
-        return "UserRoleDO{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", roleId=" + roleId +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "UserRoleDO{" + "id=" + id + ", userId=" + userId + ", roleId=" + roleId + '}';
+  }
 }

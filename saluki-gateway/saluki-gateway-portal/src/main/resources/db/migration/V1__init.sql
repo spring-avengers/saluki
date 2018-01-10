@@ -236,7 +236,6 @@ CREATE TABLE `gateway_route` (
   `route_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
   `service_id` varchar(50) DEFAULT NULL COMMENT '服务ID',
-  `package_name` varchar(50) DEFAULT NULL COMMENT '服务包名',
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
   `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
@@ -265,7 +264,7 @@ CREATE TABLE `gateway_grpc` (
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `serviceDefinition` (`package_name`,`service_name`,`method_name`,`service_group`,`service_version`)
+  UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
 
 

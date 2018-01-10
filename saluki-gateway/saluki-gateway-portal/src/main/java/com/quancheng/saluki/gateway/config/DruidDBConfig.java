@@ -22,9 +22,7 @@ import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
 import com.google.common.collect.Lists;
 
-/**
- * Created by PrimaryKey on 17/2/4.
- */
+
 @Configuration
 public class DruidDBConfig {
   private Logger logger = LoggerFactory.getLogger(DruidDBConfig.class);

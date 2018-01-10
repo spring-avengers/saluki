@@ -154,7 +154,6 @@ public class UserServiceImpl implements UserService {
       tree.setState(state);
       trees.add(tree);
     }
-    // 默认顶级菜单为０，根据数据库实际情况调整
     Tree<DeptDO> t = BuildTree.build(trees);
     return t;
   }

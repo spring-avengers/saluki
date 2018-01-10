@@ -107,16 +107,12 @@ INSERT INTO `sys_menu` VALUES ('26', '2', '系统日志', 'sys/log', 'sys:monito
 INSERT INTO `sys_menu` VALUES ('27', '2', '运行监控', 'sys/log/run', 'sys:monitor:run', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
-
-
-
-
 -- ----------------------------
 -- zuul管理
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('32', '3', '路由管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('33', '3', '策略管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('34', '3', '动态过滤', '/zuul/route', 'zuul:route:route', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('28', '3', '路由管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('29', '3', '策略管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('30', '3', '动态过滤', '/zuul/route', 'zuul:route:route', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
 

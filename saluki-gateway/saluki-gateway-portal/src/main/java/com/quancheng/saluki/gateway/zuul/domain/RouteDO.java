@@ -38,8 +38,6 @@ public class RouteDO implements Serializable {
 
   private Boolean stripPrefix;
 
-  private String packageName;
-
   private String serviceName;
 
   private String methodName;
@@ -128,15 +126,6 @@ public class RouteDO implements Serializable {
     this.methodName = methodName;
   }
 
-  public String getPackageName() {
-    return packageName;
-  }
-
-  public void setPackageName(String packageName) {
-    this.packageName = packageName;
-  }
-
-
   public String getServiceGroup() {
     return serviceGroup;
   }
@@ -189,10 +178,9 @@ public class RouteDO implements Serializable {
   public String toString() {
     return "RouteDO [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
         + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
-        + ", packageName=" + packageName + ", serviceName=" + serviceName + ", methodName="
-        + methodName + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
-        + ", grpc=" + grpc + ", dubbo=" + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified="
-        + gmtModified + "]";
+        + ", serviceName=" + serviceName + ", methodName=" + methodName + ", serviceGroup="
+        + serviceGroup + ", serviceVersion=" + serviceVersion + ", grpc=" + grpc + ", dubbo="
+        + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
 
 

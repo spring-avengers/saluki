@@ -255,7 +255,6 @@ CREATE TABLE `gateway_route` (
 DROP TABLE IF EXISTS `gateway_grpc`;
 CREATE TABLE `gateway_grpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `package_name` varchar(50) DEFAULT NULL COMMENT '服务包名',
   `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
   `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
@@ -270,5 +269,5 @@ CREATE TABLE `gateway_grpc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
 
 
-INSERT INTO `gateway_route` (`route_id`, `path`, `service_id`, `package_name`, `service_name`, `method_name`, `service_group`, `service_version`, `url`, `retryable`, `enabled`, `strip_prefix`, `grpc`, `dubbo`, `gmt_create`, `gmt_modified`)VALUES(1, '/example/**', NULL, 'com.quancheng.examples.service', 'com.quancheng.examples.service.HelloService', 'sayHello', 'example', '1.0.0', NULL, NULL, NULL, 1, 1, NULL, '2018-01-08 00:00:00', '2018-01-08 00:00:00');
+INSERT INTO `gateway_route` (`route_id`, `path`, `service_id`, `service_name`, `method_name`, `service_group`, `service_version`, `url`, `retryable`, `enabled`, `strip_prefix`, `grpc`, `dubbo`, `gmt_create`, `gmt_modified`)VALUES(1, '/example/**', NULL, 'com.quancheng.examples.service.HelloService', 'sayHello', 'example', '1.0.0', NULL, NULL, NULL, 1, 1, NULL, '2018-01-08 00:00:00', '2018-01-08 00:00:00');
 

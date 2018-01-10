@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
 
@@ -26,8 +27,8 @@ import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
  */
 @Mapper
 public interface GrpcDao {
-  GrpcDO get(String packageName, String serviceName, String methodName, String group,
-      String version);
+  GrpcDO get(@Param("serviceName") String serviceName, @Param("methodName") String methodName,
+      @Param("group") String group, @Param("version") String version);
 
   List<GrpcDO> list(Map<String, Object> map);
 

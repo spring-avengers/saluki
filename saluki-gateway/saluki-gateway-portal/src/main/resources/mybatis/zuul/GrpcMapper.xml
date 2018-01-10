@@ -5,23 +5,27 @@
 
 	<select id="get" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
 		select
-		`id`,`package_name`,`service_name`,`method_name`,`service_group`,`service_version`
-		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_grpc
-		where id
-		=#{value}
+		where
+		service_name = #{serviceName，jdbcType=VARCHAR}
+		and
+		method_name = #{methodName,jdbcType=VARCHAR}
+		and
+		service_group = #{group,jdbcType=VARCHAR}
+		and
+		service_version = #{version,jdbcType=VARCHAR}
 	</select>
 
 	<select id="list" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
 		select
-		`id`,`package_name`,`service_name`,`method_name`,`service_group`,`service_version`
-		,`proto_context`,`proto_req`,`proto_rep`,`gmt_create` ,`gmt_modified`
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_grpc
 		<where>
-			<if test="id != null and id != ''"> and id = #{id} </if>
-			<if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
+			<if test="group != null and group != ''"> and service_group = #{group} </if>
+			<if test="version != null and version != ''"> and service_version = #{version} </if>
 		</where>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">
@@ -39,9 +43,10 @@
 	<select id="count" resultType="int">
 		select count(*) from gateway_grpc
 		<where>
-		    <if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
+			<if test="group != null and group != ''"> and service_group = #{group} </if>
+			<if test="version != null and version != ''"> and service_version = #{version} </if>
 		</where>
 	</select>
 
@@ -49,7 +54,6 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into gateway_grpc
 		(
-		`package_name`,
 		`service_name`,
 		`method_name` ,
 		`service_group`,
@@ -62,7 +66,6 @@
 		)
 		values
 		(
-		#{packageName},
 		#{serviceName},
 		#{methodName},
 		#{serviceGroup},
@@ -78,7 +81,6 @@
 	<update id="update" parameterType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
 		update gateway_grpc
 		<set>
-		    <if test="packageName != null and packageName != ''"> and package_name = #{packageName} </if>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
 			<if test="serviceGroup != null and serviceGroup != ''">`service_group`=#{serviceGroup},</if>

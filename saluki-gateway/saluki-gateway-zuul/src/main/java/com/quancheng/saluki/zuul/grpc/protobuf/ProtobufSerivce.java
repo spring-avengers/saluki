@@ -43,30 +43,30 @@ public class ProtobufSerivce {
   private GrpcDao grpcDao;
 
 
-  @Cacheable(value = "serviceTypes", key = "#packageName+ '.' + #serviceName" + "_" + "#methodName"
-      + "_" + "#group" + "_" + "#version")
-  public Pair<Descriptor, Descriptor> resolveServiceInputOutputType(final String packageName,
-      String serviceName, final String methodName, final String group, final String version) {
+  @Cacheable(value = "serviceTypes",
+      key = "#serviceName" + "_" + "#methodName" + "_" + "#group" + "_" + "#version")
+  public Pair<Descriptor, Descriptor> resolveServiceInputOutputType(String serviceName,
+      final String methodName, final String group, final String version) {
     Pair<Descriptor, Descriptor> argsDesc =
-        this.findSingleProtobuf(packageName, serviceName, methodName, group, version);
+        this.findSingleProtobuf(serviceName, methodName, group, version);
     if (argsDesc == null) {
-      argsDesc = this.findDirectyprotobuf(packageName, serviceName, methodName, group, version);
+      argsDesc = this.findDirectyprotobuf(serviceName, methodName, group, version);
     }
     return argsDesc;
   }
 
 
-  private Pair<Descriptor, Descriptor> findDirectyprotobuf(final String packageName,
-      String serviceName, final String methodName, final String group, final String version) {
-    GrpcDO grpcDo = grpcDao.get(packageName, serviceName, methodName, group, version);
+  private Pair<Descriptor, Descriptor> findDirectyprotobuf(String serviceName,
+      final String methodName, final String group, final String version) {
+    GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
     byte[] protoContent = grpcDo.getProtoContext();
     FileDescriptorSet descriptorSet = null;
     if (protoContent != null && protoContent.length > 0) {
       try {
         descriptorSet = FileDescriptorSet.parseFrom(protoContent);
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(descriptorSet);
-        ProtoMethodName protoMethodName = ProtoMethodName
-            .parseFullGrpcMethodName(packageName + "." + serviceName + "/" + methodName);
+        ProtoMethodName protoMethodName =
+            ProtoMethodName.parseFullGrpcMethodName(serviceName + "/" + methodName);
         MethodDescriptor protoMethodDesc = serviceResolver.resolveServiceMethod(protoMethodName);
         return new ImmutablePair<Descriptor, Descriptor>(protoMethodDesc.getInputType(),
             protoMethodDesc.getOutputType());
@@ -79,9 +79,9 @@ public class ProtobufSerivce {
     return null;
   }
 
-  private Pair<Descriptor, Descriptor> findSingleProtobuf(final String packageName,
-      String serviceName, final String methodName, final String group, final String version) {
-    GrpcDO grpcDo = grpcDao.get(packageName, serviceName, methodName, group, version);
+  private Pair<Descriptor, Descriptor> findSingleProtobuf(String serviceName,
+      final String methodName, final String group, final String version) {
+    GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
     byte[] in = grpcDo.getProtoReq();
     byte[] out = grpcDo.getProtoRep();
     FileDescriptorSet inputDescriptorSet = null;

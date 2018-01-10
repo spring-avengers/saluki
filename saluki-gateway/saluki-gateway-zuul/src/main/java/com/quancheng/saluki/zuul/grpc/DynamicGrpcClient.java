@@ -51,11 +51,11 @@ public class DynamicGrpcClient {
   private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 
 
-  public Object call(final String packageName, final String serviceName, final String methodName,
-      final String group, final String version, final String jsonInput) {
+  public Object call(final String serviceName, final String methodName, final String group,
+      final String version, final String jsonInput) {
     try {
       Pair<Descriptor, Descriptor> inOutType =
-          protobufService.resolveServiceInputOutputType(packageName, serviceName, methodName, group, version);
+          protobufService.resolveServiceInputOutputType(serviceName, methodName, group, version);
       Descriptor inPutType = inOutType.getLeft();
       Descriptor outPutType = inOutType.getRight();
       MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
@@ -68,8 +68,8 @@ public class DynamicGrpcClient {
           jsonInput), e);
     } catch (Exception e) {
       throw new RpcFrameworkException(String.format(
-          "service definition is wrong,please check the proto file you update,packageName is %s,service is %s, method is %s",
-          packageName, serviceName, methodName), e);
+          "service definition is wrong,please check the proto file you update,service is %s, method is %s",
+          serviceName, methodName), e);
     }
   }
 

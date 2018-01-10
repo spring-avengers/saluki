@@ -38,8 +38,6 @@ public class ZuulVo implements Serializable {
 
   private Boolean stripPrefix;
 
-  private String packageName;
-
   private String serviceName;
 
   private String methodName;
@@ -110,14 +108,6 @@ public class ZuulVo implements Serializable {
 
   public void setStripPrefix(Boolean stripPrefix) {
     this.stripPrefix = stripPrefix;
-  }
-
-  public String getPackageName() {
-    return packageName;
-  }
-
-  public void setPackageName(String packageName) {
-    this.packageName = packageName;
   }
 
   public String getServiceName() {
@@ -195,7 +185,6 @@ public class ZuulVo implements Serializable {
     zuulDto.setStripPrefix(this.stripPrefix);
     zuulDto.setGrpc(this.grpc);
     zuulDto.setDubbo(this.dubbo);
-    zuulDto.setPackageName(this.packageName);
     zuulDto.setServiceName(this.serviceName);
     zuulDto.setMethodName(this.methodName);
     zuulDto.setServiceGroup(this.getServiceGroup());
@@ -214,7 +203,6 @@ public class ZuulVo implements Serializable {
     zuulVo.setStripPrefix(zuulDto.isStripPrefix());
     zuulVo.setGrpc(zuulDto.isGrpc());
     zuulVo.setDubbo(zuulDto.isDubbo());
-    zuulVo.setPackageName(zuulDto.getPackageName());
     zuulVo.setServiceName(zuulDto.getServiceName());
     zuulVo.setMethodName(zuulDto.getMethodName());
     zuulVo.setServiceGroup(zuulDto.getServiceGroup());
@@ -227,11 +215,9 @@ public class ZuulVo implements Serializable {
   public String toString() {
     return "ZuulVo [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
         + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
-        + ", packageName=" + packageName + ", serviceName=" + serviceName + ", methodName="
-        + methodName + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
-        + ", serviceFileName=" + serviceFileName + ", grpc=" + grpc + ", dubbo=" + dubbo + "]";
+        + ", serviceName=" + serviceName + ", methodName=" + methodName + ", serviceGroup="
+        + serviceGroup + ", serviceVersion=" + serviceVersion + ", serviceFileName="
+        + serviceFileName + ", grpc=" + grpc + ", dubbo=" + dubbo + ", httpRest=" + httpRest + "]";
   }
-
-
 
 }

@@ -61,12 +61,11 @@ public class ZuulServiceImpl implements ZuulService {
   @Override
   public ZuulDto get(Long routeId) {
     RouteDO route = routeDao.get(routeId);
-    String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
     String group = route.getServiceGroup();
     String version = route.getServiceVersion();
-    GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+    GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
     ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
     return zuulDto;
   }
@@ -76,12 +75,11 @@ public class ZuulServiceImpl implements ZuulService {
     List<RouteDO> routes = routeDao.list(map);
     List<ZuulDto> zuulDtos = Lists.newArrayList();
     for (RouteDO route : routes) {
-      String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
       String group = route.getServiceGroup();
       String version = route.getServiceVersion();
-      GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+      GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
       ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
       zuulDtos.add(zuulDto);
     }
@@ -123,12 +121,11 @@ public class ZuulServiceImpl implements ZuulService {
   @Override
   public int remove(Long routeId) {
     RouteDO route = routeDao.get(routeId);
-    String packageName = route.getPackageName();
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
     String group = route.getServiceGroup();
     String version = route.getServiceVersion();
-    GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+    GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
     int success1 = routeDao.remove(routeId);
     int success2 = grpcDao.remove(grpc.getId());
     if (success1 > 0 && success2 > 0) {
@@ -143,12 +140,11 @@ public class ZuulServiceImpl implements ZuulService {
     List<Long> ids = Lists.newArrayList();
     for (Long routeId : routeIds) {
       RouteDO route = routeDao.get(routeId);
-      String packageName = route.getPackageName();
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
       String group = route.getServiceGroup();
       String version = route.getServiceVersion();
-      GrpcDO grpc = grpcDao.get(packageName, serviceName, methodName, group, version);
+      GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
       ids.add(grpc.getId());
     }
     routeDao.batchRemove(routeIds);

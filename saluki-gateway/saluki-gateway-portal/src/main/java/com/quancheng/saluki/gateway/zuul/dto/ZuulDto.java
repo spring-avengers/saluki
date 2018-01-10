@@ -40,8 +40,6 @@ public class ZuulDto implements Serializable {
 
   private Boolean stripPrefix;
 
-  private String packageName;
-
   private String serviceName;
 
   private String methodName;
@@ -106,14 +104,6 @@ public class ZuulDto implements Serializable {
 
   public void setStripPrefix(Boolean stripPrefix) {
     this.stripPrefix = stripPrefix;
-  }
-
-  public String getPackageName() {
-    return packageName;
-  }
-
-  public void setPackageName(String packageName) {
-    this.packageName = packageName;
   }
 
   public String getServiceName() {
@@ -216,7 +206,6 @@ public class ZuulDto implements Serializable {
 
   public GrpcDO buildGrpc() {
     GrpcDO grpc = new GrpcDO();
-    grpc.setPackageName(this.packageName);
     grpc.setServiceName(this.serviceName);
     grpc.setMethodName(this.methodName);
     grpc.setSerivceGroup(this.serviceGroup);
@@ -239,7 +228,6 @@ public class ZuulDto implements Serializable {
     zuulDto.setGrpc(route.isGrpc());
     zuulDto.setDubbo(route.isDubbo());
 
-    zuulDto.setPackageName(grpc.getPackageName());
     zuulDto.setServiceName(grpc.getServiceName());
     zuulDto.setServiceGroup(grpc.getServiceName());
     zuulDto.setServiceVersion(grpc.getServiceVersion());
@@ -260,7 +248,6 @@ public class ZuulDto implements Serializable {
     zuulDto.setStripPrefix(route.isStripPrefix());
     zuulDto.setGrpc(route.isGrpc());
     zuulDto.setDubbo(route.isDubbo());
-    zuulDto.setPackageName(route.getPackageName());
     zuulDto.setServiceName(route.getServiceName());
     zuulDto.setMethodName(route.getMethodName());
     zuulDto.setServiceGroup(route.getServiceGroup());

@@ -91,10 +91,6 @@ function load() {
 									title : '匹配前缀'
 								},
 								{
-									field : 'packageName',
-									title : '服务包名'
-								},
-								{
 									field : 'serviceName',
 									title : '接口名'
 								},
@@ -104,11 +100,11 @@ function load() {
 								},
 								{
 									field : 'serviceGroup',
-									title : '服务组别'
+									title : '组别'
 								},
 								{
 									field : 'serviceVersion',
-									title : '服务版本'
+									title : '版本'
 								},
 								{
 									title : '操作',

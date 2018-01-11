@@ -11,6 +11,7 @@ function load() {
 						url : prefix + "/list",
 						iconSize : 'outline',
 						toolbar : '#exampleToolbar',
+						expandColumn : '3',
 						striped : true,
 						dataType : "json",
 						pagination : true,
@@ -18,17 +19,7 @@ function load() {
 						pageSize : 10,
 						pageNumber : 1,
 						sidePagination : "server",
-						queryParams : function(params) {
-							return {
-								limit : params.limit,
-								offset : params.offset,
-								name : $('#searchName').val(),
-								sort : 'gmt_create',
-								order : 'desc',
-								operation : $("#searchOperation").val(),
-								username : $("#searchUsername").val()
-							};
-						},
+						detailView : true,
 						columns : [
 								{
 									checkbox : true
@@ -36,28 +27,6 @@ function load() {
 								{
 									field : 'routeId',
 									title : '序号'
-								},
-								{
-									field : 'grpc',
-									title : 'gRpc',
-									formatter : function(value, row, index) {
-										if (value) {
-											return "是";
-										} else {
-											return "否"
-										}
-									}
-								},
-								{
-									field : 'dubbo',
-									title : 'dubbo',
-									formatter : function(value, row, index) {
-										if (value) {
-											return "是";
-										} else {
-											return "否"
-										}
-									}
 								},
 								{
 									field : 'httpRest',
@@ -91,22 +60,6 @@ function load() {
 									title : '匹配前缀'
 								},
 								{
-									field : 'serviceName',
-									title : '接口名'
-								},
-								{
-									field : 'methodName',
-									title : '方法名'
-								},
-								{
-									field : 'serviceGroup',
-									title : '组别'
-								},
-								{
-									field : 'serviceVersion',
-									title : '版本'
-								},
-								{
 									title : '操作',
 									field : 'routeId',
 									align : 'center',
@@ -116,11 +69,57 @@ function load() {
 												+ '\')"><i class="fa fa-remove"></i></a> ';
 										return d;
 									}
-								} ]
+								} ],
+						onExpandRow : function(index, row, $detail) {
+							if (!row.httpRest) {
+								chirdTable(index, row, $detail);
+							}
+						}
 					});
 }
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
+}
+function chirdTable(index, row, $detail) {
+	var cur_table = $detail.html('<table></table>').find('table');
+	var rows = [];
+	rows.push(row);
+	$(cur_table).bootstrapTable({
+		columns : [ {
+			field : 'grpc',
+			title : 'grpc服务',
+			formatter : function(value, row, index) {
+				if (value) {
+					return "是";
+				} else {
+					return "否"
+				}
+			}
+		}, {
+			field : 'dubbo',
+			title : 'dubbo服务',
+			formatter : function(value, row, index) {
+				if (value) {
+					return "是";
+				} else {
+					return "否"
+				}
+			}
+		}, {
+			field : 'serviceName',
+			title : '接口名'
+		}, {
+			field : 'methodName',
+			title : '方法名'
+		}, {
+			field : 'serviceGroup',
+			title : '组别'
+		}, {
+			field : 'serviceVersion',
+			title : '版本'
+		} ],
+		data : rows
+	});
 }
 function add() {
 	// iframe层

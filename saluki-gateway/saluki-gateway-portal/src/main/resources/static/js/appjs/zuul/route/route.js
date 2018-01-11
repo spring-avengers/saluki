@@ -78,7 +78,7 @@ function load() {
 					});
 }
 function reLoad() {
-	$('#exampleTable').bootstrapTable('refresh');
+	$('#zuulTable').bootstrapTable('refresh');
 }
 function chirdTable(index, row, $detail) {
 	var cur_table = $detail.html('<table></table>').find('table');
@@ -165,7 +165,7 @@ function edit(id) {
 	});
 }
 function batchRemove() {
-	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
+	var rows = $('#zuulTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {
 		layer.msg("请选择要删除的数据");
 		return;

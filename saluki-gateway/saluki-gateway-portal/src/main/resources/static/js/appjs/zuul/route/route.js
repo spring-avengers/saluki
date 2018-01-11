@@ -122,15 +122,12 @@ function chirdTable(index, row, $detail) {
 	});
 }
 function add() {
-	// iframe层
-	layer.open({
+	var addPage = layer.open({
 		type : 2,
 		title : '添加路由',
-		maxmin : true,
-		shadeClose : false, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/add' // iframe的url
+		content : prefix + '/add'
 	});
+	layer.full(addPage);
 }
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {

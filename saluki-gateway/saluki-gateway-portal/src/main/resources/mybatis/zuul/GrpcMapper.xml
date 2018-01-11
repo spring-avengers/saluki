@@ -8,13 +8,13 @@
 		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_grpc
 		where
-		service_name = #{serviceName，jdbcType=VARCHAR}
+		service_name = #{serviceName}
 		and
-		method_name = #{methodName,jdbcType=VARCHAR}
+		method_name = #{methodName}
 		and
-		service_group = #{group,jdbcType=VARCHAR}
+		service_group = #{group}
 		and
-		service_version = #{version,jdbcType=VARCHAR}
+		service_version = #{version}
 	</select>
 
 	<select id="list" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">

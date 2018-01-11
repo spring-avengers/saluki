@@ -65,7 +65,7 @@ function load() {
 									align : 'center',
 									formatter : function(value, row, index) {
 										var d = '<a class="btn btn-warning btn-sm" href="#" title="删除"  mce_href="#" onclick="remove(\''
-												+ row.id
+												+ row.routeId
 												+ '\')"><i class="fa fa-remove"></i></a> ';
 										return d;
 									}
@@ -125,7 +125,7 @@ function add() {
 	// iframe层
 	layer.open({
 		type : 2,
-		title : '添加角色',
+		title : '添加路由',
 		maxmin : true,
 		shadeClose : false, // 点击遮罩关闭层
 		area : [ '800px', '520px' ],
@@ -157,7 +157,7 @@ function remove(id) {
 function edit(id) {
 	layer.open({
 		type : 2,
-		title : '角色修改',
+		title : '路由修改',
 		maxmin : true,
 		shadeClose : true, // 点击遮罩关闭层
 		area : [ '800px', '520px' ],

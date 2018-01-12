@@ -1,7 +1,6 @@
 $().ready(function() {
 	validateRule();
 });
-
 $.validator.setDefaults({
 	submitHandler : function() {
 		save();
@@ -33,11 +32,26 @@ function save() {
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
+	jQuery.validator.addMethod("isZipFileNotNull", function(value, element,
+			param) {
+		return param.val() != null && value != null && value != '';
+	}, icon + "上传proto目录文件，需要指定目录中的服务定义文件名！");
+	jQuery.validator.addMethod("isOutputNotNull", function(value, element,
+			param) {
+		return param.val() != null && value != null && value != '';
+	}, icon + "上传proto目录文件，需要指定目录中的服务定义文件名！");
 	$("#routeForm").validate({
 		rules : {
 			path : {
 				required : true
-			}
+			},
+			serviceFileName : {
+				isZipFileNotNull : $("#zipFile")
+			},
+			output : {
+				isOutputNotNull : $("#input")
+			},
+
 		},
 		messages : {
 			path : {

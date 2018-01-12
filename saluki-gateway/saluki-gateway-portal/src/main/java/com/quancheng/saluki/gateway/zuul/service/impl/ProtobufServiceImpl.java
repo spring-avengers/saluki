@@ -14,22 +14,23 @@
 package com.quancheng.saluki.gateway.zuul.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.os72.protocjar.Protoc;
 import com.google.common.collect.ImmutableList;
@@ -47,7 +48,7 @@ public class ProtobufServiceImpl implements ProtobufService {
   private String protoFileDirectory;
 
   @Override
-  public byte[] compileDirectoryProto(InputStream directoryZipStream, String serviceFileName) {
+  public byte[] compileDirectoryProto(MultipartFile directoryZipStream, String serviceFileName) {
     String fileDirectory = null;
     try {
       fileDirectory = this.uploadZipFile(directoryZipStream, serviceFileName);
@@ -59,17 +60,13 @@ public class ProtobufServiceImpl implements ProtobufService {
       throw new BDException(e.getMessage(), e);
     } finally {
       if (fileDirectory != null) {
-        try {
-          Files.deleteIfExists(Paths.get(fileDirectory));
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        FileUtils.deleteQuietly(new File(fileDirectory));
       }
     }
   }
 
   @Override
-  public byte[] compileFileProto(InputStream inputStream, String fileName) {
+  public byte[] compileFileProto(MultipartFile inputStream, String fileName) {
     String filePath = null;
     try {
       filePath = this.uploadSimpleFile(inputStream, fileName);
@@ -78,11 +75,7 @@ public class ProtobufServiceImpl implements ProtobufService {
       throw new BDException(e.getMessage(), e);
     } finally {
       if (filePath != null) {
-        try {
-          Files.deleteIfExists(Paths.get(filePath));
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        FileUtils.deleteQuietly(new File(filePath));
       }
     }
 
@@ -109,30 +102,28 @@ public class ProtobufServiceImpl implements ProtobufService {
   }
 
 
-  private String uploadSimpleFile(InputStream argStream, String fileName) throws IOException {
-    String argRealPath = Paths.get(protoFileDirectory, "argsProtos").toFile().getAbsolutePath();
-    File argDirectory = new File(argRealPath);
-    if (!argDirectory.exists()) {
-      argDirectory.mkdirs();
-    }
-    Path filePath = Paths.get(argRealPath, fileName);
-    Files.copy(argStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-    return filePath.toFile().getAbsolutePath();
+  private String uploadSimpleFile(MultipartFile protoFile, String fileName) throws IOException {
+    Path protoFileDistPath =
+        Paths.get(protoFileDirectory, "argProtos", protoFile.getOriginalFilename());
+    File protoFileDist = protoFileDistPath.toFile();
+    FileUtils.forceMkdirParent(protoFileDist);
+    protoFile.transferTo(protoFileDist);
+    return protoFileDist.getAbsolutePath();
   }
 
-  private String uploadZipFile(InputStream serviceStream, String serviceName) throws IOException {
-    String unZipRealPath = Paths.get(protoFileDirectory, serviceName).toFile().getAbsolutePath();
-    File unZipFile = new File(unZipRealPath);
-    if (!unZipFile.exists()) {
-      unZipFile.mkdirs();
-    }
+  private String uploadZipFile(MultipartFile zipFile, String serviceName) throws IOException {
+    Path zipFileDistPath =
+        Paths.get(protoFileDirectory, serviceName, zipFile.getOriginalFilename());
+    File zipFileDist = zipFileDistPath.toFile();
+    FileUtils.forceMkdirParent(zipFileDist);
+    zipFile.transferTo(zipFileDist);
     ZipInputStream zipInputStream = null;
     try {
-      zipInputStream = new ZipInputStream(serviceStream);
+      zipInputStream = new ZipInputStream(new FileInputStream(zipFileDist));
       ZipEntry zipEntry;
       while ((zipEntry = zipInputStream.getNextEntry()) != null) {
         String zipEntryName = zipEntry.getName();
-        String outPath = unZipRealPath + "/" + zipEntryName;
+        String outPath = zipFileDistPath.getParent() + "/" + zipEntryName;
         File file = new File(outPath.substring(0, outPath.lastIndexOf('/')));
         if (!file.exists()) {
           file.mkdirs();
@@ -159,7 +150,7 @@ public class ProtobufServiceImpl implements ProtobufService {
         e.printStackTrace();
       }
     }
-    return unZipRealPath;
+    return zipFileDist.getParent();
   }
 
 

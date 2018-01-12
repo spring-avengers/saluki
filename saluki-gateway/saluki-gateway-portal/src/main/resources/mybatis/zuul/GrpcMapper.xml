@@ -10,11 +10,13 @@
 		where
 		service_name = #{serviceName}
 		and
-		method_name = #{methodName}
+		method_name =
+		#{methodName}
 		and
 		service_group = #{group}
 		and
-		service_version = #{version}
+		service_version =
+		#{version}
 	</select>
 
 	<select id="list" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
@@ -55,13 +57,13 @@
 		insert into gateway_grpc
 		(
 		`service_name`,
-		`method_name` ,
+		`method_name`,
 		`service_group`,
-		`service_version`
-		`proto_context` ,
+		`service_version`,
+		`proto_context`,
 		`proto_req`,
 		`proto_rep`,
-		`gmt_create` ,
+		`gmt_create`,
 		`gmt_modified`
 		)
 		values

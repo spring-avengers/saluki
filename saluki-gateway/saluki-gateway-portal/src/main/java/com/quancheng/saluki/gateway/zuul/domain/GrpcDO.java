@@ -31,7 +31,7 @@ public class GrpcDO implements Serializable {
 
   private String methodName;
 
-  private String serivceGroup;
+  private String serviceGroup;
 
   private String serviceVersion;
 
@@ -69,12 +69,14 @@ public class GrpcDO implements Serializable {
     this.methodName = methodName;
   }
 
-  public String getSerivceGroup() {
-    return serivceGroup;
+
+
+  public String getServiceGroup() {
+    return serviceGroup;
   }
 
-  public void setSerivceGroup(String serivceGroup) {
-    this.serivceGroup = serivceGroup;
+  public void setServiceGroup(String serviceGroup) {
+    this.serviceGroup = serviceGroup;
   }
 
   public String getServiceVersion() {
@@ -128,7 +130,7 @@ public class GrpcDO implements Serializable {
   @Override
   public String toString() {
     return "GrpcDO [id=" + id + ", serviceName=" + serviceName + ", methodName=" + methodName
-        + ", serivceGroup=" + serivceGroup + ", serviceVersion=" + serviceVersion
+        + ", serivceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
         + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
         + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
         + gmtCreate + ", gmtModified=" + gmtModified + "]";

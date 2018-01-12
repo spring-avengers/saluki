@@ -52,10 +52,9 @@ public class FileType {
     FILE_TYPE_MAP.put("52494646e27807005741", "wav"); // Wave (wav)
     FILE_TYPE_MAP.put("52494646d07d60074156", "avi");
     FILE_TYPE_MAP.put("4d546864000000060001", "mid"); // MIDI (mid)
-    FILE_TYPE_MAP.put("504b0304140000000800", "zip");
     FILE_TYPE_MAP.put("526172211a0700cf9073", "rar");
     FILE_TYPE_MAP.put("235468697320636f6e66", "ini");
-    FILE_TYPE_MAP.put("504b03040a0000000000", "jar");
+    FILE_TYPE_MAP.put("504b03040a0000000000", "zip");
     FILE_TYPE_MAP.put("4d5a9000030000000400", "exe");// 可执行文件
     FILE_TYPE_MAP.put("3c25402070616765206c", "jsp");// jsp文件
     FILE_TYPE_MAP.put("4d616e69666573742d56", "mf");// MF文件

@@ -199,6 +199,8 @@ public class ZuulDto implements Serializable {
     routeDo.setStripPrefix(this.stripPrefix);
     routeDo.setServiceName(this.serviceName);
     routeDo.setMethodName(this.methodName);
+    routeDo.setServiceGroup(this.serviceGroup);
+    routeDo.setServiceVersion(this.serviceVersion);
     routeDo.setGrpc(this.grpc);
     routeDo.setDubbo(this.dubbo);
     return routeDo;
@@ -208,7 +210,7 @@ public class ZuulDto implements Serializable {
     GrpcDO grpc = new GrpcDO();
     grpc.setServiceName(this.serviceName);
     grpc.setMethodName(this.methodName);
-    grpc.setSerivceGroup(this.serviceGroup);
+    grpc.setServiceGroup(this.serviceGroup);
     grpc.setServiceVersion(this.serviceVersion);
     grpc.setProtoContext(this.protoContext);
     grpc.setProtoRep(this.protoReq);

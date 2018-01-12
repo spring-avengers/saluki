@@ -8,12 +8,11 @@ $.validator.setDefaults({
 	}
 });
 function save() {
-	$.ajax({
-		cache : true,
+	alert("test");
+	$("#routeForm").ajaxSubmit({
 		type : "POST",
 		url : "/zuul/route/save",
-		data : $('#signupForm').serialize(),// 你的formid
-		async : false,
+		dataType : 'json',
 		error : function(request) {
 			parent.layer.alert("Connection error");
 		},
@@ -21,7 +20,7 @@ function save() {
 			if (data.code == 0) {
 				parent.layer.msg("操作成功");
 				parent.reLoad();
-				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+				var index = parent.layer.getFrameIndex(window.name);
 				parent.layer.close(index);
 
 			} else {
@@ -34,15 +33,15 @@ function save() {
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
+	$("#routeForm").validate({
 		rules : {
-			name : {
+			path : {
 				required : true
 			}
 		},
 		messages : {
-			name : {
-				required : icon + "请输入姓名"
+			path : {
+				required : icon + "请输入路由路径！"
 			}
 		}
 	})

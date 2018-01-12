@@ -53,7 +53,7 @@
 	</select>
 
 	<insert id="save" parameterType="com.quancheng.saluki.gateway.zuul.domain.RouteDO"
-		useGeneratedKeys="true" keyProperty="route_id">
+		useGeneratedKeys="true" keyProperty="routeId">
 		insert into gateway_route
 		(
 		`path`,
@@ -61,7 +61,7 @@
 		`service_name`,
 		`method_name`,
 		`service_group`,
-		`service_version`
+		`service_version`,
 		`url`,
 		`retryable`,
 		`enabled`,
@@ -77,8 +77,8 @@
 		#{serviceId},
 		#{serviceName},
 		#{methodName},
-		#{group},
-		#{version},
+		#{serviceGroup},
+		#{serviceVersion},
 		#{url},
 		#{retryable},
 		#{enabled},

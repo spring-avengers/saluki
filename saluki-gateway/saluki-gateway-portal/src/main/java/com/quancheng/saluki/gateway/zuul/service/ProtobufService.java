@@ -13,7 +13,7 @@
  */
 package com.quancheng.saluki.gateway.zuul.service;
 
-import java.io.InputStream;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author liushiming
@@ -21,9 +21,9 @@ import java.io.InputStream;
  */
 public interface ProtobufService {
 
-  public byte[] compileDirectoryProto(InputStream directoryZipStream, String serviceFileName);
+  public byte[] compileDirectoryProto(MultipartFile directoryZipStream, String serviceFileName);
 
-  public byte[] compileFileProto(InputStream inputStream, String fileName);
+  public byte[] compileFileProto(MultipartFile inputStream, String fileName);
 
 
 }

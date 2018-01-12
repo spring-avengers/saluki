@@ -235,11 +235,11 @@ DROP TABLE IF EXISTS `gateway_route`;
 CREATE TABLE `gateway_route` (
   `route_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
-  `service_id` varchar(50) DEFAULT NULL COMMENT '服务ID',
-  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
-  `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
-  `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
-  `service_version` varchar(50) DEFAULT NULL COMMENT '服务版本',
+  `service_id` varchar(255) DEFAULT NULL COMMENT '服务ID',
+  `service_name` varchar(255) DEFAULT NULL COMMENT '服务名',
+  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
+  `service_group` varchar(100) DEFAULT NULL COMMENT '服务组名',
+  `service_version` varchar(100) DEFAULT NULL COMMENT '服务版本',
   `url` varchar(255) DEFAULT NULL COMMENT 'url',
   `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
   `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
@@ -248,16 +248,17 @@ CREATE TABLE `gateway_route` (
   `dubbo` tinyint(1) DEFAULT NULL COMMENT '是否dubbo请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
- PRIMARY KEY (`route_id`)
+ PRIMARY KEY (`route_id`),
+ UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='网关路由表';
 
 DROP TABLE IF EXISTS `gateway_grpc`;
 CREATE TABLE `gateway_grpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
-  `method_name` varchar(50) DEFAULT NULL COMMENT '方法名',
-  `service_group` varchar(50) DEFAULT NULL COMMENT '服务组名',
-  `service_version` varchar(50) DEFAULT NULL COMMENT '服务版本',
+  `service_name` varchar(255) DEFAULT NULL COMMENT '服务名',
+  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
+  `service_group` varchar(100) DEFAULT NULL COMMENT '服务组名',
+  `service_version` varchar(100) DEFAULT NULL COMMENT '服务版本',
   `proto_context` blob COMMENT 'proto内容',
   `proto_req` blob COMMENT 'proto请求',
   `proto_rep` blob COMMENT 'proto请求',

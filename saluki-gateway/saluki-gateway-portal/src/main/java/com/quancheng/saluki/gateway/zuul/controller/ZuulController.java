@@ -116,8 +116,7 @@ public class ZuulController extends BaseController {
           return response;
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
-          byte[] protoContext =
-              protobufService.compileDirectoryProto(directoryZipStream, serviceFileName);
+          byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
           ZuulDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
           zuulService.save(zuulDto);
@@ -133,9 +132,9 @@ public class ZuulController extends BaseController {
           return responseOutput;
         } else {
           String fileNameInput = inputFile.getOriginalFilename();
-          byte[] protoInput = protobufService.compileFileProto(inputStream, fileNameInput);
+          byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
-          byte[] protoOutput = protobufService.compileFileProto(outputStream, fileNameOutput);
+          byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
           ZuulDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
@@ -179,8 +178,7 @@ public class ZuulController extends BaseController {
           return response;
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
-          byte[] protoContext =
-              protobufService.compileDirectoryProto(directoryZipStream, serviceFileName);
+          byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
           ZuulDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
           zuulService.update(zuulDto);
@@ -196,9 +194,9 @@ public class ZuulController extends BaseController {
           return responseOutput;
         } else {
           String fileNameInput = inputFile.getOriginalFilename();
-          byte[] protoInput = protobufService.compileFileProto(inputStream, fileNameInput);
+          byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
-          byte[] protoOutput = protobufService.compileFileProto(outputStream, fileNameOutput);
+          byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
           ZuulDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);

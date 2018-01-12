@@ -8,41 +8,54 @@
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
-						<form class="form-horizontal" id="signupForm">
+						<form class="form-horizontal" id="routeForm"
+							enctype="multipart/form-data">
 							<fieldset>
 								<legend>基础配置</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">请求路径</label>
+									<label class="col-sm-2 control-label" for="path">请求路径</label>
 									<div class="col-sm-4">
-										<input class="form-control" id="ds_host" type="text"
-											placeholder="path" />
+										<input class="form-control" id="path" name="path"
+											th:value="${path}" type="text" placeholder="path" />
 									</div>
-									<label class="col-sm-2 control-label" for="ds_name">服务Id</label>
+									<label class="col-sm-2 control-label" for="serviceId">服务Id</label>
 									<div class="col-sm-4">
-										<input class="form-control" id="ds_name" type="text"
-											placeholder="serviceId" />
+										<input class="form-control" id="serviceId" name="serviceId"
+											th:value="${serviceId}" type="text" placeholder="serviceId" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_username">转发url</label>
+									<label class="col-sm-2 control-label" for="url">转发url</label>
 									<div class="col-sm-10">
-										<input class="form-control" id="ds_username" type="text"
-											placeholder="url" />
+										<input id="url" name="url" th:value="${url}"
+											class="form-control" type="text" placeholder="url" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="disabledSelect" class="col-sm-2 control-label">忽略前缀</label>
+									<label for="stripPrefix" class="col-sm-2 control-label">忽略前缀</label>
 									<div class="col-sm-4">
-										<select id="disabledSelect" class="form-control">
+										<select id="stripPrefix" name="stripPrefix"
+											th:value="${stripPrefix}" class="form-control">
 											<option value="0">否</option>
 											<option value="1">是</option>
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="disabledSelect" class="col-sm-2 control-label">重试</label>
+									<label for="retryable" class="col-sm-2 control-label">重试</label>
 									<div class="col-sm-4">
-										<select id="disabledSelect" class="form-control">
+										<select id="retryable" name="retryable"
+											th:value="${retryable}" class="form-control">
+											<option value="0">否</option>
+											<option value="1">是</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="enabled" class="col-sm-2 control-label">开启</label>
+									<div class="col-sm-4">
+										<select id="enabled" name="enabled" th:value="${enabled}"
+											class="form-control">
 											<option value="0">否</option>
 											<option value="1">是</option>
 										</select>
@@ -52,16 +65,18 @@
 							<fieldset>
 								<legend>Rpc选择</legend>
 								<div class="form-group">
-									<label for="disabledSelect" class="col-sm-2 control-label">是否gRpc</label>
+									<label for="grpc" class="col-sm-2 control-label">是否gRpc</label>
 									<div class="col-sm-4">
-										<select id="disabledSelect" class="form-control">
+										<select id="grpc" name="grpc" th:value="${grpc}"
+											class="form-control">
 											<option value="0">否</option>
 											<option value="1">是</option>
 										</select>
 									</div>
-									<label for="disabledSelect" class="col-sm-2 control-label">是否dubbo</label>
+									<label for="dubbo" class="col-sm-2 control-label">是否dubbo</label>
 									<div class="col-sm-4">
-										<select id="disabledSelect" class="form-control">
+										<select id="dubbo" name="dubbo" th:value="${dubbo}"
+											class="form-control">
 											<option value="0">否</option>
 											<option value="1">是</option>
 										</select>
@@ -71,76 +86,87 @@
 							<fieldset>
 								<legend>Rpc服务配置</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">接口名</label>
+									<label class="col-sm-2 control-label" for="serviceName">接口名</label>
 									<div class="col-sm-10">
-										<input class="form-control" id="ds_host" type="text"
+										<input class="form-control" id="serviceName"
+											name="serviceName" th:value="${serviceName}" type="text"
 											placeholder="serviceName" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">方法名</label>
+									<label class="col-sm-2 control-label" for="methodName">方法名</label>
 									<div class="col-sm-10">
-										<input class="form-control" id="ds_host" type="text"
-											placeholder="methodName" />
+										<input class="form-control" id="methodName" name="methodName"
+											th:value="${methodName}" type="text" placeholder="methodName" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">组别</label>
+									<label class="col-sm-2 control-label" for="serviceGroup">组别</label>
 									<div class="col-sm-10">
-										<input class="form-control" id="ds_host" type="text"
+										<input class="form-control" id="serviceGroup"
+											name="serviceGroup" th:value="${serviceGroup}" type="text"
 											placeholder="group" />
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">版本</label>
+									<label class="col-sm-2 control-label" for="serviceVersion">版本</label>
 									<div class="col-sm-10">
-										<input class="form-control" id="ds_host" type="text"
-											placeholder="version" />
+										<input class="form-control" id="serviceVersion"
+											name="serviceVersion" th:value="${serviceVersion}"
+											type="text" placeholder="version" />
 									</div>
 								</div>
 							</fieldset>
 							<fieldset>
 								<legend>gRpc目录文件上传</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">gRpc目录文件</label>
-									<div class="col-sm-10">
-										<span id="filename" style="vertical-align: left">未上传文件</span>
+									<label class="col-sm-2 control-label" for="zipFile">gRpc目录文件</label>
+									<div class="col-sm-4">
+										<span id="zipfilename" style="vertical-align: left">未上传文件</span>
 										<div class="file-container"
 											style="display: inline-block; position: relative; overflow: hidden; vertical-align: middle">
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
-											<input type="file" id="jobData"
-												onchange="loadFile(this.files[0])"
+											<input type="file" id="zipFile" name="zipFile"
+												th:value="${zipFile}" onchange="loadZipFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>
-										<span class="help-block">包括gRpc service的定义及入参出参的Proto文件,以zip包的方式</span>
+										<span class="help-block">包括gRpc
+											service的定义及入参出参的Proto文件,以zip包的方式</span>
+									</div>
+									<label class="col-sm-2 control-label" for="serviceFileName">服务定义文件</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="serviceFileName"
+											name="serviceFileName" th:value="${serviceFileName}"
+											type="text" placeholder="serviceFileName" />
 									</div>
 								</div>
 							</fieldset>
 							<fieldset>
 								<legend>gRpc入参出参文件上传</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="ds_host">入参</label>
+									<label class="col-sm-2 control-label" for="input">入参</label>
 									<div class="col-sm-4">
-										<span id="filename" style="vertical-align: left">未上传文件</span>
+										<span id="inputname" style="vertical-align: left">未上传文件</span>
 										<div class="file-container"
 											style="display: inline-block; position: relative; overflow: hidden; vertical-align: middle">
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
-											<input type="file" id="jobData"
-												onchange="loadFile(this.files[0])"
+											<input type="file" id="input" name="input"
+												th:value="${input}" onchange="loadInputFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>
 									</div>
-									<label class="col-sm-2 control-label" for="ds_host">出参</label>
+									<label class="col-sm-2 control-label" for="output">出参</label>
 									<div class="col-sm-4">
-										<span id="filename" style="vertical-align: left">未上传文件</span>
+										<span id="outputname" style="vertical-align: left">未上传文件</span>
 										<div class="file-container"
 											style="display: inline-block; position: relative; overflow: hidden; vertical-align: middle">
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
-											<input type="file" id="jobData"
-												onchange="loadFile(this.files[0])"
+											<input type="file" id="output" name="output"
+												th:value="${output}"
+												onchange="loadOutputFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>
 									</div>
@@ -161,8 +187,14 @@
 	</div>
 	<div th:include="include::footer"></div>
 	<script>
-		function loadFile(file) {
-			$("#filename").html(file.name);
+		function loadZipFile(file) {
+			$("#zipfilename").html(file.name);
+		}
+		function loadInputFile(file) {
+			$("#inputname").html(file.name);
+		}
+		function loadOutputFile(file) {
+			$("#outputname").html(file.name);
 		}
 	</script>
 	<script type="text/javascript" src="/js/appjs/zuul/route/add.js"></script>

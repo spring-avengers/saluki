@@ -231,6 +231,7 @@ public class ZuulDto implements Serializable {
     zuulDto.setDubbo(route.isDubbo());
 
     zuulDto.setServiceName(grpc.getServiceName());
+    zuulDto.setMethodName(grpc.getMethodName());
     zuulDto.setServiceGroup(grpc.getServiceName());
     zuulDto.setServiceVersion(grpc.getServiceVersion());
     zuulDto.setProtoContext(grpc.getProtoContext());

@@ -8,8 +8,6 @@ server:
 security:
   basic:
     enabled: false
-flyway:
-  locations: classpath:/db
 spring:
   thymeleaf:
     mode: LEGACYHTML5

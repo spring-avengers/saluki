@@ -37,8 +37,8 @@
 									<div class="col-sm-4">
 										<select id="stripPrefix" name="stripPrefix"
 											th:value="${zuul.stripPrefix}" class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
+											<option value="0" th:if="${zuul.stripPrefix ==false}">否</option>
+											<option value="1" th:if="${zuul.stripPrefix ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -47,8 +47,8 @@
 									<div class="col-sm-4">
 										<select id="retryable" name="retryable"
 											th:value="${zuul.retryable}" class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
+											<option value="0" th:if="${zuul.retryable ==false}">否</option>
+											<option value="1" th:if="${zuul.retryable ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -57,8 +57,8 @@
 									<div class="col-sm-4">
 										<select id="enabled" name="enabled" th:value="${zuul.enabled}"
 											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
+											<option value="0" th:if="${zuul.enabled ==false}">否</option>
+											<option value="1" th:if="${zuul.enabled ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -70,16 +70,16 @@
 									<div class="col-sm-4">
 										<select id="grpc" name="grpc" th:value="${zuul.grpc}"
 											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
+											<option value="0" th:if="${zuul.grpc ==false}">否</option>
+											<option value="1" th:if="${zuul.grpc ==true}">是</option>
 										</select>
 									</div>
 									<label for="dubbo" class="col-sm-2 control-label">是否dubbo</label>
 									<div class="col-sm-4">
 										<select id="dubbo" name="dubbo" th:value="${zuul.dubbo}"
 											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
+											<option value="0" th:if="${zuul.dubbo ==false}">否</option>
+											<option value="1" th:if="${zuul.dubbo ==true}">是</option>
 										</select>
 									</div>
 								</div>

@@ -212,8 +212,8 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '超级管理员', '27bd386e70f280e24c2f4f2a549b82cf', '6', 'admin@example.com', '123456', '1', '1', '2017-08-15 21:40:39', '2017-08-15 21:41:00');
-INSERT INTO `sys_user` VALUES ('2', 'test', '普通用户', '6cf3bb3deba2aadbd41ec9a22511084e', '6', 'test@bootdo.com', null, '1', '1', '2017-08-14 13:43:05', '2017-08-14 21:15:36');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '超级管理员', 'd633268afedf209e1e4ea0f5f43228a8', '6', 'admin@example.com', '123456', '1', '1', '2017-08-15 21:40:39', '2017-08-15 21:41:00');
+INSERT INTO `sys_user` VALUES ('2', 'test', '普通用户', 'b132f5f968c9373261f74025c23c2222', '6', 'test@test.com', null, '1', '1', '2017-08-14 13:43:05', '2017-08-14 21:15:36');
 -- ----------------------------
 -- Table structure for `sys_user_role`
 -- ----------------------------

@@ -64,10 +64,15 @@ function load() {
 									field : 'routeId',
 									align : 'center',
 									formatter : function(value, row, index) {
+										var e = '<a class="btn btn-primary btn-sm '
+												+ s_edit_h
+												+ '" href="#" mce_href="#" title="编辑" onclick="edit(\''
+												+ row.routeId
+												+ '\')"><i class="fa fa-edit"></i></a> ';
 										var d = '<a class="btn btn-warning btn-sm" href="#" title="删除"  mce_href="#" onclick="remove(\''
 												+ row.routeId
 												+ '\')"><i class="fa fa-remove"></i></a> ';
-										return d;
+										return e + d;
 									}
 								} ],
 						onExpandRow : function(index, row, $detail) {
@@ -122,12 +127,14 @@ function chirdTable(index, row, $detail) {
 	});
 }
 function add() {
-	var addPage = layer.open({
+	layer.open({
 		type : 2,
 		title : '添加路由',
+		maxmin : true,
+		shadeClose : true,
+		area : [ '1300px', '700px' ],
 		content : prefix + '/add'
 	});
-	layer.full(addPage);
 }
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {
@@ -156,9 +163,9 @@ function edit(id) {
 		type : 2,
 		title : '路由修改',
 		maxmin : true,
-		shadeClose : true, // 点击遮罩关闭层
-		area : [ '800px', '520px' ],
-		content : prefix + '/edit/' + id // iframe的url
+		shadeClose : true,
+		area : [ '1300px', '700px' ],
+		content : prefix + '/edit/' + id
 	});
 }
 function batchRemove() {

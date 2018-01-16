@@ -268,6 +268,3 @@ CREATE TABLE `gateway_grpc` (
   UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
 
-
-INSERT INTO `gateway_route` (`route_id`, `path`, `service_id`, `service_name`, `method_name`, `service_group`, `service_version`, `url`, `retryable`, `enabled`, `strip_prefix`, `grpc`, `dubbo`, `gmt_create`, `gmt_modified`)VALUES(1, '/example/**', NULL, 'com.quancheng.examples.service.HelloService', 'sayHello', 'example', '1.0.0', NULL, NULL, NULL, 1, 1, NULL, '2018-01-08 00:00:00', '2018-01-08 00:00:00');
-

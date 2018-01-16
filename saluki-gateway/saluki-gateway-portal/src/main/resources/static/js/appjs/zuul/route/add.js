@@ -36,10 +36,6 @@ function validateRule() {
 			param) {
 		return param.val() != null && value != null && value != '';
 	}, icon + "上传proto目录文件，需要指定目录中的服务定义文件名！");
-	jQuery.validator.addMethod("isOutputNotNull", function(value, element,
-			param) {
-		return param.val() != null && value != null && value != '';
-	}, icon + "上传proto目录文件，需要指定目录中的服务定义文件名！");
 	$("#routeForm").validate({
 		rules : {
 			path : {
@@ -47,11 +43,7 @@ function validateRule() {
 			},
 			serviceFileName : {
 				isZipFileNotNull : $("#zipFile")
-			},
-			output : {
-				isOutputNotNull : $("#input")
-			},
-
+			}
 		},
 		messages : {
 			path : {

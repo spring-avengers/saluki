@@ -252,8 +252,8 @@ CREATE TABLE `gateway_route` (
  UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
 ) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='网关路由表';
 
-DROP TABLE IF EXISTS `gateway_grpc`;
-CREATE TABLE `gateway_grpc` (
+DROP TABLE IF EXISTS `gateway_rpc`;
+CREATE TABLE `gateway_rpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `service_name` varchar(255) DEFAULT NULL COMMENT '服务名',
   `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
@@ -266,5 +266,5 @@ CREATE TABLE `gateway_grpc` (
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='grpc服务映射表';
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='rpc服务映射表';
 

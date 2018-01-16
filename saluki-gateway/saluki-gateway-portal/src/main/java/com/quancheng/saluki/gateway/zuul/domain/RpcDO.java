@@ -21,7 +21,7 @@ import java.util.Arrays;
  * @author liushiming
  * @version GrpcDO.java, v 0.0.1 2018年1月4日 上午10:33:59 liushiming
  */
-public class GrpcDO implements Serializable {
+public class RpcDO implements Serializable {
 
   private static final long serialVersionUID = 4715218350028915340L;
 

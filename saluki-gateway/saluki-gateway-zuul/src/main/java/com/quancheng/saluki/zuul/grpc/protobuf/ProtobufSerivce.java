@@ -27,8 +27,8 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.quancheng.saluki.core.grpc.exception.RpcBizException;
-import com.quancheng.saluki.gateway.zuul.dao.GrpcDao;
-import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
+import com.quancheng.saluki.gateway.zuul.dao.RpcDao;
+import com.quancheng.saluki.gateway.zuul.domain.RpcDO;
 
 /**
  * @author liushiming
@@ -40,7 +40,7 @@ public class ProtobufSerivce {
   private static final Logger LOG = LoggerFactory.getLogger(ProtobufSerivce.class);
 
   @Autowired
-  private GrpcDao grpcDao;
+  private RpcDao grpcDao;
 
 
   @Cacheable(value = "serviceTypes",
@@ -58,7 +58,7 @@ public class ProtobufSerivce {
 
   private Pair<Descriptor, Descriptor> findDirectyprotobuf(String serviceName,
       final String methodName, final String group, final String version) {
-    GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
     byte[] protoContent = grpcDo.getProtoContext();
     FileDescriptorSet descriptorSet = null;
     if (protoContent != null && protoContent.length > 0) {
@@ -81,7 +81,7 @@ public class ProtobufSerivce {
 
   private Pair<Descriptor, Descriptor> findSingleProtobuf(String serviceName,
       final String methodName, final String group, final String version) {
-    GrpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
     byte[] in = grpcDo.getProtoReq();
     byte[] out = grpcDo.getProtoRep();
     FileDescriptorSet inputDescriptorSet = null;

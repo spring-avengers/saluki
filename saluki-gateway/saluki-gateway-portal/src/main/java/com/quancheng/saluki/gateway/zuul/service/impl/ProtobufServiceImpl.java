@@ -27,8 +27,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,8 +45,17 @@ import com.quancheng.saluki.gateway.zuul.service.ProtobufService;
 @Service
 public class ProtobufServiceImpl implements ProtobufService {
 
-  @Value("${saluki.gateway.protos}")
   private String protoFileDirectory;
+
+  @PostConstruct
+  public void init() {
+    try {
+      Path protosTempDirectory = Files.createTempDirectory("protos");
+      protoFileDirectory = protosTempDirectory.toFile().getAbsolutePath();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   @Override
   public byte[] compileDirectoryProto(MultipartFile directoryZipStream, String serviceFileName) {

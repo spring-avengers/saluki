@@ -19,24 +19,24 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
+import com.quancheng.saluki.gateway.zuul.domain.RpcDO;
 
 /**
  * @author liushiming
  * @version GrpcDao.java, v 0.0.1 2018年1月4日 上午10:48:12 liushiming
  */
 @Mapper
-public interface GrpcDao {
-  GrpcDO get(@Param("serviceName") String serviceName, @Param("methodName") String methodName,
+public interface RpcDao {
+  RpcDO get(@Param("serviceName") String serviceName, @Param("methodName") String methodName,
       @Param("group") String group, @Param("version") String version);
 
-  List<GrpcDO> list(Map<String, Object> map);
+  List<RpcDO> list(Map<String, Object> map);
 
   int count(Map<String, Object> map);
 
-  int save(GrpcDO route);
+  int save(RpcDO route);
 
-  int update(GrpcDO route);
+  int update(RpcDO route);
 
   int remove(Long id);
 

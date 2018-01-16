@@ -23,9 +23,9 @@ import com.google.common.collect.Lists;
 import com.quancheng.saluki.gateway.common.CommonResponse;
 import com.quancheng.saluki.gateway.system.domain.PageDO;
 import com.quancheng.saluki.gateway.utils.Query;
-import com.quancheng.saluki.gateway.zuul.dao.GrpcDao;
+import com.quancheng.saluki.gateway.zuul.dao.RpcDao;
 import com.quancheng.saluki.gateway.zuul.dao.RouteDao;
-import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
+import com.quancheng.saluki.gateway.zuul.domain.RpcDO;
 import com.quancheng.saluki.gateway.zuul.domain.RouteDO;
 import com.quancheng.saluki.gateway.zuul.dto.ZuulDto;
 import com.quancheng.saluki.gateway.zuul.service.ZuulService;
@@ -41,7 +41,7 @@ public class ZuulServiceImpl implements ZuulService {
   private RouteDao routeDao;
 
   @Autowired
-  private GrpcDao grpcDao;
+  private RpcDao grpcDao;
 
   @Override
   public PageDO<ZuulDto> queryList(Query query) {
@@ -65,7 +65,7 @@ public class ZuulServiceImpl implements ZuulService {
     String methodName = route.getMethodName();
     String group = route.getServiceGroup();
     String version = route.getServiceVersion();
-    GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
     ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
     return zuulDto;
   }
@@ -79,7 +79,7 @@ public class ZuulServiceImpl implements ZuulService {
       String methodName = route.getMethodName();
       String group = route.getServiceGroup();
       String version = route.getServiceVersion();
-      GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+      RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
       ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
       zuulDtos.add(zuulDto);
     }
@@ -95,7 +95,7 @@ public class ZuulServiceImpl implements ZuulService {
   @Override
   public int save(ZuulDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
-    GrpcDO grpcDo = zuulDto.buildGrpc();
+    RpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.save(grpcDo);
     int success2 = routeDao.save(routeDo);
     if (success1 > 0 && success2 > 0) {
@@ -108,7 +108,7 @@ public class ZuulServiceImpl implements ZuulService {
   @Override
   public int update(ZuulDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
-    GrpcDO grpcDo = zuulDto.buildGrpc();
+    RpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.update(grpcDo);
     int success2 = routeDao.update(routeDo);
     if (success1 > 0 && success2 > 0) {
@@ -125,7 +125,7 @@ public class ZuulServiceImpl implements ZuulService {
     String methodName = route.getMethodName();
     String group = route.getServiceGroup();
     String version = route.getServiceVersion();
-    GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
     int success1 = routeDao.remove(routeId);
     int success2 = grpcDao.remove(grpc.getId());
     if (success1 > 0 && success2 > 0) {
@@ -144,7 +144,7 @@ public class ZuulServiceImpl implements ZuulService {
       String methodName = route.getMethodName();
       String group = route.getServiceGroup();
       String version = route.getServiceVersion();
-      GrpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+      RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
       ids.add(grpc.getId());
     }
     routeDao.batchRemove(routeIds);

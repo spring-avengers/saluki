@@ -15,7 +15,7 @@ package com.quancheng.saluki.gateway.zuul.dto;
 
 import java.io.Serializable;
 
-import com.quancheng.saluki.gateway.zuul.domain.GrpcDO;
+import com.quancheng.saluki.gateway.zuul.domain.RpcDO;
 import com.quancheng.saluki.gateway.zuul.domain.RouteDO;
 
 /**
@@ -206,8 +206,8 @@ public class ZuulDto implements Serializable {
     return routeDo;
   }
 
-  public GrpcDO buildGrpc() {
-    GrpcDO grpc = new GrpcDO();
+  public RpcDO buildGrpc() {
+    RpcDO grpc = new RpcDO();
     grpc.setServiceName(this.serviceName);
     grpc.setMethodName(this.methodName);
     grpc.setServiceGroup(this.serviceGroup);
@@ -218,7 +218,7 @@ public class ZuulDto implements Serializable {
     return grpc;
   }
 
-  public static ZuulDto buildZuulDto(RouteDO route, GrpcDO grpc) {
+  public static ZuulDto buildZuulDto(RouteDO route, RpcDO grpc) {
     ZuulDto zuulDto = new ZuulDto();
     zuulDto.setRouteId(route.getRouteId());
     zuulDto.setPath(route.getPath());

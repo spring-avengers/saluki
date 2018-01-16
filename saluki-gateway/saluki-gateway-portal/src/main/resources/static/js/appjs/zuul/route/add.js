@@ -7,7 +7,6 @@ $.validator.setDefaults({
 	}
 });
 function save() {
-	alert("test");
 	$("#routeForm").ajaxSubmit({
 		type : "POST",
 		url : "/zuul/route/save",
@@ -32,23 +31,28 @@ function save() {
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
-	jQuery.validator.addMethod("isZipFileNotNull", function(value, element,
-			param) {
-		return param.val() != null && value != null && value != '';
-	}, icon + "上传proto目录文件，需要指定目录中的服务定义文件名！");
-	$("#routeForm").validate({
-		rules : {
-			path : {
-				required : true
-			},
-			serviceFileName : {
-				isZipFileNotNull : $("#zipFile")
-			}
-		},
-		messages : {
-			path : {
-				required : icon + "请输入路由路径！"
-			}
-		}
-	})
+	$("#routeForm").validate(
+			{
+				rules : {
+					path : {
+						required : true
+					},
+					serviceFileName : {
+						required : {
+							depends : function(value, element) {
+								return ($('#zipFile').val() != null
+										&& value != null && value != '');
+							}
+						}
+					}
+				},
+				messages : {
+					path : {
+						required : icon + "请输入路由路径！"
+					},
+					serviceFileName : {
+						required : icon + "上传proto目录文件，需要指定目录中的服务定义文件名！"
+					}
+				}
+			})
 }

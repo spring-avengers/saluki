@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.quancheng.saluki.gateway.zuul.dao.GrpcDao">
+<mapper namespace="com.quancheng.saluki.gateway.zuul.dao.RpcDao">
 
-	<select id="get" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
+	<select id="get" resultType="com.quancheng.saluki.gateway.zuul.domain.RpcDO">
 		select
 		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
-		from gateway_grpc
+		from gateway_rpc
 		where
 		service_name = #{serviceName}
 		and
@@ -19,10 +19,10 @@
 		#{version}
 	</select>
 
-	<select id="list" resultType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
+	<select id="list" resultType="com.quancheng.saluki.gateway.zuul.domain.RpcDO">
 		select
 		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
-		from gateway_grpc
+		from gateway_rpc
 		<where>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
@@ -43,7 +43,7 @@
 	</select>
 
 	<select id="count" resultType="int">
-		select count(*) from gateway_grpc
+		select count(*) from gateway_rpc
 		<where>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
 			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
@@ -52,9 +52,9 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO"
+	<insert id="save" parameterType="com.quancheng.saluki.gateway.zuul.domain.RpcDO"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into gateway_grpc
+		insert into gateway_rpc
 		(
 		`service_name`,
 		`method_name`,
@@ -80,8 +80,8 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.quancheng.saluki.gateway.zuul.domain.GrpcDO">
-		update gateway_grpc
+	<update id="update" parameterType="com.quancheng.saluki.gateway.zuul.domain.RpcDO">
+		update gateway_rpc
 		<set>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
@@ -96,11 +96,11 @@
 	</update>
 
 	<delete id="remove">
-		delete from gateway_grpc where id = #{value}
+		delete from gateway_rpc where id = #{value}
 	</delete>
 
 	<delete id="batchRemove">
-		delete from gateway_grpc where id in
+		delete from gateway_rpc where id in
 		<foreach item="id" collection="array" open="(" separator=","
 			close=")">
 			#{id}

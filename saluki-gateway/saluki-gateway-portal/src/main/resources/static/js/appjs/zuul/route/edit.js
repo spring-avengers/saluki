@@ -72,6 +72,14 @@ function validateRule() {
 					}
 				}
 			},
+			zipFile : {
+				required : {
+					depends : function(value, element) {
+						var isGrpc = $('#grpc').val();
+						return isGrpc == 1;
+					}
+				}
+			},
 			serviceFileName : {
 				required : {
 					depends : function(value, element) {
@@ -101,6 +109,9 @@ function validateRule() {
 			},
 			serviceVersion : {
 				required : icon + "请输入版本！"
+			},
+			zipFile : {
+				required : icon + "请上传proto目录文件！"
 			},
 			serviceFileName : {
 				required : icon + "上传proto目录文件，需要指定目录中的服务定义文件名！"

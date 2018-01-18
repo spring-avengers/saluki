@@ -20,7 +20,6 @@
 		<module>saluki-serializer</module>
 		<module>saluki-service</module>
 		<module>spring-boot-starter-saluki</module>
-		<module>saluki-springsupport</module>
 		<module>saluki-monitor</module>
 		<module>saluki-plugin</module>
 		<module>saluki-gateway</module>

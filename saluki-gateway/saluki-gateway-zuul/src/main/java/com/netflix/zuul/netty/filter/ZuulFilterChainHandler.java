@@ -33,13 +33,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
-import com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler;
-import com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteEvent;
+
+import com.quancheng.saluki.netty.HttpLifecycleChannelHandler;
+import com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteEvent;
 import com.quancheng.saluki.netty.common.HttpRequestReadTimeoutEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 import static com.netflix.zuul.context.CommonContextKeys.NETTY_SERVER_CHANNEL_HANDLER_CONTEXT;
 import static com.netflix.zuul.context.CommonContextKeys.ZUUL_FILTER_CHAIN;
 import static com.netflix.zuul.stats.status.ZuulStatusCategory.FAILURE_CLIENT_CANCELLED;
@@ -47,6 +47,7 @@ import static com.netflix.zuul.stats.status.ZuulStatusCategory.FAILURE_CLIENT_PI
 import static com.netflix.zuul.stats.status.ZuulStatusCategory.FAILURE_CLIENT_TIMEOUT;
 import static com.netflix.zuul.stats.status.ZuulStatusCategory.FAILURE_LOCAL;
 import static com.netflix.zuul.stats.status.ZuulStatusCategory.FAILURE_LOCAL_IDLE_TIMEOUT;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 
 /**
  * Created by saroskar on 5/18/17.

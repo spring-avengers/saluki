@@ -14,31 +14,30 @@
  *      limitations under the License.
  */
 
-package com.quancheng.saluki.netty.common.channel.config;
+package com.quancheng.saluki.netty;
+
+import io.netty.util.concurrent.FastThreadLocalThread;
+
+import java.util.concurrent.ThreadFactory;
 
 /**
- * User: michaels@netflix.com
- * Date: 2/8/17
- * Time: 6:41 PM
+ * User: Mike Smith
+ * Date: 6/8/16
+ * Time: 11:49 AM
  */
-public class ChannelConfigValue<T>
+public class CategorizedThreadFactory implements ThreadFactory
 {
-    private final ChannelConfigKey<T> key;
-    private final T value;
+    private String category;
+    private int num = 0;
 
-    public ChannelConfigValue(ChannelConfigKey<T> key, T value)
-    {
-        this.key = key;
-        this.value = value;
+    public CategorizedThreadFactory(String category) {
+        super();
+        this.category = category;
     }
 
-    public ChannelConfigKey<T> key()
-    {
-        return key;
-    }
-
-    public T value()
-    {
-        return value;
+    public Thread newThread(final Runnable r) {
+        final FastThreadLocalThread t = new FastThreadLocalThread(r,
+                category + "-" + num++);
+        return t;
     }
 }

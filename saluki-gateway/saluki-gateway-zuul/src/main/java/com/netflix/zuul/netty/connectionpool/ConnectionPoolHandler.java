@@ -21,12 +21,13 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
+
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteEvent;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteEvent;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 
 /**
  * User: michaels@netflix.com Date: 6/23/16 Time: 1:57 PM

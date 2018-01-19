@@ -15,8 +15,8 @@
 package com.netflix.zuul.netty.server;
 
 import com.quancheng.saluki.netty.common.accesslog.AccessLogPublisher;
-import com.quancheng.saluki.netty.common.channel.config.ChannelConfigKey;
 import com.quancheng.saluki.netty.common.metrics.EventLoopGroupMetrics;
+import com.quancheng.saluki.netty.config.ChannelConfigKey;
 import com.quancheng.saluki.servo.monitor.BasicCounter;
 import com.quancheng.saluki.spectator.api.Registry;
 import com.netflix.zuul.FilterLoader;

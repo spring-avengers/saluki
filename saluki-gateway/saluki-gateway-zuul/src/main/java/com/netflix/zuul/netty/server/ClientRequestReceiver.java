@@ -50,7 +50,8 @@ import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
-import com.quancheng.saluki.netty.common.SourceAddressChannelHandler;
+
+import com.quancheng.saluki.netty.SourceAddressChannelHandler;
 import com.quancheng.saluki.netty.common.ssl.SslHandshakeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,10 +59,10 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteEvent;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 import static com.netflix.zuul.netty.server.HttpHandler.PROTOCOL_NAME;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteEvent;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 
 
 /**

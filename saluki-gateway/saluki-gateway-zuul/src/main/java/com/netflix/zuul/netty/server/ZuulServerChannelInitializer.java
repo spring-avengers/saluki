@@ -14,10 +14,11 @@
 
 package com.netflix.zuul.netty.server;
 
+import com.quancheng.saluki.netty.config.ChannelConfig;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.group.ChannelGroup;
-import com.quancheng.saluki.netty.common.channel.config.ChannelConfig;
 
 /**
  * User: Mike Smith Date: 3/5/16 Time: 6:44 PM

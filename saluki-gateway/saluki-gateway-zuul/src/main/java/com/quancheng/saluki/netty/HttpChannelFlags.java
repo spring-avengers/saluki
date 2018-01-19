@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.quancheng.saluki.netty.common;
+package com.quancheng.saluki.netty;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

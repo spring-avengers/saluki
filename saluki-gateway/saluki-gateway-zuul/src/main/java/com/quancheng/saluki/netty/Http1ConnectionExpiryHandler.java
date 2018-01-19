@@ -14,7 +14,7 @@
  *      limitations under the License.
  */
 
-package com.quancheng.saluki.netty.common;
+package com.quancheng.saluki.netty;
 
 import io.netty.handler.codec.http.HttpResponse;
 

@@ -17,13 +17,14 @@
 package com.netflix.zuul.netty.server;
 
 import com.netflix.zuul.netty.ssl.SslContextFactory;
+import com.quancheng.saluki.netty.config.ChannelConfig;
+import com.quancheng.saluki.netty.config.CommonChannelConfigKeys;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslHandler;
-import com.quancheng.saluki.netty.common.channel.config.ChannelConfig;
-import com.quancheng.saluki.netty.common.channel.config.CommonChannelConfigKeys;
 
 import javax.net.ssl.SSLException;
 

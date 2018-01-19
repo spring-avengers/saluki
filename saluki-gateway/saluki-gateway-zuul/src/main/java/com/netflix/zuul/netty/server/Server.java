@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.quancheng.saluki.config.DynamicBooleanProperty;
 import com.quancheng.saluki.config.DynamicIntProperty;
-import com.quancheng.saluki.netty.common.CategorizedThreadFactory;
+import com.quancheng.saluki.netty.CategorizedThreadFactory;
 import com.quancheng.saluki.netty.common.LeastConnsEventLoopChooserFactory;
 import com.quancheng.saluki.netty.common.metrics.EventLoopGroupMetrics;
 

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.quancheng.saluki.netty.common;
+package com.quancheng.saluki.netty;
 
 import java.util.concurrent.TimeUnit;
 

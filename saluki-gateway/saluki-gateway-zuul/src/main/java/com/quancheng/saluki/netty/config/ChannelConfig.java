@@ -14,7 +14,7 @@
  *      limitations under the License.
  */
 
-package com.quancheng.saluki.netty.common.channel.config;
+package com.quancheng.saluki.netty.config;
 
 import java.util.HashMap;
 

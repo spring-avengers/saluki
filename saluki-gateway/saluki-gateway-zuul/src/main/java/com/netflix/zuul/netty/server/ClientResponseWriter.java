@@ -24,6 +24,8 @@ import com.netflix.zuul.message.Header;
 import com.netflix.zuul.message.http.HttpRequestInfo;
 import com.netflix.zuul.message.http.HttpResponseMessage;
 import com.netflix.zuul.netty.ChannelUtils;
+import com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason;
+
 /*import com.netflix.zuul.netty.platform.NFFilterChannelHandler;
 import com.netflix.zuul.netty.prefetch.PrefetchRequest;
 import com.netflix.zuul.stats.NfStatus;
@@ -47,15 +49,15 @@ import io.netty.handler.codec.http2.HttpConversionUtil;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.util.ReferenceCountUtil;
-import com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.netflix.zuul.netty.server.ClientRequestReceiver.ATTR_ZUUL_RESP;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteEvent;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.StartEvent;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteEvent;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.StartEvent;
 
 /**
  * Created by saroskar on 2/26/17.

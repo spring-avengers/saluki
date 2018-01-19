@@ -44,9 +44,9 @@ import java.io.IOException;
 
 import static com.netflix.zuul.exception.OutboundErrorType.READ_TIMEOUT;
 import static com.netflix.zuul.exception.OutboundErrorType.RESET_CONNECTION;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteEvent;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason;
-import static com.quancheng.saluki.netty.common.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteEvent;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason;
+import static com.quancheng.saluki.netty.HttpLifecycleChannelHandler.CompleteReason.SESSION_COMPLETE;
 
 /**
  * Created by saroskar on 1/18/17.

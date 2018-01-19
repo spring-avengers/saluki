@@ -26,7 +26,8 @@ import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import com.quancheng.saluki.netty.common.HttpClientLifecycleChannelHandler;
+
+import com.quancheng.saluki.netty.HttpClientLifecycleChannelHandler;
 import com.quancheng.saluki.netty.common.metrics.HttpMetricsChannelHandler;
 
 import java.util.concurrent.TimeUnit;

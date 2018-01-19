@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.quancheng.saluki.config.DynamicBooleanProperty;
 import com.quancheng.saluki.config.DynamicIntProperty;
-import com.quancheng.saluki.netty.common.ConnectionCloseType;
+import com.quancheng.saluki.netty.ConnectionCloseType;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.group.ChannelGroup;

@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.google.protobuf.Message;
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.netflix.hystrix.HystrixCommandKey;
-import com.netflix.hystrix.HystrixCommandProperties;
-import com.netflix.hystrix.HystrixThreadPoolProperties;
+import com.quancheng.saluki.hystrix.HystrixCommand;
+import com.quancheng.saluki.hystrix.HystrixCommandGroupKey;
+import com.quancheng.saluki.hystrix.HystrixCommandKey;
+import com.quancheng.saluki.hystrix.HystrixCommandProperties;
+import com.quancheng.saluki.hystrix.HystrixThreadPoolProperties;
 import com.quancheng.saluki.core.common.Constants;
 import com.quancheng.saluki.core.common.GrpcURL;
 import com.quancheng.saluki.core.common.NamedThreadFactory;

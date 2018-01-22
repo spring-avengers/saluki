@@ -16,10 +16,11 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.http.HttpRequest;
 
-public class HttpProxyHandler extends ChannelDuplexHandler {
+public class HttpProxyHandler extends ChannelInboundHandlerAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(HttpProxyHandler.class);
   private static final String HANDLER_NAME = "http-pipe-back";

@@ -14,8 +14,6 @@
 
 package com.quancheng.saluki.netty;
 
-import com.netflix.zuul.passport.PassportState;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
@@ -105,10 +103,7 @@ public class HttpServerLifecycleChannelHandler extends HttpLifecycleChannelHandl
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-      addPassportState(ctx, PassportState.SERVER_CH_CLOSE);
-
       fireCompleteEventIfNotAlready(ctx, CompleteReason.CLOSE);
-
       super.close(ctx, promise);
     }
 

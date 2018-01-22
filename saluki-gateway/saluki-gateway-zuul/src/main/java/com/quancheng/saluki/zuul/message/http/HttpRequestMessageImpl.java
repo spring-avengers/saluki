@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.netflix.config.CachedDynamicBooleanProperty;
 import com.netflix.config.CachedDynamicIntProperty;
 import com.netflix.config.DynamicStringProperty;
-import com.netflix.zuul.context.SessionContext;
+import com.quancheng.saluki.zuul.context.SessionContext;
 import com.quancheng.saluki.zuul.filters.ZuulFilter;
 import com.quancheng.saluki.zuul.message.Headers;
 import com.quancheng.saluki.zuul.message.ZuulMessage;

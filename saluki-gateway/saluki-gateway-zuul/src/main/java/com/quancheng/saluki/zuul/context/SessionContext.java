@@ -28,9 +28,9 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.netflix.config.DynamicPropertyFactory;
-import com.netflix.zuul.filters.FilterError;
-import com.netflix.zuul.stats.Timings;
+import com.quancheng.saluki.zuul.filters.FilterError;
 import com.quancheng.saluki.zuul.message.http.HttpResponseMessage;
+import com.quancheng.saluki.zuul.stats.Timings;
 import com.quancheng.saluki.zuul.util.DeepCopy;
 
 /**

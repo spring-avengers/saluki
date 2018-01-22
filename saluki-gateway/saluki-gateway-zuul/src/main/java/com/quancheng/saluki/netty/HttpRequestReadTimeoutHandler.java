@@ -17,8 +17,6 @@ package com.quancheng.saluki.netty;
 import java.util.concurrent.TimeUnit;
 
 import com.netflix.servo.monitor.BasicCounter;
-import com.netflix.zuul.passport.CurrentPassport;
-import com.netflix.zuul.passport.PassportState;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -73,7 +71,6 @@ public class HttpRequestReadTimeoutHandler extends ChannelInboundHandlerAdapter 
   @Override
   public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
     if (evt instanceof HttpRequestReadTimeoutEvent) {
-      CurrentPassport.fromChannel(ctx.channel()).add(PassportState.IN_REQ_READ_TIMEOUT);
       removeInternalHandler(ctx);
       httpRequestReadTimeoutCounter.increment();
     }

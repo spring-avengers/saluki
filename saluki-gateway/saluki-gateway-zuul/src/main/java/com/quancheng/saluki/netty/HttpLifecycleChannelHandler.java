@@ -17,9 +17,6 @@ package com.quancheng.saluki.netty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.netflix.zuul.passport.CurrentPassport;
-import com.netflix.zuul.passport.PassportState;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
@@ -101,10 +98,6 @@ public abstract class HttpLifecycleChannelHandler extends CombinedChannelDuplexH
     return true;
   }
 
-  protected static void addPassportState(ChannelHandlerContext ctx, PassportState state) {
-    CurrentPassport passport = CurrentPassport.fromChannel(ctx.channel());
-    passport.add(state);
-  }
 
   public enum CompleteReason {
     SESSION_COMPLETE, INACTIVE, DISCONNECT, DEREGISTER, EXCEPTION, CLOSE

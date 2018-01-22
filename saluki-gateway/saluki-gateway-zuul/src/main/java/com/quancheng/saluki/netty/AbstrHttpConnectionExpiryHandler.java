@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.netflix.config.CachedDynamicLongProperty;
-import com.netflix.zuul.netty.ChannelUtils;
+import com.quancheng.saluki.zuul.util.ChannelUtils;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

@@ -29,7 +29,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.netflix.config.DynamicIntProperty;
 import com.netflix.config.DynamicPropertyFactory;
-import com.netflix.zuul.context.SessionContext;
+import com.quancheng.saluki.zuul.context.SessionContext;
 import com.quancheng.saluki.zuul.filters.ZuulFilter;
 import com.quancheng.saluki.zuul.message.http.HttpHeaderNames;
 

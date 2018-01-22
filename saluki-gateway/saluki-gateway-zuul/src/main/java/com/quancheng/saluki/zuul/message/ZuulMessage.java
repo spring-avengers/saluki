@@ -14,7 +14,7 @@
 
 package com.quancheng.saluki.zuul.message;
 
-import com.netflix.zuul.context.SessionContext;
+import com.quancheng.saluki.zuul.context.SessionContext;
 import com.quancheng.saluki.zuul.filters.ZuulFilter;
 
 import io.netty.handler.codec.http.HttpContent;

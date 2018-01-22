@@ -14,14 +14,15 @@
 
 package com.quancheng.saluki.zuul.util;
 
-import com.netflix.zuul.exception.ZuulException;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.http.HttpContent;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
+
+import com.quancheng.saluki.zuul.exception.ZuulException;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.HttpContent;
 
 /**
  * Refactored this out of our GZipResponseFilter

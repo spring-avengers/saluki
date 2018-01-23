@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import com.quancheng.saluki.netty.HostResolver;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
-import com.quancheng.saluki.netty.adapter.ActivityTracker;
-import com.quancheng.saluki.netty.adapter.HttpFilter;
-import com.quancheng.saluki.netty.adapter.HttpFilterSource;
+import com.quancheng.saluki.netty.callback.ActivityTracker;
+import com.quancheng.saluki.netty.callback.HttpFilter;
+import com.quancheng.saluki.netty.callback.HttpFilterSource;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.bootstrap.ServerBootstrap;

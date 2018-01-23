@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.adapter;
+package com.quancheng.saluki.netty.callback;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;

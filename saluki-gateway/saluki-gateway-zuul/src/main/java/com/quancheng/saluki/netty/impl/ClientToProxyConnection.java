@@ -23,8 +23,8 @@ import javax.net.ssl.SSLSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.quancheng.saluki.netty.adapter.ActivityTracker;
-import com.quancheng.saluki.netty.adapter.HttpFilter;
+import com.quancheng.saluki.netty.callback.ActivityTracker;
+import com.quancheng.saluki.netty.callback.HttpFilter;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 import com.quancheng.saluki.netty.impl.support.FlowContext;
 import com.quancheng.saluki.netty.impl.support.FullFlowContext;

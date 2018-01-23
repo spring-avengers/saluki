@@ -14,8 +14,8 @@ import java.util.concurrent.RejectedExecutionException;
 import javax.net.ssl.SSLProtocolException;
 
 import com.google.common.net.HostAndPort;
-import com.quancheng.saluki.netty.adapter.ActivityTracker;
-import com.quancheng.saluki.netty.adapter.HttpFilter;
+import com.quancheng.saluki.netty.callback.ActivityTracker;
+import com.quancheng.saluki.netty.callback.HttpFilter;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 import com.quancheng.saluki.netty.impl.support.FullFlowContext;
 import com.quancheng.saluki.utils.ProxyUtils;

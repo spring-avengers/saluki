@@ -7,7 +7,7 @@ import static com.quancheng.saluki.netty.impl.support.ConnectionState.NEGOTIATIN
 
 import javax.net.ssl.SSLEngine;
 
-import com.quancheng.saluki.netty.adapter.HttpFilter;
+import com.quancheng.saluki.netty.callback.HttpFilter;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 import com.quancheng.saluki.utils.ProxyUtils;
 

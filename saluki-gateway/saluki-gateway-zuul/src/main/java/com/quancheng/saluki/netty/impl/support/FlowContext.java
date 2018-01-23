@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSession;
 
-import com.quancheng.saluki.netty.adapter.ActivityTracker;
+import com.quancheng.saluki.netty.callback.ActivityTracker;
 import com.quancheng.saluki.netty.impl.ClientToProxyConnection;
 
 /**

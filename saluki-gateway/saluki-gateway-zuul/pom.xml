@@ -48,13 +48,25 @@
 			<version>4.1.16.Final</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-pool</groupId>
-			<artifactId>commons-pool</artifactId>
+			<groupId>org.littleshoot</groupId>
+			<artifactId>dnssec4j</artifactId>
+			<version>0.1.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.littleshoot</groupId>
+					<artifactId>dnsjava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.yammer.metrics</groupId>
-			<artifactId>metrics-core</artifactId>
-			<version>2.2.0</version>
+			<groupId>dnsjava</groupId>
+			<artifactId>dnsjava</artifactId>
+			<version>2.1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.udt</groupId>
+			<artifactId>barchart-udt-bundle</artifactId>
+			<version>2.3.0</version>
 		</dependency>
 	</dependencies>
 </project>

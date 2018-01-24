@@ -19,7 +19,7 @@
 	</licenses>
 	<modules>
 		<module>saluki-gateway-portal</module>
-		<module>saluki-gateway-zuul</module>
+		<module>saluki-gateway-proxy</module>
 		<module>saluki-gateway-oauth2</module>
 	</modules>
 	<properties>

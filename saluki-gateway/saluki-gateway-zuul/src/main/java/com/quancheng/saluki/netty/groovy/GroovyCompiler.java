@@ -12,15 +12,13 @@
  * the License.
  */
 
-package com.quancheng.saluki.zuul.groovy;
+package com.quancheng.saluki.netty.groovy;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.quancheng.saluki.zuul.DynamicCodeCompiler;
 
 import groovy.lang.GroovyClassLoader;
 

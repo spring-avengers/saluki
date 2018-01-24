@@ -14,7 +14,7 @@
  *      limitations under the License.
  */
 
-package com.quancheng.saluki.zuul;
+package com.quancheng.saluki.netty.groovy;
 
 import java.io.File;
 

@@ -2,11 +2,9 @@ package com.quancheng.saluki.netty;
 
 import java.net.InetSocketAddress;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.quancheng.saluki.netty.filter.HttpRequestFilter;
 import com.quancheng.saluki.netty.filter.HttpRequestFilterChain;
 import com.quancheng.saluki.netty.filter.HttpResponseFilterChain;
 
@@ -24,8 +22,6 @@ import io.netty.handler.codec.http.HttpVersion;
 public class HttpFiltersRunner extends HttpFiltersAdapter {
 
   private static Logger logger = LoggerFactory.getLogger(HttpFiltersRunner.class);
-  private final HttpRequestFilterChain httpRequestFilterChain = new HttpRequestFilterChain();
-  private final HttpResponseFilterChain httpResponseFilterChain = new HttpResponseFilterChain();
 
   public HttpFiltersRunner(HttpRequest originalRequest, ChannelHandlerContext ctx) {
     super(originalRequest, ctx);
@@ -35,11 +31,8 @@ public class HttpFiltersRunner extends HttpFiltersAdapter {
   public HttpResponse clientToProxyRequest(HttpObject httpObject) {
     HttpResponse httpResponse = null;
     try {
-      ImmutablePair<Boolean, HttpRequestFilter> immutablePair =
-          httpRequestFilterChain.doFilter(originalRequest, httpObject, ctx);
-      if (immutablePair.left) {
-        httpResponse = createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
-      }
+      httpResponse =
+          HttpRequestFilterChain.requestFilterChain().doFilter(originalRequest, httpObject, ctx);
     } catch (Exception e) {
       httpResponse = createResponse(HttpResponseStatus.BAD_GATEWAY, originalRequest);
       logger.error("client's request failed", e.getCause());
@@ -50,7 +43,8 @@ public class HttpFiltersRunner extends HttpFiltersAdapter {
   @Override
   public HttpObject proxyToClientResponse(HttpObject httpObject) {
     if (httpObject instanceof HttpResponse) {
-      httpResponseFilterChain.doFilter(originalRequest, (HttpResponse) httpObject);
+      HttpResponseFilterChain.responseFilterChain().doFilter(originalRequest,
+          (HttpResponse) httpObject);
     }
     return httpObject;
   }

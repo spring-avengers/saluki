@@ -16,12 +16,12 @@ import javax.net.ssl.SSLEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HostResolver;
+import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.HttpFilterSource;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
-import com.quancheng.saluki.netty.callback.ActivityTracker;
-import com.quancheng.saluki.netty.callback.HttpFilter;
-import com.quancheng.saluki.netty.callback.HttpFilterSource;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.bootstrap.ServerBootstrap;

@@ -22,11 +22,12 @@ import javax.net.ssl.SSLSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.quancheng.saluki.netty.callback.ActivityTracker;
-import com.quancheng.saluki.netty.callback.HttpFilter;
+import com.quancheng.saluki.netty.ActivityTracker;
+import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
+import com.quancheng.saluki.netty.impl.flow.FlowContext;
+import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
-import com.quancheng.saluki.netty.impl.support.FlowContext;
-import com.quancheng.saluki.netty.impl.support.FullFlowContext;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.buffer.ByteBuf;
@@ -88,7 +89,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
   @Override
-  protected ConnectionState readHTTPInitial(HttpRequest httpRequest) {
+  public ConnectionState readHTTPInitial(HttpRequest httpRequest) {
     LOG.debug("Received raw request: {}", httpRequest);
     if (httpRequest.decoderResult().isFailure()) {
       LOG.debug("Could not parse request from client. Decoder result: {}",
@@ -216,18 +217,18 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
   @Override
-  protected void readHTTPChunk(HttpContent chunk) {
+  public void readHTTPChunk(HttpContent chunk) {
     currentFilters.clientToProxyRequest(chunk);
     currentFilters.proxyToServerRequest(chunk);
     currentServerConnection.write(chunk);
   }
 
   @Override
-  protected void readRaw(ByteBuf buf) {
+  public void readRaw(ByteBuf buf) {
     currentServerConnection.write(buf);
   }
 
-  void respond(ProxyToServerConnection serverConnection, HttpFilter filters,
+  protected void respond(ProxyToServerConnection serverConnection, HttpFilter filters,
       HttpRequest currentHttpRequest, HttpResponse currentHttpResponse, HttpObject httpObject) {
     this.currentRequest = null;
     httpObject = filters.serverToProxyResponse(httpObject);
@@ -265,11 +266,11 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   ConnectionFlowStep RespondCONNECTSuccessful = new ConnectionFlowStep(this, NEGOTIATING_CONNECT) {
     @Override
-    boolean shouldSuppressInitialRequest() {
+    public boolean shouldSuppressInitialRequest() {
       return true;
     }
 
-    protected Future<?> execute() {
+    public Future<?> execute() {
       LOG.debug("Responding with CONNECT successful");
       HttpResponse response =
           ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1, CONNECTION_ESTABLISHED);
@@ -281,7 +282,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   @Override
-  protected void connected() {
+  public void connected() {
     super.connected();
     become(AWAITING_INITIAL);
     recordClientConnected();
@@ -297,7 +298,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
   @Override
-  protected void timedOut() {
+  public void timedOut() {
     if (currentServerConnection == null
         || this.lastReadTime <= currentServerConnection.lastReadTime) {
       super.timedOut();
@@ -306,7 +307,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   @Override
-  protected void disconnected() {
+  public void disconnected() {
     super.disconnected();
     for (ProxyToServerConnection serverConnection : serverConnectionsByHostAndPort.values()) {
       serverConnection.disconnect();
@@ -315,13 +316,13 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  protected void serverConnectionFlowStarted(ProxyToServerConnection serverConnection) {
+  public void serverConnectionFlowStarted(ProxyToServerConnection serverConnection) {
     stopReading();
     this.numberOfCurrentlyConnectingServers.incrementAndGet();
   }
 
 
-  protected void serverConnectionSucceeded(ProxyToServerConnection serverConnection,
+  public void serverConnectionSucceeded(ProxyToServerConnection serverConnection,
       boolean shouldForwardInitialRequest) {
     LOG.debug("Connection to server succeeded: {}", serverConnection.getRemoteAddress());
     resumeReadingIfNecessary();
@@ -330,7 +331,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  protected boolean serverConnectionFailed(ProxyToServerConnection serverConnection,
+  public boolean serverConnectionFailed(ProxyToServerConnection serverConnection,
       ConnectionState lastStateBeforeFailure, Throwable cause) {
     resumeReadingIfNecessary();
     HttpRequest initialRequest = serverConnection.getInitialRequest();
@@ -383,7 +384,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   @Override
-  synchronized protected void becameSaturated() {
+  public synchronized void becameSaturated() {
     super.becameSaturated();
     for (ProxyToServerConnection serverConnection : serverConnectionsByHostAndPort.values()) {
       synchronized (serverConnection) {
@@ -396,7 +397,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   @Override
-  synchronized protected void becameWritable() {
+  public synchronized void becameWritable() {
     super.becameWritable();
     for (ProxyToServerConnection serverConnection : serverConnectionsByHostAndPort.values()) {
       synchronized (serverConnection) {
@@ -431,7 +432,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
   @Override
-  protected void exceptionCaught(Throwable cause) {
+  public void exceptionCaught(Throwable cause) {
     try {
       if (cause instanceof IOException) {
         LOG.info("An IOException occurred on ClientToProxyConnection: " + cause.getMessage());
@@ -711,7 +712,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private final BytesReadMonitor bytesReadMonitor = new BytesReadMonitor() {
     @Override
-    protected void bytesRead(int numberOfBytes) {
+    public void bytesRead(int numberOfBytes) {
       FlowContext flowContext = flowContext();
       for (ActivityTracker tracker : proxyServer.getActivityTrackers()) {
         tracker.bytesReceivedFromClient(flowContext, numberOfBytes);

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.callback;
+package com.quancheng.saluki.netty;
 
 import java.net.InetSocketAddress;
 

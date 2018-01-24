@@ -1,43 +1,45 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.flow;
 
+import com.quancheng.saluki.netty.impl.ProxyConnection;
+import com.quancheng.saluki.netty.impl.ProxyConnectionLogger;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 
 import io.netty.util.concurrent.Future;
 
 
-abstract class ConnectionFlowStep {
+public abstract class ConnectionFlowStep {
   private final ProxyConnectionLogger LOG;
   private final ProxyConnection<?> connection;
   private final ConnectionState state;
 
 
-  ConnectionFlowStep(ProxyConnection<?> connection, ConnectionState state) {
+  public ConnectionFlowStep(ProxyConnection<?> connection, ConnectionState state) {
     super();
     this.connection = connection;
     this.state = state;
     this.LOG = connection.getLOG();
   }
 
-  ProxyConnection<?> getConnection() {
+  public ProxyConnection<?> getConnection() {
     return connection;
   }
 
-  ConnectionState getState() {
+  public ConnectionState getState() {
     return state;
   }
 
-  boolean shouldSuppressInitialRequest() {
+  public boolean shouldSuppressInitialRequest() {
     return false;
   }
 
-  boolean shouldExecuteOnEventLoop() {
+  public boolean shouldExecuteOnEventLoop() {
     return true;
   }
 
   @SuppressWarnings("rawtypes")
-  protected abstract Future execute();
+  public abstract Future execute();
 
-  void onSuccess(ConnectionFlow flow) {
+  public void onSuccess(ConnectionFlow flow) {
     flow.advance();
   }
 

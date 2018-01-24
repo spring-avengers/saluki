@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.support;
+package com.quancheng.saluki.netty.impl.flow;
 
 import com.quancheng.saluki.netty.impl.ClientToProxyConnection;
 import com.quancheng.saluki.netty.impl.ProxyToServerConnection;

@@ -14,10 +14,12 @@ import java.util.concurrent.RejectedExecutionException;
 import javax.net.ssl.SSLProtocolException;
 
 import com.google.common.net.HostAndPort;
-import com.quancheng.saluki.netty.callback.ActivityTracker;
-import com.quancheng.saluki.netty.callback.HttpFilter;
+import com.quancheng.saluki.netty.ActivityTracker;
+import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.flow.ConnectionFlow;
+import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
+import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
-import com.quancheng.saluki.netty.impl.support.FullFlowContext;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.bootstrap.Bootstrap;
@@ -88,7 +90,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected void read(Object msg) {
+  public void read(Object msg) {
     if (isConnecting()) {
       LOG.debug("In the middle of connecting, forwarding message to connection flow: {}", msg);
       this.connectionFlow.read(msg);
@@ -98,7 +100,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected ConnectionState readHTTPInitial(HttpResponse httpResponse) {
+  public ConnectionState readHTTPInitial(HttpResponse httpResponse) {
     LOG.debug("Received raw response: {}", httpResponse);
 
     if (httpResponse.decoderResult().isFailure()) {
@@ -121,12 +123,12 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected void readHTTPChunk(HttpContent chunk) {
+  public void readHTTPChunk(HttpContent chunk) {
     respondWith(chunk);
   }
 
   @Override
-  protected void readRaw(ByteBuf buf) {
+  public void readRaw(ByteBuf buf) {
     clientConnection.write(buf);
   }
 
@@ -138,7 +140,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
     }
 
     @Override
-    protected boolean isContentAlwaysEmpty(HttpMessage httpMessage) {
+    public boolean isContentAlwaysEmpty(HttpMessage httpMessage) {
       if (currentHttpRequest == null) {
         return true;
       } else {
@@ -191,7 +193,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   };
 
   @Override
-  protected void writeHttp(HttpObject httpObject) {
+  public void writeHttp(HttpObject httpObject) {
     if (httpObject instanceof HttpRequest) {
       HttpRequest httpRequest = (HttpRequest) httpObject;
       currentHttpRequest = httpRequest;
@@ -200,7 +202,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected void become(ConnectionState newState) {
+  public void become(ConnectionState newState) {
     if (getCurrentState() == DISCONNECTED && newState == CONNECTING) {
       currentFilters.proxyToServerConnectionStarted();
     } else if (getCurrentState() == CONNECTING) {
@@ -225,31 +227,31 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected void becameSaturated() {
+  public void becameSaturated() {
     super.becameSaturated();
     this.clientConnection.serverBecameSaturated(this);
   }
 
   @Override
-  protected void becameWritable() {
+  public void becameWritable() {
     super.becameWritable();
     this.clientConnection.serverBecameWriteable(this);
   }
 
   @Override
-  protected void timedOut() {
+  public void timedOut() {
     super.timedOut();
     clientConnection.timedOut(this);
   }
 
   @Override
-  protected void disconnected() {
+  public void disconnected() {
     super.disconnected();
     clientConnection.serverDisconnected(this);
   }
 
   @Override
-  protected void exceptionCaught(Throwable cause) {
+  public void exceptionCaught(Throwable cause) {
     try {
       if (cause instanceof IOException) {
         LOG.info("An IOException occurred on ProxyToServerConnection: " + cause.getMessage());
@@ -284,7 +286,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  protected HttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public HttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return currentFilters;
   }
 
@@ -321,18 +323,18 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private ConnectionFlowStep ConnectChannel = new ConnectionFlowStep(this, CONNECTING) {
     @Override
-    boolean shouldExecuteOnEventLoop() {
+    public boolean shouldExecuteOnEventLoop() {
       return false;
     }
 
     @Override
-    protected Future<?> execute() {
+    public Future<?> execute() {
       Bootstrap cb = new Bootstrap();
       cb.group(proxyServer.getProxyToServerWorkerFor())//
           .channel(NioSocketChannel.class)
           .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, proxyServer.getConnectTimeout())
           .handler(new ChannelInitializer<Channel>() {
-            protected void initChannel(Channel ch) throws Exception {
+            public void initChannel(Channel ch) throws Exception {
               initChannelPipeline(ch.pipeline(), initialRequest);
             };
           });
@@ -345,7 +347,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   };
 
 
-  protected boolean connectionFailed(Throwable cause) throws UnknownHostException {
+  public boolean connectionFailed(Throwable cause) throws UnknownHostException {
     if (!disableSni && cause instanceof SSLProtocolException) {
       if (cause.getMessage() != null && cause.getMessage().contains("unrecognized_name")) {
         LOG.debug(
@@ -413,7 +415,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
 
-  void connectionSucceeded(boolean shouldForwardInitialRequest) {
+  public void connectionSucceeded(boolean shouldForwardInitialRequest) {
     become(AWAITING_INITIAL);
     clientConnection.serverConnectionSucceeded(this, shouldForwardInitialRequest);
     if (shouldForwardInitialRequest) {
@@ -443,7 +445,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private final BytesReadMonitor bytesReadMonitor = new BytesReadMonitor() {
     @Override
-    protected void bytesRead(int numberOfBytes) {
+    public void bytesRead(int numberOfBytes) {
       FullFlowContext flowContext =
           new FullFlowContext(clientConnection, ProxyToServerConnection.this);
       for (ActivityTracker tracker : proxyServer.getActivityTrackers()) {
@@ -454,7 +456,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private ResponseReadMonitor responseReadMonitor = new ResponseReadMonitor() {
     @Override
-    protected void responseRead(HttpResponse httpResponse) {
+    public void responseRead(HttpResponse httpResponse) {
       FullFlowContext flowContext =
           new FullFlowContext(clientConnection, ProxyToServerConnection.this);
       for (ActivityTracker tracker : proxyServer.getActivityTrackers()) {
@@ -465,7 +467,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private BytesWrittenMonitor bytesWrittenMonitor = new BytesWrittenMonitor() {
     @Override
-    protected void bytesWritten(int numberOfBytes) {
+    public void bytesWritten(int numberOfBytes) {
       FullFlowContext flowContext =
           new FullFlowContext(clientConnection, ProxyToServerConnection.this);
       for (ActivityTracker tracker : proxyServer.getActivityTrackers()) {
@@ -476,7 +478,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private RequestWrittenMonitor requestWrittenMonitor = new RequestWrittenMonitor() {
     @Override
-    protected void requestWriting(HttpRequest httpRequest) {
+    public void requestWriting(HttpRequest httpRequest) {
       FullFlowContext flowContext =
           new FullFlowContext(clientConnection, ProxyToServerConnection.this);
       try {
@@ -491,10 +493,10 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
     }
 
     @Override
-    protected void requestWritten(HttpRequest httpRequest) {}
+    public void requestWritten(HttpRequest httpRequest) {}
 
     @Override
-    protected void contentWritten(HttpContent httpContent) {
+    public void contentWritten(HttpContent httpContent) {
       if (httpContent instanceof LastHttpContent) {
         currentFilters.proxyToServerRequestSent();
       }

@@ -5,7 +5,8 @@ import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_I
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.DISCONNECTED;
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.NEGOTIATING_CONNECT;
 
-import com.quancheng.saluki.netty.callback.HttpFilter;
+import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 import com.quancheng.saluki.utils.ProxyUtils;
 
@@ -33,19 +34,20 @@ import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.Promise;
 
 
-abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboundHandler<Object> {
-  protected final ProxyConnectionLogger LOG = new ProxyConnectionLogger(this);
+public abstract class ProxyConnection<I extends HttpObject>
+    extends SimpleChannelInboundHandler<Object> {
+  public final ProxyConnectionLogger LOG = new ProxyConnectionLogger(this);
 
-  protected final DefaultHttpProxyServer proxyServer;
-  protected final boolean runsAsSslClient;
+  public final DefaultHttpProxyServer proxyServer;
+  public final boolean runsAsSslClient;
 
-  protected volatile ChannelHandlerContext ctx;
-  protected volatile Channel channel;
+  public volatile ChannelHandlerContext ctx;
+  public volatile Channel channel;
   private volatile ConnectionState currentState;
   private volatile boolean tunneling = false;
-  protected volatile long lastReadTime = 0;
+  public volatile long lastReadTime = 0;
 
-  protected ProxyConnection(ConnectionState initialState, DefaultHttpProxyServer proxyServer,
+  public ProxyConnection(ConnectionState initialState, DefaultHttpProxyServer proxyServer,
       boolean runsAsSslClient) {
     become(initialState);
     this.proxyServer = proxyServer;
@@ -53,7 +55,7 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
   }
 
 
-  protected void read(Object msg) {
+  public void read(Object msg) {
     LOG.debug("Reading: {}", msg);
     lastReadTime = System.currentTimeMillis();
     if (tunneling) {
@@ -113,11 +115,11 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
   }
 
 
-  protected abstract ConnectionState readHTTPInitial(I httpObject);
+  public abstract ConnectionState readHTTPInitial(I httpObject);
 
-  protected abstract void readHTTPChunk(HttpContent chunk);
+  public abstract void readHTTPChunk(HttpContent chunk);
 
-  protected abstract void readRaw(ByteBuf buf);
+  public abstract void readRaw(ByteBuf buf);
 
 
   void write(Object msg) {
@@ -144,7 +146,7 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
   }
 
 
-  protected void writeHttp(HttpObject httpObject) {
+  public void writeHttp(HttpObject httpObject) {
     if (ProxyUtils.isLastChunk(httpObject)) {
       channel.write(httpObject);
       LOG.debug("Writing an empty buffer to signal the end of our chunked transfer");
@@ -155,37 +157,37 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
   }
 
 
-  protected void writeRaw(ByteBuf buf) {
+  public void writeRaw(ByteBuf buf) {
     writeToChannel(buf);
   }
 
-  protected ChannelFuture writeToChannel(final Object msg) {
+  public ChannelFuture writeToChannel(final Object msg) {
     return channel.writeAndFlush(msg);
   }
 
 
-  protected void connected() {
+  public void connected() {
     LOG.debug("Connected");
   }
 
 
-  protected void disconnected() {
+  public void disconnected() {
     become(DISCONNECTED);
     LOG.debug("Disconnected");
   }
 
-  protected void timedOut() {
+  public void timedOut() {
     disconnect();
   }
 
 
-  protected ConnectionFlowStep StartTunneling = new ConnectionFlowStep(this, NEGOTIATING_CONNECT) {
+  public ConnectionFlowStep StartTunneling = new ConnectionFlowStep(this, NEGOTIATING_CONNECT) {
     @Override
-    boolean shouldSuppressInitialRequest() {
+    public boolean shouldSuppressInitialRequest() {
       return true;
     }
 
-    protected Future<?> execute() {
+    public Future<?> execute() {
       try {
         ChannelPipeline pipeline = ctx.pipeline();
         if (pipeline.get("encoder") != null) {
@@ -210,24 +212,24 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
 
 
 
-  protected void aggregateContentForFiltering(ChannelPipeline pipeline, int numberOfBytesToBuffer) {
+  public void aggregateContentForFiltering(ChannelPipeline pipeline, int numberOfBytesToBuffer) {
     pipeline.addLast("inflater", new HttpContentDecompressor());
     pipeline.addLast("aggregator", new HttpObjectAggregator(numberOfBytesToBuffer));
   }
 
 
-  protected void becameSaturated() {
+  public void becameSaturated() {
     LOG.debug("Became saturated");
   }
 
-  protected void becameWritable() {
+  public void becameWritable() {
     LOG.debug("Became writeable");
   }
 
-  protected void exceptionCaught(Throwable cause) {}
+  public void exceptionCaught(Throwable cause) {}
 
 
-  Future<Void> disconnect() {
+  public Future<Void> disconnect() {
     if (channel == null) {
       return null;
     } else {
@@ -255,23 +257,23 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
     });
   }
 
-  protected boolean isSaturated() {
+  public boolean isSaturated() {
     return !this.channel.isWritable();
   }
 
-  protected boolean is(ConnectionState state) {
+  public boolean is(ConnectionState state) {
     return currentState == state;
   }
 
-  protected boolean isConnecting() {
+  public boolean isConnecting() {
     return currentState.isPartOfConnectionFlow();
   }
 
-  protected void become(ConnectionState state) {
+  public void become(ConnectionState state) {
     this.currentState = state;
   }
 
-  protected ConnectionState getCurrentState() {
+  public ConnectionState getCurrentState() {
     return currentState;
   }
 
@@ -279,27 +281,27 @@ abstract class ProxyConnection<I extends HttpObject> extends SimpleChannelInboun
     return tunneling;
   }
 
-  protected void stopReading() {
+  public void stopReading() {
     LOG.debug("Stopped reading");
     this.channel.config().setAutoRead(false);
   }
 
 
-  protected void resumeReading() {
+  public void resumeReading() {
     LOG.debug("Resumed reading");
     this.channel.config().setAutoRead(true);
   }
 
-  protected HttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public HttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return proxyServer.getFiltersSource().filterRequest(httpRequest, ctx);
   }
 
-  ProxyConnectionLogger getLOG() {
+  public ProxyConnectionLogger getLOG() {
     return LOG;
   }
 
   @Override
-  protected final void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+  public final void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
     read(msg);
   }
 

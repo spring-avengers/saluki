@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.connection;
 
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_CHUNK;
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_INITIAL;
@@ -6,6 +6,7 @@ import static com.quancheng.saluki.netty.impl.support.ConnectionState.DISCONNECT
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.NEGOTIATING_CONNECT;
 
 import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 import com.quancheng.saluki.utils.ProxyUtils;
@@ -122,7 +123,7 @@ public abstract class ProxyConnection<I extends HttpObject>
   public abstract void readRaw(ByteBuf buf);
 
 
-  void write(Object msg) {
+  public void write(Object msg) {
     if (msg instanceof ReferenceCounted) {
       LOG.debug("Retaining reference counted message");
       ((ReferenceCounted) msg).retain();
@@ -131,7 +132,7 @@ public abstract class ProxyConnection<I extends HttpObject>
     doWrite(msg);
   }
 
-  void doWrite(Object msg) {
+  public void doWrite(Object msg) {
     LOG.debug("Writing: {}", msg);
 
     try {

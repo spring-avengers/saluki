@@ -1,11 +1,9 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.internal;
 
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 import org.littleshoot.dnssec4j.VerifiedAddressFactory;
-
-import com.quancheng.saluki.netty.HostResolver;
 
 public class DnsSecServerResolver implements HostResolver {
   @Override

@@ -1,10 +1,8 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.internal;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-
-import com.quancheng.saluki.netty.HostResolver;
 
 
 public class DefaultHostResolver implements HostResolver {

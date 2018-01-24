@@ -1,7 +1,5 @@
 package com.quancheng.saluki.netty.impl.support;
 
-import com.quancheng.saluki.netty.impl.ServerGroup;
-
 /**
  * Configuration object for the proxy's thread pools. Controls the number of acceptor and worker
  * threads in the Netty {@link io.netty.channel.EventLoopGroup} used by the proxy.

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.connection;
 
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_CHUNK;
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_INITIAL;
@@ -16,6 +16,7 @@ import javax.net.ssl.SSLProtocolException;
 import com.google.common.net.HostAndPort;
 import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.impl.flow.ConnectionFlow;
 import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
 import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
@@ -69,7 +70,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
 
 
-  static ProxyToServerConnection create(DefaultHttpProxyServer proxyServer,
+  public static ProxyToServerConnection create(DefaultHttpProxyServer proxyServer,
       ClientToProxyConnection clientConnection, String serverHostAndPort, HttpFilter initialFilters,
       HttpRequest initialHttpRequest, GlobalTrafficShapingHandler globalTrafficShapingHandler)
       throws UnknownHostException {
@@ -149,13 +150,13 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
     }
   };
 
-  void write(Object msg, HttpFilter filters) {
+  public void write(Object msg, HttpFilter filters) {
     this.currentFilters = filters;
     write(msg);
   }
 
   @Override
-  void write(Object msg) {
+  public void write(Object msg) {
     LOG.debug("Requested write of {}", msg);
 
     if (msg instanceof ReferenceCounted) {

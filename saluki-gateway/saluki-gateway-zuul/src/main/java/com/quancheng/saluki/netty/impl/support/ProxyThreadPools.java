@@ -1,7 +1,6 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.support;
 
 import com.google.common.collect.ImmutableList;
-import com.quancheng.saluki.netty.impl.support.CategorizedThreadFactory;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;

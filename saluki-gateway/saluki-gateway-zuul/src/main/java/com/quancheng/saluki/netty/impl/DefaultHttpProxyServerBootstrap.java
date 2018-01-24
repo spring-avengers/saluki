@@ -19,10 +19,13 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.quancheng.saluki.netty.ActivityTracker;
-import com.quancheng.saluki.netty.HostResolver;
 import com.quancheng.saluki.netty.HttpFilterSource;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
+import com.quancheng.saluki.netty.impl.internal.DefaultHostResolver;
+import com.quancheng.saluki.netty.impl.internal.DnsSecServerResolver;
+import com.quancheng.saluki.netty.impl.internal.HostResolver;
+import com.quancheng.saluki.netty.impl.support.ServerGroup;
 import com.quancheng.saluki.netty.impl.support.ThreadPoolConfiguration;
 import com.quancheng.saluki.utils.ProxyUtils;
 

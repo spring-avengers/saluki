@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.impl.connection;
 
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_CHUNK;
 import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_INITIAL;
@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.impl.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
 import com.quancheng.saluki.netty.impl.flow.FlowContext;
 import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
@@ -80,7 +81,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private volatile HttpRequest currentRequest;
 
-  ClientToProxyConnection(final DefaultHttpProxyServer proxyServer, ChannelPipeline pipeline,
+  public ClientToProxyConnection(final DefaultHttpProxyServer proxyServer, ChannelPipeline pipeline,
       GlobalTrafficShapingHandler globalTrafficShapingHandler) {
     super(AWAITING_INITIAL, proxyServer, false);
     initChannelPipeline(pipeline);
@@ -228,7 +229,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     currentServerConnection.write(buf);
   }
 
-  protected void respond(ProxyToServerConnection serverConnection, HttpFilter filters,
+  public void respond(ProxyToServerConnection serverConnection, HttpFilter filters,
       HttpRequest currentHttpRequest, HttpResponse currentHttpResponse, HttpObject httpObject) {
     this.currentRequest = null;
     httpObject = filters.serverToProxyResponse(httpObject);
@@ -264,21 +265,22 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  ConnectionFlowStep RespondCONNECTSuccessful = new ConnectionFlowStep(this, NEGOTIATING_CONNECT) {
-    @Override
-    public boolean shouldSuppressInitialRequest() {
-      return true;
-    }
+  protected ConnectionFlowStep RespondCONNECTSuccessful =
+      new ConnectionFlowStep(this, NEGOTIATING_CONNECT) {
+        @Override
+        public boolean shouldSuppressInitialRequest() {
+          return true;
+        }
 
-    public Future<?> execute() {
-      LOG.debug("Responding with CONNECT successful");
-      HttpResponse response =
-          ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1, CONNECTION_ESTABLISHED);
-      response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-      ProxyUtils.addVia(response, proxyServer.getProxyAlias());
-      return writeToChannel(response);
-    };
-  };
+        public Future<?> execute() {
+          LOG.debug("Responding with CONNECT successful");
+          HttpResponse response =
+              ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1, CONNECTION_ESTABLISHED);
+          response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+          ProxyUtils.addVia(response, proxyServer.getProxyAlias());
+          return writeToChannel(response);
+        };
+      };
 
 
   @Override
@@ -288,7 +290,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     recordClientConnected();
   }
 
-  void timedOut(ProxyToServerConnection serverConnection) {
+  public void timedOut(ProxyToServerConnection serverConnection) {
     if (currentServerConnection == serverConnection
         && this.lastReadTime > currentServerConnection.lastReadTime) {
       LOG.warn("Server timed out: {}", currentServerConnection);
@@ -375,7 +377,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  protected void serverDisconnected(ProxyToServerConnection serverConnection) {
+  public void serverDisconnected(ProxyToServerConnection serverConnection) {
     numberOfCurrentlyConnectedServers.decrementAndGet();
     if (isTunneling() || isMitming()) {
       disconnect();
@@ -409,7 +411,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  synchronized protected void serverBecameSaturated(ProxyToServerConnection serverConnection) {
+  public synchronized void serverBecameSaturated(ProxyToServerConnection serverConnection) {
     if (serverConnection.isSaturated()) {
       LOG.info("Connection to server became saturated, stopping reading");
       stopReading();
@@ -417,7 +419,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   }
 
 
-  synchronized protected void serverBecameWriteable(ProxyToServerConnection serverConnection) {
+  public synchronized void serverBecameWriteable(ProxyToServerConnection serverConnection) {
     boolean anyServersSaturated = false;
     for (ProxyToServerConnection otherServerConnection : serverConnectionsByHostAndPort.values()) {
       if (otherServerConnection.isSaturated()) {

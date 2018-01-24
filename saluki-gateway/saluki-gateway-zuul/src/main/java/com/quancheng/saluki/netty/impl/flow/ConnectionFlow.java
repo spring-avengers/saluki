@@ -3,10 +3,10 @@ package com.quancheng.saluki.netty.impl.flow;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.quancheng.saluki.netty.impl.ClientToProxyConnection;
-import com.quancheng.saluki.netty.impl.ProxyConnection;
-import com.quancheng.saluki.netty.impl.ProxyConnectionLogger;
-import com.quancheng.saluki.netty.impl.ProxyToServerConnection;
+import com.quancheng.saluki.netty.impl.connection.ClientToProxyConnection;
+import com.quancheng.saluki.netty.impl.connection.ProxyConnection;
+import com.quancheng.saluki.netty.impl.connection.ProxyConnectionLogger;
+import com.quancheng.saluki.netty.impl.connection.ProxyToServerConnection;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 
 import io.netty.util.concurrent.Future;

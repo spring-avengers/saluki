@@ -1,7 +1,7 @@
 package com.quancheng.saluki.netty.impl.flow;
 
-import com.quancheng.saluki.netty.impl.ProxyConnection;
-import com.quancheng.saluki.netty.impl.ProxyConnectionLogger;
+import com.quancheng.saluki.netty.impl.connection.ProxyConnection;
+import com.quancheng.saluki.netty.impl.connection.ProxyConnectionLogger;
 import com.quancheng.saluki.netty.impl.support.ConnectionState;
 
 import io.netty.util.concurrent.Future;

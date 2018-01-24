@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.quancheng.saluki.gateway.portal.filter.dao.RouteDao">
+
+	<select id="get"
+		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		select
+		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
+		`service_name`,`method_name`,`service_group`,`service_version`,`grpc`,`dubbo`,
+		`gmt_create`,`gmt_modified`
+		from gateway_route
+		where
+		route_id = #{value}
+	</select>
+
+	<select id="list"
+		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		select
+		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
+		`service_name`,`method_name`,`service_group`,`service_version`,`grpc`,`dubbo`,
+		`gmt_create`,`gmt_modified`
+		from gateway_route
+		<where>
+			<if test="routeId != null and routeId != ''"> and route_id = #{routeId} </if>
+			<if test="path != null and path != ''"> and path = #{path} </if>
+			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
+			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
+			<if test="grpc != null and grpc != ''"> and grpc = #{grpc} </if>
+			<if test="dubbo != null and dubbo != ''"> and dubbo = #{dubbo} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by route_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from gateway_route
+		<where>
+			<if test="routeId != null and routeId != ''"> and route_id = #{routeId} </if>
+			<if test="path != null and path != ''"> and path = #{path} </if>
+			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
+			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
+			<if test="grpc != null and grpc != ''"> and grpc = #{grpc} </if>
+			<if test="dubbo != null and dubbo != ''"> and dubbo = #{dubbo} </if>
+		</where>
+	</select>
+
+	<insert id="save"
+		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO"
+		useGeneratedKeys="true" keyProperty="routeId">
+		insert into gateway_route
+		(
+		`path`,
+		`service_id`,
+		`service_name`,
+		`method_name`,
+		`service_group`,
+		`service_version`,
+		`url`,
+		`retryable`,
+		`enabled`,
+		`strip_prefix`,
+		`grpc`,
+		`dubbo`,
+		`gmt_create`,
+		`gmt_modified`
+		)
+		values
+		(
+		#{path},
+		#{serviceId},
+		#{serviceName},
+		#{methodName},
+		#{serviceGroup},
+		#{serviceVersion},
+		#{url},
+		#{retryable},
+		#{enabled},
+		#{stripPrefix},
+		#{grpc},
+		#{dubbo},
+		sysdate(),
+		sysdate()
+		)
+	</insert>
+
+	<update id="update"
+		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		update gateway_route
+		<set>
+			<if test="path != null and path != ''">`path`=#{path},</if>
+			<if test="serviceId != null and serviceId != ''">`service_id`=#{serviceId},</if>
+			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
+			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
+			<if test="url != null and url != ''">`url`=#{url},</if>
+			<if test="retryable != null and retryable != ''">`retryable`=#{retryable},</if>
+			<if test="enabled != null and enabled != ''">`enabled`=#{enabled},</if>
+			<if test="stripPrefix != null and stripPrefix != ''">`strip_prefix`=#{stripPrefix},</if>
+			<if test="grpc != null and grpc != ''">`grpc`=#{grpc},</if>
+			<if test="dubbo != null and dubbo != ''">`dubbo`=#{dubbo},</if>
+			`gmt_modified`=sysdate()
+		</set>
+		where route_id = #{routeId}
+	</update>
+
+	<delete id="remove">
+		delete from gateway_route where route_id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from gateway_route where route_id in
+		<foreach item="routeId" collection="array" open="(" separator=","
+			close=")">
+			#{routeId}
+		</foreach>
+	</delete>
+</mapper>

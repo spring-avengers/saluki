@@ -27,5 +27,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: mybatis/**/*Mapper.xml
+  mapper-locations: classpath:mybatis/**/*Mapper.xml
   typeAliasesPackage: com.quancheng.saluki.**.domain

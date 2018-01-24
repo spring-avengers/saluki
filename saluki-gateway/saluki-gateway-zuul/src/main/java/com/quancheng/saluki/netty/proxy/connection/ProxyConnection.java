@@ -1,14 +1,14 @@
-package com.quancheng.saluki.netty.impl.connection;
+package com.quancheng.saluki.netty.proxy.connection;
 
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_CHUNK;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_INITIAL;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.DISCONNECTED;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.NEGOTIATING_CONNECT;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.AWAITING_CHUNK;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.AWAITING_INITIAL;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.DISCONNECTED;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.NEGOTIATING_CONNECT;
 
 import com.quancheng.saluki.netty.HttpFilter;
-import com.quancheng.saluki.netty.impl.DefaultHttpProxyServer;
-import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
-import com.quancheng.saluki.netty.impl.support.ConnectionState;
+import com.quancheng.saluki.netty.proxy.ConnectionState;
+import com.quancheng.saluki.netty.proxy.DefaultHttpProxyServer;
+import com.quancheng.saluki.netty.proxy.flow.ConnectionFlowStep;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.buffer.ByteBuf;

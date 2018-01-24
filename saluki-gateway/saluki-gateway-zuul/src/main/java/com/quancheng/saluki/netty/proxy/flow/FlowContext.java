@@ -1,8 +1,8 @@
-package com.quancheng.saluki.netty.impl.flow;
+package com.quancheng.saluki.netty.proxy.flow;
 
 import java.net.InetSocketAddress;
 
-import com.quancheng.saluki.netty.impl.connection.ClientToProxyConnection;
+import com.quancheng.saluki.netty.proxy.connection.ClientToProxyConnection;
 
 
 public class FlowContext {

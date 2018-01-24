@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.support;
+package com.quancheng.saluki.netty.proxy;
 
 /**
  * Configuration object for the proxy's thread pools. Controls the number of acceptor and worker

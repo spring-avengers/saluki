@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.internal;
+package com.quancheng.saluki.netty.proxy.host;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

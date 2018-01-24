@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.support;
+package com.quancheng.saluki.netty.proxy;
 
 import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
@@ -20,26 +20,14 @@ public class ServerGroup {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServerGroup.class);
 
   public static final int DEFAULT_INCOMING_ACCEPTOR_THREADS = 2;
-
-
   public static final int DEFAULT_INCOMING_WORKER_THREADS = 8;
-
-
   public static final int DEFAULT_OUTGOING_WORKER_THREADS = 8;
-
-
   private static final AtomicInteger serverGroupCount = new AtomicInteger(0);
-
   private static final SelectorProvider selectorProvider = SelectorProvider.provider();
-
-
-  public final List<HttpProxyServer> registeredServers = new ArrayList<HttpProxyServer>(1);
-
+  private static final List<HttpProxyServer> registeredServers = new ArrayList<HttpProxyServer>(1);
 
   private final ProxyThreadPools proxyThreadPools;
-
   private final Object SERVER_REGISTRATION_LOCK = new Object();
-
   private final AtomicBoolean stopped = new AtomicBoolean(false);
 
   public ServerGroup(String name, int incomingAcceptorThreads, int incomingWorkerThreads,

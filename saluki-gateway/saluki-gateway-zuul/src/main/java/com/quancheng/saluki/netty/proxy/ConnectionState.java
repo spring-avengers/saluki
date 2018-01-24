@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.support;
+package com.quancheng.saluki.netty.proxy;
 
 public enum ConnectionState {
     /**

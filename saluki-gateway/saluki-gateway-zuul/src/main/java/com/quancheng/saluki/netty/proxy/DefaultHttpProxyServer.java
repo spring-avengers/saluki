@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl;
+package com.quancheng.saluki.netty.proxy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,9 +18,8 @@ import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HttpFilterSource;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
-import com.quancheng.saluki.netty.impl.connection.ClientToProxyConnection;
-import com.quancheng.saluki.netty.impl.internal.HostResolver;
-import com.quancheng.saluki.netty.impl.support.ServerGroup;
+import com.quancheng.saluki.netty.proxy.connection.ClientToProxyConnection;
+import com.quancheng.saluki.netty.proxy.host.HostResolver;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.bootstrap.ServerBootstrap;

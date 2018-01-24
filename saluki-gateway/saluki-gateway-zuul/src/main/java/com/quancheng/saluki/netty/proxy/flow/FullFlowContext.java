@@ -1,7 +1,7 @@
-package com.quancheng.saluki.netty.impl.flow;
+package com.quancheng.saluki.netty.proxy.flow;
 
-import com.quancheng.saluki.netty.impl.connection.ClientToProxyConnection;
-import com.quancheng.saluki.netty.impl.connection.ProxyToServerConnection;
+import com.quancheng.saluki.netty.proxy.connection.ClientToProxyConnection;
+import com.quancheng.saluki.netty.proxy.connection.ProxyToServerConnection;
 
 
 public class FullFlowContext extends FlowContext {

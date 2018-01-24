@@ -1,10 +1,10 @@
-package com.quancheng.saluki.netty.impl.connection;
+package com.quancheng.saluki.netty.proxy.connection;
 
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_CHUNK;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.AWAITING_INITIAL;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.CONNECTING;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.DISCONNECTED;
-import static com.quancheng.saluki.netty.impl.support.ConnectionState.HANDSHAKING;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.AWAITING_CHUNK;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.AWAITING_INITIAL;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.CONNECTING;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.DISCONNECTED;
+import static com.quancheng.saluki.netty.proxy.ConnectionState.HANDSHAKING;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,11 +16,11 @@ import javax.net.ssl.SSLProtocolException;
 import com.google.common.net.HostAndPort;
 import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HttpFilter;
-import com.quancheng.saluki.netty.impl.DefaultHttpProxyServer;
-import com.quancheng.saluki.netty.impl.flow.ConnectionFlow;
-import com.quancheng.saluki.netty.impl.flow.ConnectionFlowStep;
-import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
-import com.quancheng.saluki.netty.impl.support.ConnectionState;
+import com.quancheng.saluki.netty.proxy.ConnectionState;
+import com.quancheng.saluki.netty.proxy.DefaultHttpProxyServer;
+import com.quancheng.saluki.netty.proxy.flow.ConnectionFlow;
+import com.quancheng.saluki.netty.proxy.flow.ConnectionFlowStep;
+import com.quancheng.saluki.netty.proxy.flow.FullFlowContext;
 import com.quancheng.saluki.utils.ProxyUtils;
 
 import io.netty.bootstrap.Bootstrap;

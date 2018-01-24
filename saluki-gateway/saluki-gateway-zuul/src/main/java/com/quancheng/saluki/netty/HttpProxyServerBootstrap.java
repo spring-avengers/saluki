@@ -2,8 +2,8 @@ package com.quancheng.saluki.netty;
 
 import java.net.InetSocketAddress;
 
-import com.quancheng.saluki.netty.impl.internal.HostResolver;
-import com.quancheng.saluki.netty.impl.support.ThreadPoolConfiguration;
+import com.quancheng.saluki.netty.proxy.ThreadPoolConfiguration;
+import com.quancheng.saluki.netty.proxy.host.HostResolver;
 
 
 

@@ -4,8 +4,8 @@ import java.net.InetSocketAddress;
 
 import javax.net.ssl.SSLSession;
 
-import com.quancheng.saluki.netty.impl.flow.FlowContext;
-import com.quancheng.saluki.netty.impl.flow.FullFlowContext;
+import com.quancheng.saluki.netty.proxy.flow.FlowContext;
+import com.quancheng.saluki.netty.proxy.flow.FullFlowContext;
 
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;

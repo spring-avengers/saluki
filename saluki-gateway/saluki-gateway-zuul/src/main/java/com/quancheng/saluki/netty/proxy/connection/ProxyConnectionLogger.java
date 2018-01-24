@@ -1,4 +1,4 @@
-package com.quancheng.saluki.netty.impl.connection;
+package com.quancheng.saluki.netty.proxy.connection;
 
 import java.util.Arrays;
 

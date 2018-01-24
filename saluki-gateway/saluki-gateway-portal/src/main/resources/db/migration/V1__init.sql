@@ -110,14 +110,14 @@ INSERT INTO `sys_menu` VALUES ('27', '2', '运行监控', 'sys/log/run', 'sys:mo
 -- ----------------------------
 -- zuul管理
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('28', '3', '路由管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('29', '3', '策略管理', '/zuul/route', 'zuul:route:route', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('30', '3', '动态过滤', '/zuul/route', 'zuul:route:route', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('28', '3', '路由管理', '/filter/route', 'filter:route:route', '1', 'fa fa-area-chart', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('29', '3', '策略管理', '/filter/route', 'filter:route:route', '1', 'fa fa-warning', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('30', '3', '动态过滤', '/filter/route', 'filter:route:route', '1', 'fa fa-caret-square-o-right', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
-INSERT INTO `sys_menu` VALUES ('31', '28', '新增', '', 'zuul:route:add', '2', '', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('32', '28', '批量删除', '', 'zuul:route:batchRemove', '2','', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('33', '28', '编辑', '', 'zuul:route:edit', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
-INSERT INTO `sys_menu` VALUES ('34', '28', '删除', '', 'zuul:route:remove', '2', '', '3', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('31', '28', '新增', '', 'filter:route:add', '2', '', '0', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('32', '28', '批量删除', '', 'filter:route:batchRemove', '2','', '1', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('33', '28', '编辑', '', 'filter:route:edit', '2', '', '2', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
+INSERT INTO `sys_menu` VALUES ('34', '28', '删除', '', 'filter:route:remove', '2', '', '3', '2017-08-09 23:06:55', '2017-08-14 14:13:43');
 
 
  

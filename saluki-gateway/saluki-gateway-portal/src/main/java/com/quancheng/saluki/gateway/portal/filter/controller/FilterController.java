@@ -58,21 +58,21 @@ public class FilterController extends BaseController {
   @Autowired
   private ZuulService zuulService;
 
-  @RequiresPermissions("zuul:route:route")
+  @RequiresPermissions("filter:route:route")
   @GetMapping()
   String route() {
     return prefix + "/route";
   }
 
   @Log("添加路由")
-  @RequiresPermissions("zuul:route:add")
+  @RequiresPermissions("filter:route:add")
   @GetMapping("/add")
   String add() {
     return prefix + "/add";
   }
 
   @Log("编辑路由")
-  @RequiresPermissions("zuul:route:edit")
+  @RequiresPermissions("filter:route:edit")
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
     ZuulDto zuulDto = zuulService.get(id);
@@ -82,7 +82,7 @@ public class FilterController extends BaseController {
   }
 
 
-  @RequiresPermissions("zuul:route:route")
+  @RequiresPermissions("filter:route:route")
   @GetMapping("/list")
   @ResponseBody
   PageDO<ZuulVo> list(@RequestParam Map<String, Object> params) {
@@ -100,7 +100,7 @@ public class FilterController extends BaseController {
   }
 
   @Log("保存路由")
-  @RequiresPermissions("zuul:route:add")
+  @RequiresPermissions("filter:route:add")
   @PostMapping("/save")
   @ResponseBody()
   CommonResponse save(ZuulVo zuulVo,
@@ -162,7 +162,7 @@ public class FilterController extends BaseController {
 
 
   @Log("更新路由")
-  @RequiresPermissions("zuul:route:edit")
+  @RequiresPermissions("filter:route:edit")
   @PostMapping("/update")
   @ResponseBody()
   CommonResponse update(ZuulVo zuulVo,
@@ -214,7 +214,7 @@ public class FilterController extends BaseController {
   }
 
   @Log("删除路由")
-  @RequiresPermissions("zuul:route:remove")
+  @RequiresPermissions("filter:route:remove")
   @PostMapping("/remove")
   @ResponseBody()
   CommonResponse save(Long id) {
@@ -225,7 +225,7 @@ public class FilterController extends BaseController {
     }
   }
 
-  @RequiresPermissions("zuul:route:batchRemove")
+  @RequiresPermissions("filter:route:batchRemove")
   @Log("批量删除路由")
   @PostMapping("/batchRemove")
   @ResponseBody

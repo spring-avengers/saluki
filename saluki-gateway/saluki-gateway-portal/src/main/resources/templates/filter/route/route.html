@@ -9,12 +9,12 @@
 			<div class="ibox">
 				<div class="ibox-body">
 					<div id="exampleToolbar" role="group">
-						<button shiro:hasPermission="zuul:route:add" type="button"
+						<button shiro:hasPermission="filter:route:add" type="button"
 							class="btn btn-primary" onclick="add()">
 							<i class="fa fa-plus" aria-hidden="true"></i>添加
 						</button>
-						<button shiro:hasPermission="zuul:route:batchRemove" type="button"
-							class="btn btn-danger" onclick="batchRemove()">
+						<button shiro:hasPermission="filter:route:batchRemove"
+							type="button" class="btn btn-danger" onclick="batchRemove()">
 							<i class="fa fa-trash" aria-hidden="true"></i>删除
 						</button>
 					</div>

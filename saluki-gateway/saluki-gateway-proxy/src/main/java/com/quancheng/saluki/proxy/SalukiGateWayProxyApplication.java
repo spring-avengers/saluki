@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author liushiming
  * @version SalukiGateWayApplication.java, v 0.0.1 2018年1月24日 下午4:37:37 liushiming
  */
-@MapperScan("com.quancheng.saluki.gateway.*.dao")
+@MapperScan(value = {"com.quancheng.saluki.gateway.persistence.*.dao"})
 @SpringBootApplication
 public class SalukiGateWayProxyApplication {
   public static void main(String[] args) {

@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
-@MapperScan(basePackages = "com.quancheng.saluki.gateway.*.dao")
+@MapperScan(value = {"com.quancheng.saluki.gateway.portal.*.dao",
+    "com.quancheng.saluki.gateway.persistence.*.dao"})
 @SpringBootApplication
 public class SalukiGateWayPortalApplication {
   public static void main(String[] args) {

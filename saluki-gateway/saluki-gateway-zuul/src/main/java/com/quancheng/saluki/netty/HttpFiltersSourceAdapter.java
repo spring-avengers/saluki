@@ -4,10 +4,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 
 
-public abstract class HttpFilterSource {
+public class HttpFiltersSourceAdapter {
 
-  public abstract AbstractHttpFilter filterRequest(HttpRequest originalRequest,
-      ChannelHandlerContext ctx);
+  public HttpFiltersRunner filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
+    return new HttpFiltersRunner(originalRequest, ctx);
+  }
 
   public int getMaximumRequestBufferSizeInBytes() {
     return 0;

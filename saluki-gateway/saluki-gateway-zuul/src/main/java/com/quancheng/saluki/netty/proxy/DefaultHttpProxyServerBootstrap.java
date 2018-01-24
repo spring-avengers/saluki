@@ -18,9 +18,9 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.quancheng.saluki.netty.AbstractHttpFilter;
 import com.quancheng.saluki.netty.ActivityTracker;
-import com.quancheng.saluki.netty.HttpFilterSource;
+import com.quancheng.saluki.netty.HttpFiltersSourceAdapter;
+import com.quancheng.saluki.netty.HttpFiltersRunner;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
 import com.quancheng.saluki.netty.proxy.host.DefaultHostResolver;
@@ -46,15 +46,7 @@ public class DefaultHttpProxyServerBootstrap implements HttpProxyServerBootstrap
   private InetSocketAddress requestedAddress;
   private int port = 8080;
   private boolean allowLocalOnly = true;
-  private HttpFilterSource filtersSource = new HttpFilterSource() {
-
-    @Override
-    public AbstractHttpFilter filterRequest(HttpRequest originalRequest,
-        ChannelHandlerContext ctx) {
-      return AbstractHttpFilter.NOOP_FILTER;
-    }
-
-  };
+  private HttpFiltersSourceAdapter filtersSource = new HttpFiltersSourceAdapter();
   private boolean transparent = false;
   private int idleConnectionTimeout = 70;
   private Collection<ActivityTracker> activityTrackers =
@@ -76,7 +68,7 @@ public class DefaultHttpProxyServerBootstrap implements HttpProxyServerBootstrap
   public DefaultHttpProxyServerBootstrap() {}
 
   public DefaultHttpProxyServerBootstrap(ServerGroup serverGroup,
-      InetSocketAddress requestedAddress, HttpFilterSource filtersSource, boolean transparent,
+      InetSocketAddress requestedAddress, HttpFiltersSourceAdapter filtersSource, boolean transparent,
       int idleConnectionTimeout, Collection<ActivityTracker> activityTrackers, int connectTimeout,
       HostResolver serverResolver, long readThrottleBytesPerSecond,
       long writeThrottleBytesPerSecond, InetSocketAddress localAddress, String proxyAlias,
@@ -153,7 +145,7 @@ public class DefaultHttpProxyServerBootstrap implements HttpProxyServerBootstrap
 
 
   @Override
-  public HttpProxyServerBootstrap withFiltersSource(HttpFilterSource filtersSource) {
+  public HttpProxyServerBootstrap withFiltersSource(HttpFiltersSourceAdapter filtersSource) {
     this.filtersSource = filtersSource;
     return this;
   }

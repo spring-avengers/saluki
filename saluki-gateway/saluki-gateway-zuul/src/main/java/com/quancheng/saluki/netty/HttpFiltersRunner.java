@@ -2,84 +2,75 @@ package com.quancheng.saluki.netty;
 
 import java.net.InetSocketAddress;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.quancheng.saluki.netty.filter.HttpRequestFilter;
+import com.quancheng.saluki.netty.filter.HttpRequestFilterChain;
+import com.quancheng.saluki.netty.filter.HttpResponseFilterChain;
+
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 
 
-public abstract class AbstractHttpFilter {
+public class HttpFiltersRunner extends HttpFiltersAdapter {
 
-  public static final AbstractHttpFilter NOOP_FILTER = new DefaultHttpFilter(null);
+  private static Logger logger = LoggerFactory.getLogger(HttpFiltersRunner.class);
+  private final HttpRequestFilterChain httpRequestFilterChain = new HttpRequestFilterChain();
+  private final HttpResponseFilterChain httpResponseFilterChain = new HttpResponseFilterChain();
 
-  protected final HttpRequest originalRequest;
-
-  protected final ChannelHandlerContext ctx;
-
-  public AbstractHttpFilter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
-    this.originalRequest = originalRequest;
-    this.ctx = ctx;
+  public HttpFiltersRunner(HttpRequest originalRequest, ChannelHandlerContext ctx) {
+    super(originalRequest, ctx);
   }
 
-  public AbstractHttpFilter(HttpRequest originalRequest) {
-    this(originalRequest, null);
-  }
-
+  @Override
   public HttpResponse clientToProxyRequest(HttpObject httpObject) {
-    return null;
-  }
-
-  public HttpResponse proxyToServerRequest(HttpObject httpObject) {
-    return null;
-  }
-
-  public void proxyToServerRequestSending() {}
-
-
-  public void proxyToServerRequestSent() {}
-
-
-  public HttpObject serverToProxyResponse(HttpObject httpObject) {
-    return httpObject;
-  }
-
-  public void serverToProxyResponseTimedOut() {}
-
-
-  public void serverToProxyResponseReceiving() {}
-
-
-  public void serverToProxyResponseReceived() {}
-
-
-  public HttpObject proxyToClientResponse(HttpObject httpObject) {
-    return httpObject;
-  }
-
-  public void proxyToServerConnectionQueued() {}
-
-  public InetSocketAddress proxyToServerResolutionStarted(String resolvingServerHostAndPort) {
-    return null;
-  }
-
-  public void proxyToServerResolutionFailed(String hostAndPort) {}
-
-  public void proxyToServerResolutionSucceeded(String serverHostAndPort,
-      InetSocketAddress resolvedRemoteAddress) {}
-
-  public void proxyToServerConnectionStarted() {}
-
-  public void proxyToServerConnectionSSLHandshakeStarted() {}
-
-  public void proxyToServerConnectionFailed() {}
-
-  public void proxyToServerConnectionSucceeded(ChannelHandlerContext serverCtx) {}
-
-  private static class DefaultHttpFilter extends AbstractHttpFilter {
-
-    public DefaultHttpFilter(HttpRequest originalRequest) {
-      super(originalRequest);
+    HttpResponse httpResponse = null;
+    try {
+      ImmutablePair<Boolean, HttpRequestFilter> immutablePair =
+          httpRequestFilterChain.doFilter(originalRequest, httpObject, ctx);
+      if (immutablePair.left) {
+        httpResponse = createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      }
+    } catch (Exception e) {
+      httpResponse = createResponse(HttpResponseStatus.BAD_GATEWAY, originalRequest);
+      logger.error("client's request failed", e.getCause());
     }
-
+    return httpResponse;
   }
+
+  @Override
+  public HttpObject proxyToClientResponse(HttpObject httpObject) {
+    if (httpObject instanceof HttpResponse) {
+      httpResponseFilterChain.doFilter(originalRequest, (HttpResponse) httpObject);
+    }
+    return httpObject;
+  }
+
+  @Override
+  public void proxyToServerResolutionSucceeded(String serverHostAndPort,
+      InetSocketAddress resolvedRemoteAddress) {
+    if (resolvedRemoteAddress == null) {
+      ctx.writeAndFlush(createResponse(HttpResponseStatus.BAD_GATEWAY, originalRequest));
+    }
+  }
+
+  private HttpResponse createResponse(HttpResponseStatus httpResponseStatus,
+      HttpRequest originalRequest) {
+    HttpHeaders httpHeaders = new DefaultHttpHeaders();
+    httpHeaders.add("Transfer-Encoding", "chunked");
+    HttpResponse httpResponse =
+        new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, httpResponseStatus);
+    httpResponse.headers().add(httpHeaders);
+    return httpResponse;
+  }
+
 }

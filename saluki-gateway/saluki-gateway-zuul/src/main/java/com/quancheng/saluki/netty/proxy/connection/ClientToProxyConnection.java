@@ -23,7 +23,7 @@ import javax.net.ssl.SSLSession;
 import org.apache.commons.lang3.StringUtils;
 
 import com.quancheng.saluki.netty.ActivityTracker;
-import com.quancheng.saluki.netty.AbstractHttpFilter;
+import com.quancheng.saluki.netty.HttpFiltersRunner;
 import com.quancheng.saluki.netty.proxy.ConnectionState;
 import com.quancheng.saluki.netty.proxy.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.proxy.flow.ConnectionFlowStep;
@@ -73,7 +73,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private volatile ProxyToServerConnection currentServerConnection;
 
-  private volatile AbstractHttpFilter currentFilters = AbstractHttpFilter.NOOP_FILTER;
+  private volatile HttpFiltersRunner currentFilters;
 
   private volatile SSLSession clientSslSession;
 
@@ -107,13 +107,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private ConnectionState doReadHTTPInitial(HttpRequest httpRequest) {
     this.currentRequest = copy(httpRequest);
-    AbstractHttpFilter filterInstance =
-        proxyServer.getFiltersSource().filterRequest(currentRequest, ctx);
-    if (filterInstance != null) {
-      currentFilters = filterInstance;
-    } else {
-      currentFilters = AbstractHttpFilter.NOOP_FILTER;
-    }
+    currentFilters = proxyServer.getFiltersSource().filterRequest(currentRequest, ctx);
     HttpResponse clientToProxyFilterResponse = currentFilters.clientToProxyRequest(httpRequest);
     if (clientToProxyFilterResponse != null) {
       LOG.debug("Responding to client with short-circuit response from filter: {}",
@@ -230,7 +224,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     currentServerConnection.write(buf);
   }
 
-  public void respond(ProxyToServerConnection serverConnection, AbstractHttpFilter filters,
+  public void respond(ProxyToServerConnection serverConnection, HttpFiltersRunner filters,
       HttpRequest currentHttpRequest, HttpResponse currentHttpResponse, HttpObject httpObject) {
     this.currentRequest = null;
     httpObject = filters.serverToProxyResponse(httpObject);

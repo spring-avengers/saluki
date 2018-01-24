@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.quancheng.saluki.netty.ActivityTracker;
-import com.quancheng.saluki.netty.HttpFilterSource;
+import com.quancheng.saluki.netty.HttpFiltersSourceAdapter;
 import com.quancheng.saluki.netty.HttpProxyServer;
 import com.quancheng.saluki.netty.HttpProxyServerBootstrap;
 import com.quancheng.saluki.netty.proxy.connection.ClientToProxyConnection;
@@ -47,7 +47,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
 
 
   private final ServerGroup serverGroup;
-  private final HttpFilterSource filtersSource;
+  private final HttpFiltersSourceAdapter filtersSource;
   private final boolean transparent;
   private final InetSocketAddress requestedAddress;
   private final HostResolver serverResolver;
@@ -100,7 +100,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
 
 
   public DefaultHttpProxyServer(ServerGroup serverGroup, InetSocketAddress requestedAddress,
-      HttpFilterSource filtersSource, boolean transparent, int idleConnectionTimeout,
+      HttpFiltersSourceAdapter filtersSource, boolean transparent, int idleConnectionTimeout,
       Collection<ActivityTracker> activityTrackers, int connectTimeout, HostResolver serverResolver,
       long readThrottleBytesPerSecond, long writeThrottleBytesPerSecond,
       InetSocketAddress localAddress, String proxyAlias, int maxInitialLineLength,
@@ -347,7 +347,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
   }
 
 
-  public HttpFilterSource getFiltersSource() {
+  public HttpFiltersSourceAdapter getFiltersSource() {
     return filtersSource;
   }
 

@@ -19,7 +19,7 @@ public interface HttpProxyServerBootstrap {
   HttpProxyServerBootstrap withAllowLocalOnly(boolean allowLocalOnly);
 
 
-  HttpProxyServerBootstrap withFiltersSource(HttpFilterSource filtersSource);
+  HttpProxyServerBootstrap withFiltersSource(HttpFiltersSourceAdapter filtersSource);
 
 
   HttpProxyServerBootstrap withUseDnsSec(boolean useDnsSec);

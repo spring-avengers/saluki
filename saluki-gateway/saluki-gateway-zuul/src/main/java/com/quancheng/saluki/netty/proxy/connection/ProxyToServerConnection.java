@@ -15,7 +15,7 @@ import javax.net.ssl.SSLProtocolException;
 
 import com.google.common.net.HostAndPort;
 import com.quancheng.saluki.netty.ActivityTracker;
-import com.quancheng.saluki.netty.AbstractHttpFilter;
+import com.quancheng.saluki.netty.HttpFiltersRunner;
 import com.quancheng.saluki.netty.proxy.ConnectionState;
 import com.quancheng.saluki.netty.proxy.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.proxy.flow.ConnectionFlow;
@@ -60,7 +60,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private volatile InetSocketAddress remoteAddress;
   private volatile InetSocketAddress localAddress;
-  private volatile AbstractHttpFilter currentFilters;
+  private volatile HttpFiltersRunner currentFilters;
   private volatile ConnectionFlow connectionFlow;
   private volatile boolean disableSni = false;
   private volatile HttpRequest initialRequest;
@@ -71,7 +71,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
 
   public static ProxyToServerConnection create(DefaultHttpProxyServer proxyServer,
-      ClientToProxyConnection clientConnection, String serverHostAndPort, AbstractHttpFilter initialFilters,
+      ClientToProxyConnection clientConnection, String serverHostAndPort, HttpFiltersRunner initialFilters,
       HttpRequest initialHttpRequest, GlobalTrafficShapingHandler globalTrafficShapingHandler)
       throws UnknownHostException {
     return new ProxyToServerConnection(proxyServer, clientConnection, serverHostAndPort,
@@ -79,7 +79,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   private ProxyToServerConnection(DefaultHttpProxyServer proxyServer,
-      ClientToProxyConnection clientConnection, String serverHostAndPort, AbstractHttpFilter initialFilters,
+      ClientToProxyConnection clientConnection, String serverHostAndPort, HttpFiltersRunner initialFilters,
       GlobalTrafficShapingHandler globalTrafficShapingHandler) throws UnknownHostException {
     super(DISCONNECTED, proxyServer, true);
     this.clientConnection = clientConnection;
@@ -150,7 +150,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
     }
   };
 
-  public void write(Object msg, AbstractHttpFilter filters) {
+  public void write(Object msg, HttpFiltersRunner filters) {
     this.currentFilters = filters;
     write(msg);
   }
@@ -287,7 +287,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  public AbstractHttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public HttpFiltersRunner getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return currentFilters;
   }
 

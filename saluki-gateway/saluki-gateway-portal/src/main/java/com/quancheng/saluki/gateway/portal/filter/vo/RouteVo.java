@@ -15,13 +15,13 @@ package com.quancheng.saluki.gateway.portal.filter.vo;
 
 import java.io.Serializable;
 
-import com.quancheng.saluki.gateway.portal.filter.dto.ZuulDto;
+import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 
 /**
  * @author liushiming
  * @version ZuulVo.java, v 0.0.1 2018年1月9日 下午1:26:56 liushiming
  */
-public class ZuulVo implements Serializable {
+public class RouteVo implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private Long routeId;
@@ -174,8 +174,8 @@ public class ZuulVo implements Serializable {
     this.httpRest = httpRest;
   }
 
-  public ZuulDto buildZuulDto() {
-    ZuulDto zuulDto = new ZuulDto();
+  public RouteDto buildZuulDto() {
+    RouteDto zuulDto = new RouteDto();
     zuulDto.setRouteId(this.routeId);
     zuulDto.setPath(this.path);
     zuulDto.setUrl(this.url);
@@ -192,8 +192,8 @@ public class ZuulVo implements Serializable {
     return zuulDto;
   }
 
-  public static ZuulVo buildZuulVo(ZuulDto zuulDto) {
-    ZuulVo zuulVo = new ZuulVo();
+  public static RouteVo buildZuulVo(RouteDto zuulDto) {
+    RouteVo zuulVo = new RouteVo();
     zuulVo.setRouteId(zuulDto.getRouteId());
     zuulVo.setPath(zuulDto.getPath());
     zuulVo.setUrl(zuulDto.getUrl());

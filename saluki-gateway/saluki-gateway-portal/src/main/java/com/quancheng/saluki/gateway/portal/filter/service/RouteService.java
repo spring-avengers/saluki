@@ -18,25 +18,25 @@ import java.util.Map;
 
 import com.quancheng.saluki.gateway.portal.system.domain.PageDO;
 import com.quancheng.saluki.gateway.portal.utils.Query;
-import com.quancheng.saluki.gateway.portal.filter.dto.ZuulDto;
+import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 
 /**
  * @author liushiming
  * @version GateWayRouteService.java, v 0.0.1 2018年1月5日 上午10:44:41 liushiming
  */
-public interface ZuulService {
+public interface RouteService {
 
-  PageDO<ZuulDto> queryList(Query query);
+  PageDO<RouteDto> queryList(Query query);
 
-  ZuulDto get(Long routeId);
+  RouteDto get(Long routeId);
 
-  List<ZuulDto> list(Map<String, Object> map);
+  List<RouteDto> list(Map<String, Object> map);
 
   int count(Map<String, Object> map);
 
-  int save(ZuulDto zuulDto);
+  int save(RouteDto zuulDto);
 
-  int update(ZuulDto zuulDto);
+  int update(RouteDto zuulDto);
 
   int remove(Long routeId);
 

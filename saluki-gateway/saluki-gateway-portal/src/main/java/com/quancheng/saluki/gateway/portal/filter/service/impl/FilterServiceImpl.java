@@ -25,8 +25,8 @@ import com.quancheng.saluki.gateway.portal.filter.dao.RouteDao;
 import com.quancheng.saluki.gateway.portal.filter.dao.RpcDao;
 import com.quancheng.saluki.gateway.portal.filter.domain.RouteDO;
 import com.quancheng.saluki.gateway.portal.filter.domain.RpcDO;
-import com.quancheng.saluki.gateway.portal.filter.dto.ZuulDto;
-import com.quancheng.saluki.gateway.portal.filter.service.ZuulService;
+import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
+import com.quancheng.saluki.gateway.portal.filter.service.RouteService;
 import com.quancheng.saluki.gateway.portal.system.domain.PageDO;
 import com.quancheng.saluki.gateway.portal.utils.Query;
 
@@ -35,7 +35,7 @@ import com.quancheng.saluki.gateway.portal.utils.Query;
  * @version ZuulServiceImpl.java, v 0.0.1 2018年1月8日 上午11:38:49 liushiming
  */
 @Service
-public class ZuulServiceImpl implements ZuulService {
+public class FilterServiceImpl implements RouteService {
 
   @Autowired
   private RouteDao routeDao;
@@ -44,43 +44,43 @@ public class ZuulServiceImpl implements ZuulService {
   private RpcDao grpcDao;
 
   @Override
-  public PageDO<ZuulDto> queryList(Query query) {
+  public PageDO<RouteDto> queryList(Query query) {
     int total = routeDao.count(query);
     List<RouteDO> routes = routeDao.list(query);
-    List<ZuulDto> dtos = Lists.newArrayListWithCapacity(routes.size());
+    List<RouteDto> dtos = Lists.newArrayListWithCapacity(routes.size());
     for (RouteDO routeDo : routes) {
-      ZuulDto dto = ZuulDto.buildZuulDto(routeDo);
+      RouteDto dto = RouteDto.buildZuulDto(routeDo);
       dtos.add(dto);
     }
-    PageDO<ZuulDto> page = new PageDO<>();
+    PageDO<RouteDto> page = new PageDO<>();
     page.setTotal(total);
     page.setRows(dtos);
     return page;
   }
 
   @Override
-  public ZuulDto get(Long routeId) {
+  public RouteDto get(Long routeId) {
     RouteDO route = routeDao.get(routeId);
     String serviceName = route.getServiceName();
     String methodName = route.getMethodName();
     String group = route.getServiceGroup();
     String version = route.getServiceVersion();
     RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
-    ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
+    RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
     return zuulDto;
   }
 
   @Override
-  public List<ZuulDto> list(Map<String, Object> map) {
+  public List<RouteDto> list(Map<String, Object> map) {
     List<RouteDO> routes = routeDao.list(map);
-    List<ZuulDto> zuulDtos = Lists.newArrayList();
+    List<RouteDto> zuulDtos = Lists.newArrayList();
     for (RouteDO route : routes) {
       String serviceName = route.getServiceName();
       String methodName = route.getMethodName();
       String group = route.getServiceGroup();
       String version = route.getServiceVersion();
       RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
-      ZuulDto zuulDto = ZuulDto.buildZuulDto(route, grpc);
+      RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
       zuulDtos.add(zuulDto);
     }
     return zuulDtos;
@@ -93,7 +93,7 @@ public class ZuulServiceImpl implements ZuulService {
   }
 
   @Override
-  public int save(ZuulDto zuulDto) {
+  public int save(RouteDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
     RpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.save(grpcDo);
@@ -106,7 +106,7 @@ public class ZuulServiceImpl implements ZuulService {
   }
 
   @Override
-  public int update(ZuulDto zuulDto) {
+  public int update(RouteDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
     RpcDO grpcDo = zuulDto.buildGrpc();
     int success1 = grpcDao.update(grpcDo);

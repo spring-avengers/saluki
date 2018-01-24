@@ -16,19 +16,19 @@
 									<label class="col-sm-2 control-label" for="path">请求路径</label>
 									<div class="col-sm-4">
 										<input class="form-control" id="path" name="path"
-											th:value="${zuul.path}" type="text" placeholder="path" />
+											th:value="${route.path}" type="text" placeholder="path" />
 									</div>
 									<label class="col-sm-2 control-label" for="serviceId">服务Id</label>
 									<div class="col-sm-4">
 										<input class="form-control" id="serviceId" name="serviceId"
-											th:value="${zuul.serviceId}" type="text"
+											th:value="${route.serviceId}" type="text"
 											placeholder="serviceId" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="url">转发url</label>
 									<div class="col-sm-10">
-										<input id="url" name="url" th:value="${zuul.url}"
+										<input id="url" name="url" th:value="${route.url}"
 											class="form-control" type="text" placeholder="url" />
 									</div>
 								</div>
@@ -36,9 +36,9 @@
 									<label for="stripPrefix" class="col-sm-2 control-label">忽略前缀</label>
 									<div class="col-sm-4">
 										<select id="stripPrefix" name="stripPrefix"
-											th:value="${zuul.stripPrefix}" class="form-control">
-											<option value="0" th:if="${zuul.stripPrefix ==false}">否</option>
-											<option value="1" th:if="${zuul.stripPrefix ==true}">是</option>
+											th:value="${route.stripPrefix}" class="form-control">
+											<option value="0" th:if="${route.stripPrefix ==false}">否</option>
+											<option value="1" th:if="${route.stripPrefix ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -46,19 +46,19 @@
 									<label for="retryable" class="col-sm-2 control-label">重试</label>
 									<div class="col-sm-4">
 										<select id="retryable" name="retryable"
-											th:value="${zuul.retryable}" class="form-control">
-											<option value="0" th:if="${zuul.retryable ==false}">否</option>
-											<option value="1" th:if="${zuul.retryable ==true}">是</option>
+											th:value="${route.retryable}" class="form-control">
+											<option value="0" th:if="${route.retryable ==false}">否</option>
+											<option value="1" th:if="${route.retryable ==true}">是</option>
 										</select>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="enabled" class="col-sm-2 control-label">开启</label>
 									<div class="col-sm-4">
-										<select id="enabled" name="enabled" th:value="${zuul.enabled}"
+										<select id="enabled" name="enabled" th:value="${route.enabled}"
 											class="form-control">
-											<option value="0" th:if="${zuul.enabled ==false}">否</option>
-											<option value="1" th:if="${zuul.enabled ==true}">是</option>
+											<option value="0" th:if="${route.enabled ==false}">否</option>
+											<option value="1" th:if="${route.enabled ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -68,18 +68,18 @@
 								<div class="form-group">
 									<label for="grpc" class="col-sm-2 control-label">是否gRpc</label>
 									<div class="col-sm-4">
-										<select id="grpc" name="grpc" th:value="${zuul.grpc}"
+										<select id="grpc" name="grpc" th:value="${route.grpc}"
 											class="form-control">
-											<option value="0" th:if="${zuul.grpc ==false}">否</option>
-											<option value="1" th:if="${zuul.grpc ==true}">是</option>
+											<option value="0" th:if="${route.grpc ==false}">否</option>
+											<option value="1" th:if="${route.grpc ==true}">是</option>
 										</select>
 									</div>
 									<label for="dubbo" class="col-sm-2 control-label">是否dubbo</label>
 									<div class="col-sm-4">
-										<select id="dubbo" name="dubbo" th:value="${zuul.dubbo}"
+										<select id="dubbo" name="dubbo" th:value="${route.dubbo}"
 											class="form-control">
-											<option value="0" th:if="${zuul.dubbo ==false}">否</option>
-											<option value="1" th:if="${zuul.dubbo ==true}">是</option>
+											<option value="0" th:if="${route.dubbo ==false}">否</option>
+											<option value="1" th:if="${route.dubbo ==true}">是</option>
 										</select>
 									</div>
 								</div>
@@ -90,7 +90,7 @@
 									<label class="col-sm-2 control-label" for="serviceName">接口名</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceName"
-											name="serviceName" th:value="${zuul.serviceName}" type="text"
+											name="serviceName" th:value="${route.serviceName}" type="text"
 											placeholder="serviceName" />
 									</div>
 								</div>
@@ -98,7 +98,7 @@
 									<label class="col-sm-2 control-label" for="methodName">方法名</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="methodName" name="methodName"
-											th:value="${zuul.methodName}" type="text"
+											th:value="${route.methodName}" type="text"
 											placeholder="methodName" />
 									</div>
 								</div>
@@ -106,7 +106,7 @@
 									<label class="col-sm-2 control-label" for="serviceGroup">组别</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceGroup"
-											name="serviceGroup" th:value="${zuul.serviceGroup}"
+											name="serviceGroup" th:value="${route.serviceGroup}"
 											type="text" placeholder="group" />
 									</div>
 								</div>
@@ -114,7 +114,7 @@
 									<label class="col-sm-2 control-label" for="serviceVersion">版本</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceVersion"
-											name="serviceVersion" th:value="${zuul.serviceVersion}"
+											name="serviceVersion" th:value="${route.serviceVersion}"
 											type="text" placeholder="version" />
 									</div>
 								</div>

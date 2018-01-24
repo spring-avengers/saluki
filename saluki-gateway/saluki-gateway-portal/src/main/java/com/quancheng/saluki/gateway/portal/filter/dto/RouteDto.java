@@ -22,7 +22,7 @@ import com.quancheng.saluki.gateway.portal.filter.domain.RouteDO;
  * @author liushiming
  * @version GateWayRouteDto.java, v 0.0.1 2018年1月5日 上午10:47:04 liushiming
  */
-public class ZuulDto implements Serializable {
+public class RouteDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -218,8 +218,8 @@ public class ZuulDto implements Serializable {
     return grpc;
   }
 
-  public static ZuulDto buildZuulDto(RouteDO route, RpcDO grpc) {
-    ZuulDto zuulDto = new ZuulDto();
+  public static RouteDto buildZuulDto(RouteDO route, RpcDO grpc) {
+    RouteDto zuulDto = new RouteDto();
     zuulDto.setRouteId(route.getRouteId());
     zuulDto.setPath(route.getPath());
     zuulDto.setUrl(route.getUrl());
@@ -240,8 +240,8 @@ public class ZuulDto implements Serializable {
     return zuulDto;
   }
 
-  public static ZuulDto buildZuulDto(RouteDO route) {
-    ZuulDto zuulDto = new ZuulDto();
+  public static RouteDto buildZuulDto(RouteDO route) {
+    RouteDto zuulDto = new RouteDto();
     zuulDto.setRouteId(route.getRouteId());
     zuulDto.setPath(route.getPath());
     zuulDto.setUrl(route.getUrl());

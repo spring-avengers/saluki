@@ -35,10 +35,10 @@ import com.quancheng.saluki.gateway.portal.common.BDException;
 import com.quancheng.saluki.gateway.portal.common.BaseController;
 import com.quancheng.saluki.gateway.portal.common.CommonResponse;
 import com.quancheng.saluki.gateway.portal.common.Log;
-import com.quancheng.saluki.gateway.portal.filter.dto.ZuulDto;
+import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 import com.quancheng.saluki.gateway.portal.filter.service.ProtobufService;
-import com.quancheng.saluki.gateway.portal.filter.service.ZuulService;
-import com.quancheng.saluki.gateway.portal.filter.vo.ZuulVo;
+import com.quancheng.saluki.gateway.portal.filter.service.RouteService;
+import com.quancheng.saluki.gateway.portal.filter.vo.RouteVo;
 import com.quancheng.saluki.gateway.portal.system.domain.PageDO;
 import com.quancheng.saluki.gateway.portal.utils.FileType;
 import com.quancheng.saluki.gateway.portal.utils.Query;
@@ -56,7 +56,7 @@ public class FilterController extends BaseController {
   private ProtobufService protobufService;
 
   @Autowired
-  private ZuulService zuulService;
+  private RouteService zuulService;
 
   @RequiresPermissions("filter:route:route")
   @GetMapping()
@@ -75,9 +75,9 @@ public class FilterController extends BaseController {
   @RequiresPermissions("filter:route:edit")
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
-    ZuulDto zuulDto = zuulService.get(id);
-    ZuulVo zuulVo = ZuulVo.buildZuulVo(zuulDto);
-    model.addAttribute("zuul", zuulVo);
+    RouteDto zuulDto = zuulService.get(id);
+    RouteVo zuulVo = RouteVo.buildZuulVo(zuulDto);
+    model.addAttribute("route", zuulVo);
     return prefix + "/edit";
   }
 
@@ -85,15 +85,15 @@ public class FilterController extends BaseController {
   @RequiresPermissions("filter:route:route")
   @GetMapping("/list")
   @ResponseBody
-  PageDO<ZuulVo> list(@RequestParam Map<String, Object> params) {
+  PageDO<RouteVo> list(@RequestParam Map<String, Object> params) {
     Query query = new Query(params);
-    PageDO<ZuulDto> pageDto = zuulService.queryList(query);
-    PageDO<ZuulVo> pageVo = new PageDO<>();
+    PageDO<RouteDto> pageDto = zuulService.queryList(query);
+    PageDO<RouteVo> pageVo = new PageDO<>();
     pageVo.setTotal(pageDto.getTotal());
-    List<ZuulDto> zuulDtos = pageDto.getRows();
-    List<ZuulVo> vos = Lists.newArrayListWithCapacity(zuulDtos.size());
-    for (ZuulDto zuulDto : zuulDtos) {
-      vos.add(ZuulVo.buildZuulVo(zuulDto));
+    List<RouteDto> zuulDtos = pageDto.getRows();
+    List<RouteVo> vos = Lists.newArrayListWithCapacity(zuulDtos.size());
+    for (RouteDto zuulDto : zuulDtos) {
+      vos.add(RouteVo.buildZuulVo(zuulDto));
     }
     pageVo.setRows(vos);
     return pageVo;
@@ -103,7 +103,7 @@ public class FilterController extends BaseController {
   @RequiresPermissions("filter:route:add")
   @PostMapping("/save")
   @ResponseBody()
-  CommonResponse save(ZuulVo zuulVo,
+  CommonResponse save(RouteVo zuulVo,
       @RequestParam(name = "input", required = false) MultipartFile inputFile,
       @RequestParam(name = "output", required = false) MultipartFile outputFile,
       @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
@@ -117,7 +117,7 @@ public class FilterController extends BaseController {
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
-          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
           zuulService.save(zuulDto);
         }
@@ -135,14 +135,14 @@ public class FilterController extends BaseController {
           byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
           byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
           zuulService.save(zuulDto);
         }
       } // rest路由
       else {
-        ZuulDto zuulDto = zuulVo.buildZuulDto();
+        RouteDto zuulDto = zuulVo.buildZuulDto();
         zuulService.save(zuulDto);
       }
     } catch (IOException e) {
@@ -165,7 +165,7 @@ public class FilterController extends BaseController {
   @RequiresPermissions("filter:route:edit")
   @PostMapping("/update")
   @ResponseBody()
-  CommonResponse update(ZuulVo zuulVo,
+  CommonResponse update(RouteVo zuulVo,
       @RequestParam(name = "input", required = false) MultipartFile inputFile,
       @RequestParam(name = "output", required = false) MultipartFile outputFile,
       @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
@@ -179,7 +179,7 @@ public class FilterController extends BaseController {
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
-          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
           zuulService.update(zuulDto);
         }
@@ -197,14 +197,14 @@ public class FilterController extends BaseController {
           byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
           byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-          ZuulDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
           zuulService.update(zuulDto);
         }
       } // rest路由
       else {
-        ZuulDto zuulDto = zuulVo.buildZuulDto();
+        RouteDto zuulDto = zuulVo.buildZuulDto();
         zuulService.update(zuulDto);
       }
     } catch (IOException e) {

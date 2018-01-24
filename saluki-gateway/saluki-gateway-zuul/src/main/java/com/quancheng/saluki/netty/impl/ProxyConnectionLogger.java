@@ -7,25 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
-/**
- * <p>
- * A helper class that logs messages for ProxyConnections. All it does is make sure that the Channel
- * and current state are always included in the log messages (if available).
- * </p>
- *
- * <p>
- * Note that this depends on us using a LocationAwareLogger so that we can report the line numbers
- * of the caller rather than this helper class. If the SLF4J binding does not provide a
- * LocationAwareLogger, then a fallback to Logger is provided.
- * </p>
- */
+
 public class ProxyConnectionLogger {
-  private final ProxyConnection connection;
+  private final ProxyConnection<?> connection;
   private final LogDispatch dispatch;
   private final Logger logger;
   private final String fqcn = this.getClass().getCanonicalName();
 
-  public ProxyConnectionLogger(ProxyConnection connection) {
+  public ProxyConnectionLogger(ProxyConnection<?> connection) {
     this.connection = connection;
     final Logger lg = LoggerFactory.getLogger(connection.getClass());
     if (lg instanceof LocationAwareLogger) {
@@ -112,9 +101,7 @@ public class ProxyConnectionLogger {
     return messagePrefix + ": " + message;
   }
 
-  /**
-   * Fallback dispatch if a LocationAwareLogger is not available from the SLF4J LoggerFactory.
-   */
+
   private class LoggerDispatch implements LogDispatch {
     @Override
     public void doLog(int level, String message, Object[] params, Throwable t) {
@@ -154,9 +141,7 @@ public class ProxyConnectionLogger {
     }
   }
 
-  /**
-   * Dispatcher for a LocationAwareLogger.
-   */
+
   private class LocationAwareLogggerDispatch implements LogDispatch {
 
     private LocationAwareLogger log;

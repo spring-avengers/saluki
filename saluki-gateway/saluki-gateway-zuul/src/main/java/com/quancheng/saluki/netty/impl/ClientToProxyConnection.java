@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -37,6 +36,8 @@ import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
@@ -45,36 +46,28 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
+import io.netty.util.AsciiString;
 import io.netty.util.concurrent.Future;
 
 
 public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   private static final HttpResponseStatus CONNECTION_ESTABLISHED =
       new HttpResponseStatus(200, "Connection established");
-
   private static final String LOWERCASE_TRANSFER_ENCODING_HEADER =
-      HttpHeaders.Names.TRANSFER_ENCODING.toLowerCase(Locale.US);
-
-
+      HttpHeaderNames.TRANSFER_ENCODING.toString().toLowerCase(Locale.US);
   private static final Pattern HTTP_SCHEME =
       Pattern.compile("^http://.*", Pattern.CASE_INSENSITIVE);
-
-
   private final Map<String, ProxyToServerConnection> serverConnectionsByHostAndPort =
       new ConcurrentHashMap<String, ProxyToServerConnection>();
 
-
   private final AtomicInteger numberOfCurrentlyConnectingServers = new AtomicInteger(0);
-
-
   private final AtomicInteger numberOfCurrentlyConnectedServers = new AtomicInteger(0);
-
-
   private final AtomicInteger numberOfReusedServerConnections = new AtomicInteger(0);
-
+  private final GlobalTrafficShapingHandler globalTrafficShapingHandler;
 
   private volatile ProxyToServerConnection currentServerConnection;
 
@@ -83,11 +76,6 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   private volatile SSLSession clientSslSession;
 
   private volatile boolean mitming = false;
-
-  private AtomicBoolean authenticated = new AtomicBoolean();
-
-  private final GlobalTrafficShapingHandler globalTrafficShapingHandler;
-
 
   private volatile HttpRequest currentRequest;
 
@@ -102,12 +90,12 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   @Override
   protected ConnectionState readHTTPInitial(HttpRequest httpRequest) {
     LOG.debug("Received raw request: {}", httpRequest);
-    if (httpRequest.getDecoderResult().isFailure()) {
+    if (httpRequest.decoderResult().isFailure()) {
       LOG.debug("Could not parse request from client. Decoder result: {}",
-          httpRequest.getDecoderResult().toString());
+          httpRequest.decoderResult().toString());
       FullHttpResponse response = ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1,
           HttpResponseStatus.BAD_REQUEST, "Unable to parse HTTP request");
-      HttpHeaders.setKeepAlive(response, false);
+      HttpUtil.setKeepAlive(response, false);
       respondWithShortCircuitResponse(response);
       return DISCONNECT_REQUESTED;
     }
@@ -143,9 +131,9 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       }
     }
     String serverHostAndPort = identifyHostAndPort(httpRequest);
-    LOG.debug("Ensuring that hostAndPort are available in {}", httpRequest.getUri());
+    LOG.debug("Ensuring that hostAndPort are available in {}", httpRequest.uri());
     if (serverHostAndPort == null || StringUtils.isBlank(serverHostAndPort)) {
-      LOG.warn("No host and port found in {}", httpRequest.getUri());
+      LOG.warn("No host and port found in {}", httpRequest.uri());
       boolean keepAlive = writeBadGateway(httpRequest);
       if (keepAlive) {
         return AWAITING_INITIAL;
@@ -181,7 +169,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         }
         serverConnectionsByHostAndPort.put(serverHostAndPort, currentServerConnection);
       } catch (UnknownHostException uhe) {
-        LOG.info("Bad Host {}", httpRequest.getUri());
+        LOG.info("Bad Host {}", httpRequest.uri());
         boolean keepAlive = writeBadGateway(httpRequest);
         resumeReading();
         if (keepAlive) {
@@ -220,10 +208,10 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   private boolean isRequestToOriginServer(HttpRequest httpRequest) {
-    if (httpRequest.getMethod() == HttpMethod.CONNECT || isMitming()) {
+    if (httpRequest.method() == HttpMethod.CONNECT || isMitming()) {
       return false;
     }
-    String uri = httpRequest.getUri();
+    String uri = httpRequest.uri();
     return !HTTP_SCHEME.matcher(uri).matches();
   }
 
@@ -256,7 +244,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
           HttpResponse duplicateResponse = ProxyUtils.duplicateHttpResponse(httpResponse);
           httpObject = httpResponse = duplicateResponse;
         }
-        HttpHeaders.setTransferEncodingChunked(httpResponse);
+        HttpUtil.setTransferEncodingChunked(httpResponse, true);
       }
       fixHttpVersionHeaderIfNecessary(httpResponse);
       modifyResponseHeadersToReflectProxying(httpResponse);
@@ -285,7 +273,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       LOG.debug("Responding with CONNECT successful");
       HttpResponse response =
           ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1, CONNECTION_ESTABLISHED);
-      response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+      response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
       ProxyUtils.addVia(response, proxyServer.getProxyAlias());
       return writeToChannel(response);
     };
@@ -510,7 +498,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         if (!ProxyUtils.isLastChunk(httpObject)) {
           String uri = null;
           if (req != null) {
-            uri = req.getUri();
+            uri = req.uri();
           }
           LOG.debug("Not closing client connection on middle chunk for {}", uri);
           return false;
@@ -519,8 +507,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         }
       }
     }
-
-    if (!HttpHeaders.isKeepAlive(req)) {
+    if (!HttpUtil.isKeepAlive(req)) {
       LOG.debug("Closing client connection since request is not keep alive: {}", req);
       return true;
     }
@@ -535,7 +522,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         if (!ProxyUtils.isLastChunk(msg)) {
           String uri = null;
           if (req != null) {
-            uri = req.getUri();
+            uri = req.uri();
           }
           LOG.debug("Not closing server connection on middle chunk for {}", uri);
           return false;
@@ -544,7 +531,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         }
       }
     }
-    if (!HttpHeaders.isKeepAlive(res)) {
+    if (!HttpUtil.isKeepAlive(res)) {
       LOG.debug("Closing server connection since response is not keep alive: {}", res);
       return true;
     }
@@ -559,8 +546,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     if (original instanceof FullHttpRequest) {
       return ((FullHttpRequest) original).copy();
     } else {
-      HttpRequest request = new DefaultHttpRequest(original.getProtocolVersion(),
-          original.getMethod(), original.getUri());
+      HttpRequest request =
+          new DefaultHttpRequest(original.protocolVersion(), original.method(), original.uri());
       request.headers().set(original.headers());
       return request;
     }
@@ -568,9 +555,9 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   private void fixHttpVersionHeaderIfNecessary(HttpResponse httpResponse) {
-    String te = httpResponse.headers().get(HttpHeaders.Names.TRANSFER_ENCODING);
-    if (StringUtils.isNotBlank(te) && te.equalsIgnoreCase(HttpHeaders.Values.CHUNKED)) {
-      if (httpResponse.getProtocolVersion() != HttpVersion.HTTP_1_1) {
+    String te = httpResponse.headers().get(HttpHeaderNames.TRANSFER_ENCODING);
+    if (AsciiString.contentEqualsIgnoreCase(HttpHeaderValues.CHUNKED, te)) {
+      if (httpResponse.protocolVersion() != HttpVersion.HTTP_1_1) {
         LOG.debug("Fixing HTTP version.");
         httpResponse.setProtocolVersion(HttpVersion.HTTP_1_1);
       }
@@ -597,8 +584,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       stripConnectionTokens(headers);
       stripHopByHopHeaders(headers);
       ProxyUtils.addVia(httpResponse, proxyServer.getProxyAlias());
-      if (!headers.contains(HttpHeaders.Names.DATE)) {
-        HttpHeaders.setDate(httpResponse, new Date());
+      if (!headers.contains(HttpHeaderNames.DATE)) {
+        headers.set(HttpHeaderNames.DATE, new Date());
       }
     }
   }
@@ -608,14 +595,14 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     if (headers.contains(proxyConnectionKey)) {
       String header = headers.get(proxyConnectionKey);
       headers.remove(proxyConnectionKey);
-      headers.set(HttpHeaders.Names.CONNECTION, header);
+      headers.set(HttpHeaderNames.CONNECTION, header);
     }
   }
 
 
   private void stripConnectionTokens(HttpHeaders headers) {
-    if (headers.contains(HttpHeaders.Names.CONNECTION)) {
-      for (String headerValue : headers.getAll(HttpHeaders.Names.CONNECTION)) {
+    if (headers.contains(HttpHeaderNames.CONNECTION)) {
+      for (String headerValue : headers.getAll(HttpHeaderNames.CONNECTION)) {
         for (String connectionToken : ProxyUtils.splitCommaSeparatedHeaderValues(headerValue)) {
           if (!LOWERCASE_TRANSFER_ENCODING_HEADER.equals(connectionToken.toLowerCase(Locale.US))) {
             headers.remove(connectionToken);
@@ -636,19 +623,18 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   private boolean writeBadGateway(HttpRequest httpRequest) {
-    String body = "Bad Gateway: " + httpRequest.getUri();
+    String body = "Bad Gateway: " + httpRequest.uri();
     FullHttpResponse response = ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1,
         HttpResponseStatus.BAD_GATEWAY, body);
     if (ProxyUtils.isHEAD(httpRequest)) {
       response.content().clear();
     }
-
     return respondWithShortCircuitResponse(response);
   }
 
 
   private boolean writeBadRequest(HttpRequest httpRequest) {
-    String body = "Bad Request to URI: " + httpRequest.getUri();
+    String body = "Bad Request to URI: " + httpRequest.uri();
     FullHttpResponse response = ProxyUtils.createFullHttpResponse(HttpVersion.HTTP_1_1,
         HttpResponseStatus.BAD_REQUEST, body);
     if (ProxyUtils.isHEAD(httpRequest)) {
@@ -678,18 +664,18 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       disconnect();
       return false;
     }
-    boolean isKeepAlive = HttpHeaders.isKeepAlive(httpResponse);
-    int statusCode = httpResponse.getStatus().code();
+    boolean isKeepAlive = HttpUtil.isKeepAlive(httpResponse);
+    int statusCode = httpResponse.status().code();
     if (statusCode != HttpResponseStatus.BAD_GATEWAY.code()
         && statusCode != HttpResponseStatus.GATEWAY_TIMEOUT.code()) {
       modifyResponseHeadersToReflectProxying(httpResponse);
     }
-    HttpHeaders.setKeepAlive(httpResponse, isKeepAlive);
+    HttpUtil.setKeepAlive(httpResponse, isKeepAlive);
     write(httpResponse);
     if (ProxyUtils.isLastChunk(httpResponse)) {
       writeEmptyBuffer();
     }
-    if (!HttpHeaders.isKeepAlive(httpResponse)) {
+    if (!HttpUtil.isKeepAlive(httpResponse)) {
       disconnect();
       return false;
     }
@@ -701,12 +687,11 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   private String identifyHostAndPort(HttpRequest httpRequest) {
     String hostAndPort = ProxyUtils.parseHostAndPort(httpRequest);
     if (StringUtils.isBlank(hostAndPort)) {
-      List<String> hosts = httpRequest.headers().getAll(HttpHeaders.Names.HOST);
+      List<String> hosts = httpRequest.headers().getAll(HttpHeaderNames.HOST);
       if (hosts != null && !hosts.isEmpty()) {
         hostAndPort = hosts.get(0);
       }
     }
-
     return hostAndPort;
   }
 

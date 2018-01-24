@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @ServletComponentScan
-@MapperScan("com.quancheng.saluki.gateway.portal.*.dao")
+@MapperScan(basePackages = "com.quancheng.saluki.gateway")
 @SpringBootApplication
 public class SalukiGateWayPortalApplication {
   public static void main(String[] args) {

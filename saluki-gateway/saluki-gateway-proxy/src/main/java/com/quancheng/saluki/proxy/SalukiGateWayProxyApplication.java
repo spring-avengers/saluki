@@ -13,6 +13,7 @@
  */
 package com.quancheng.saluki.proxy;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -20,7 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author liushiming
  * @version SalukiGateWayApplication.java, v 0.0.1 2018年1月24日 下午4:37:37 liushiming
  */
-
+@MapperScan("com.quancheng.saluki.gateway.*.dao")
 @SpringBootApplication
 public class SalukiGateWayProxyApplication {
   public static void main(String[] args) {

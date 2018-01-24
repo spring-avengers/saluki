@@ -26,7 +26,7 @@ import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
 import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 import com.quancheng.saluki.gateway.portal.common.CommonResponse;
 import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
-import com.quancheng.saluki.gateway.portal.filter.service.RouteService;
+import com.quancheng.saluki.gateway.portal.filter.service.FilterService;
 import com.quancheng.saluki.gateway.portal.system.domain.PageDO;
 import com.quancheng.saluki.gateway.portal.utils.Query;
 
@@ -35,7 +35,7 @@ import com.quancheng.saluki.gateway.portal.utils.Query;
  * @version ZuulServiceImpl.java, v 0.0.1 2018年1月8日 上午11:38:49 liushiming
  */
 @Service
-public class FilterServiceImpl implements RouteService {
+public class FilterServiceImpl implements FilterService {
 
   @Autowired
   private RouteDao routeDao;

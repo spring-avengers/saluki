@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.quancheng.saluki.gateway.system.dao.LogDao">
+<mapper namespace="com.quancheng.saluki.gateway.portal.system.dao.LogDao">
 
-	<select id="get" resultType="com.quancheng.saluki.gateway.system.domain.LogDO">
+	<select id="get" resultType="com.quancheng.saluki.gateway.portal.system.domain.LogDO">
 		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from sys_log where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.quancheng.saluki.gateway.system.domain.LogDO">
+	<select id="list" resultType="com.quancheng.saluki.gateway.portal.system.domain.LogDO">
 		select `id`,`user_id`,`username`,`operation`,`time`,`method`,`params`,`ip`,`gmt_create` from sys_log
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
@@ -48,7 +48,7 @@
 		  		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.quancheng.saluki.gateway.system.domain.LogDO" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.quancheng.saluki.gateway.portal.system.domain.LogDO" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_log
 		(
 			`user_id`, 
@@ -73,7 +73,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.quancheng.saluki.gateway.system.domain.LogDO">
+	<update id="update" parameterType="com.quancheng.saluki.gateway.portal.system.domain.LogDO">
 		update sys_log 
 		<set>
 			<if test="userId != null">`user_id` = #{userId}, </if>

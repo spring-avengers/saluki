@@ -24,7 +24,7 @@ import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
  * @author liushiming
  * @version GateWayRouteService.java, v 0.0.1 2018年1月5日 上午10:44:41 liushiming
  */
-public interface RouteService {
+public interface FilterService {
 
   PageDO<RouteDto> queryList(Query query);
 

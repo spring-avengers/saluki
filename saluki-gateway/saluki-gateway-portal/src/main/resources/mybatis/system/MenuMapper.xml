@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.quancheng.saluki.gateway.system.dao.MenuDao">
+<mapper namespace="com.quancheng.saluki.gateway.portal.system.dao.MenuDao">
 
-	<select id="get" resultType="com.quancheng.saluki.gateway.system.domain.MenuDO">
+	<select id="get" resultType="com.quancheng.saluki.gateway.portal.system.domain.MenuDO">
 		select
 		`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`,`gmt_create`,`gmt_modified`
 		from sys_menu where menu_id = #{value}
 	</select>
 
-	<select id="list" resultType="com.quancheng.saluki.gateway.system.domain.MenuDO">
+	<select id="list" resultType="com.quancheng.saluki.gateway.portal.system.domain.MenuDO">
 		select
 		`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`,`gmt_create`,`gmt_modified`
 		from sys_menu
@@ -54,7 +54,7 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.quancheng.saluki.gateway.system.domain.MenuDO"
+	<insert id="save" parameterType="com.quancheng.saluki.gateway.portal.system.domain.MenuDO"
 		useGeneratedKeys="true" keyProperty="menuId">
 		insert into sys_menu
 		(
@@ -82,7 +82,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.quancheng.saluki.gateway.system.domain.MenuDO">
+	<update id="update" parameterType="com.quancheng.saluki.gateway.portal.system.domain.MenuDO">
 		update sys_menu
 		<set>
 			<if test="parentId != null">`parent_id` = #{parentId}, </if>
@@ -110,7 +110,7 @@
 		</foreach>
 	</delete>
 
-	<select id="listMenuByUserId" resultType="com.quancheng.saluki.gateway.system.domain.MenuDO">
+	<select id="listMenuByUserId" resultType="com.quancheng.saluki.gateway.portal.system.domain.MenuDO">
 		select distinct
 		m.menu_id , parent_id, name, url,
 		perms,`type`,icon,order_num,gmt_create, gmt_modified

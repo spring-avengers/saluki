@@ -37,7 +37,7 @@ import com.quancheng.saluki.gateway.portal.common.CommonResponse;
 import com.quancheng.saluki.gateway.portal.common.Log;
 import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 import com.quancheng.saluki.gateway.portal.filter.service.ProtobufService;
-import com.quancheng.saluki.gateway.portal.filter.service.RouteService;
+import com.quancheng.saluki.gateway.portal.filter.service.FilterService;
 import com.quancheng.saluki.gateway.portal.filter.vo.RouteVo;
 import com.quancheng.saluki.gateway.portal.system.domain.PageDO;
 import com.quancheng.saluki.gateway.portal.utils.FileType;
@@ -56,7 +56,7 @@ public class FilterController extends BaseController {
   private ProtobufService protobufService;
 
   @Autowired
-  private RouteService zuulService;
+  private FilterService zuulService;
 
   @RequiresPermissions("filter:route:route")
   @GetMapping()

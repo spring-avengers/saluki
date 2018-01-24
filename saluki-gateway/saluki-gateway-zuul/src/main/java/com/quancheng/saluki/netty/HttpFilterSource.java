@@ -6,12 +6,8 @@ import io.netty.handler.codec.http.HttpRequest;
 
 public class HttpFilterSource {
 
-  public HttpFilter filterRequest(HttpRequest originalRequest) {
-    return new HttpFilter(originalRequest, null);
-  }
-
-  public HttpFilter filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
-    return filterRequest(originalRequest);
+  public AbstractHttpFilter filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
+    return new AbstractHttpFilter(originalRequest, ctx);
   }
 
   public int getMaximumRequestBufferSizeInBytes() {

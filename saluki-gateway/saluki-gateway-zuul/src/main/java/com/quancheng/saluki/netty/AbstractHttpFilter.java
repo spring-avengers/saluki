@@ -8,20 +8,20 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 
 
-public class HttpFilter {
+public class AbstractHttpFilter {
 
-  public static final HttpFilter NOOP_FILTER = new HttpFilter(null);
+  public static final AbstractHttpFilter NOOP_FILTER = new AbstractHttpFilter(null);
 
   protected final HttpRequest originalRequest;
 
   protected final ChannelHandlerContext ctx;
 
-  public HttpFilter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
+  public AbstractHttpFilter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
     this.originalRequest = originalRequest;
     this.ctx = ctx;
   }
 
-  public HttpFilter(HttpRequest originalRequest) {
+  public AbstractHttpFilter(HttpRequest originalRequest) {
     this(originalRequest, null);
   }
 

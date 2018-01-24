@@ -5,7 +5,7 @@ import static com.quancheng.saluki.netty.proxy.ConnectionState.AWAITING_INITIAL;
 import static com.quancheng.saluki.netty.proxy.ConnectionState.DISCONNECTED;
 import static com.quancheng.saluki.netty.proxy.ConnectionState.NEGOTIATING_CONNECT;
 
-import com.quancheng.saluki.netty.HttpFilter;
+import com.quancheng.saluki.netty.AbstractHttpFilter;
 import com.quancheng.saluki.netty.proxy.ConnectionState;
 import com.quancheng.saluki.netty.proxy.DefaultHttpProxyServer;
 import com.quancheng.saluki.netty.proxy.flow.ConnectionFlowStep;
@@ -293,7 +293,7 @@ public abstract class ProxyConnection<I extends HttpObject>
     this.channel.config().setAutoRead(true);
   }
 
-  public HttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public AbstractHttpFilter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return proxyServer.getFiltersSource().filterRequest(httpRequest, ctx);
   }
 

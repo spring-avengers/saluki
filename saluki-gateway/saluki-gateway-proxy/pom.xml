@@ -23,6 +23,11 @@
 			<artifactId>saluki-gateway-persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--druid -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.googlecode.protobuf-java-format</groupId>
 			<artifactId>protobuf-java-format</artifactId>

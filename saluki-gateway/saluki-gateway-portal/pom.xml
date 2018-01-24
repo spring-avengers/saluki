@@ -44,6 +44,11 @@
 			<artifactId>saluki-gateway-persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--druid -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
 		<!--commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

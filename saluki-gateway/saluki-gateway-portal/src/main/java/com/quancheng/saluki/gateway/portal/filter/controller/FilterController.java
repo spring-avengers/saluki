@@ -56,7 +56,7 @@ public class FilterController extends BaseController {
   private ProtobufService protobufService;
 
   @Autowired
-  private FilterService zuulService;
+  private FilterService fitlerService;
 
   @RequiresPermissions("filter:route:route")
   @GetMapping()
@@ -75,7 +75,7 @@ public class FilterController extends BaseController {
   @RequiresPermissions("filter:route:edit")
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
-    RouteDto zuulDto = zuulService.get(id);
+    RouteDto zuulDto = fitlerService.get(id);
     RouteVo zuulVo = RouteVo.buildZuulVo(zuulDto);
     model.addAttribute("route", zuulVo);
     return prefix + "/edit";
@@ -87,7 +87,7 @@ public class FilterController extends BaseController {
   @ResponseBody
   PageDO<RouteVo> list(@RequestParam Map<String, Object> params) {
     Query query = new Query(params);
-    PageDO<RouteDto> pageDto = zuulService.queryList(query);
+    PageDO<RouteDto> pageDto = fitlerService.queryList(query);
     PageDO<RouteVo> pageVo = new PageDO<>();
     pageVo.setTotal(pageDto.getTotal());
     List<RouteDto> zuulDtos = pageDto.getRows();
@@ -119,7 +119,7 @@ public class FilterController extends BaseController {
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
           RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
-          zuulService.save(zuulDto);
+          fitlerService.save(zuulDto);
         }
       } else if (inputFile != null && outputFile != null) {
         InputStream inputStream = inputFile.getInputStream();
@@ -138,12 +138,12 @@ public class FilterController extends BaseController {
           RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
-          zuulService.save(zuulDto);
+          fitlerService.save(zuulDto);
         }
       } // rest路由
       else {
         RouteDto zuulDto = zuulVo.buildZuulDto();
-        zuulService.save(zuulDto);
+        fitlerService.save(zuulDto);
       }
     } catch (IOException e) {
       throw new BDException("保存路由失败", e);
@@ -181,7 +181,7 @@ public class FilterController extends BaseController {
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
           RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoContext(protoContext);
-          zuulService.update(zuulDto);
+          fitlerService.update(zuulDto);
         }
       } else if (inputFile != null && outputFile != null) {
         InputStream inputStream = inputFile.getInputStream();
@@ -200,12 +200,12 @@ public class FilterController extends BaseController {
           RouteDto zuulDto = zuulVo.buildZuulDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
-          zuulService.update(zuulDto);
+          fitlerService.update(zuulDto);
         }
       } // rest路由
       else {
         RouteDto zuulDto = zuulVo.buildZuulDto();
-        zuulService.update(zuulDto);
+        fitlerService.update(zuulDto);
       }
     } catch (IOException e) {
       throw new BDException("保存路由失败", e);
@@ -218,7 +218,7 @@ public class FilterController extends BaseController {
   @PostMapping("/remove")
   @ResponseBody()
   CommonResponse save(Long id) {
-    if (zuulService.remove(id) > 0) {
+    if (fitlerService.remove(id) > 0) {
       return CommonResponse.ok();
     } else {
       return CommonResponse.error(1, "删除失败");
@@ -230,7 +230,7 @@ public class FilterController extends BaseController {
   @PostMapping("/batchRemove")
   @ResponseBody
   CommonResponse batchRemove(@RequestParam("ids[]") Long[] ids) {
-    int response = zuulService.batchRemove(ids);
+    int response = fitlerService.batchRemove(ids);
     if (response > 0) {
       return CommonResponse.ok();
     }

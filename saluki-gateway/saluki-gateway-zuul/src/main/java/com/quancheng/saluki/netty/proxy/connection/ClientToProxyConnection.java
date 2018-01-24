@@ -107,7 +107,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private ConnectionState doReadHTTPInitial(HttpRequest httpRequest) {
     this.currentRequest = copy(httpRequest);
-    AbstractHttpFilter filterInstance = proxyServer.getFiltersSource().filterRequest(currentRequest, ctx);
+    AbstractHttpFilter filterInstance =
+        proxyServer.getFiltersSource().filterRequest(currentRequest, ctx);
     if (filterInstance != null) {
       currentFilters = filterInstance;
     } else {

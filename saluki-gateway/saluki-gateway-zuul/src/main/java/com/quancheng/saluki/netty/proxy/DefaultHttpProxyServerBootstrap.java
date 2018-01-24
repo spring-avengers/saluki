@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.quancheng.saluki.netty.AbstractHttpFilter;
 import com.quancheng.saluki.netty.ActivityTracker;
 import com.quancheng.saluki.netty.HttpFilterSource;
 import com.quancheng.saluki.netty.HttpProxyServer;
@@ -26,6 +27,9 @@ import com.quancheng.saluki.netty.proxy.host.DefaultHostResolver;
 import com.quancheng.saluki.netty.proxy.host.DnsSecServerResolver;
 import com.quancheng.saluki.netty.proxy.host.HostResolver;
 import com.quancheng.saluki.utils.ProxyUtils;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpRequest;
 
 /**
  * @author liushiming
@@ -42,7 +46,15 @@ public class DefaultHttpProxyServerBootstrap implements HttpProxyServerBootstrap
   private InetSocketAddress requestedAddress;
   private int port = 8080;
   private boolean allowLocalOnly = true;
-  private HttpFilterSource filtersSource = new HttpFilterSource();
+  private HttpFilterSource filtersSource = new HttpFilterSource() {
+
+    @Override
+    public AbstractHttpFilter filterRequest(HttpRequest originalRequest,
+        ChannelHandlerContext ctx) {
+      return AbstractHttpFilter.NOOP_FILTER;
+    }
+
+  };
   private boolean transparent = false;
   private int idleConnectionTimeout = 70;
   private Collection<ActivityTracker> activityTrackers =

@@ -8,9 +8,9 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 
 
-public class AbstractHttpFilter {
+public abstract class AbstractHttpFilter {
 
-  public static final AbstractHttpFilter NOOP_FILTER = new AbstractHttpFilter(null);
+  public static final AbstractHttpFilter NOOP_FILTER = new DefaultHttpFilter(null);
 
   protected final HttpRequest originalRequest;
 
@@ -25,16 +25,13 @@ public class AbstractHttpFilter {
     this(originalRequest, null);
   }
 
-
   public HttpResponse clientToProxyRequest(HttpObject httpObject) {
     return null;
   }
 
-
   public HttpResponse proxyToServerRequest(HttpObject httpObject) {
     return null;
   }
-
 
   public void proxyToServerRequestSending() {}
 
@@ -45,7 +42,6 @@ public class AbstractHttpFilter {
   public HttpObject serverToProxyResponse(HttpObject httpObject) {
     return httpObject;
   }
-
 
   public void serverToProxyResponseTimedOut() {}
 
@@ -60,30 +56,30 @@ public class AbstractHttpFilter {
     return httpObject;
   }
 
-
   public void proxyToServerConnectionQueued() {}
-
 
   public InetSocketAddress proxyToServerResolutionStarted(String resolvingServerHostAndPort) {
     return null;
   }
 
-
   public void proxyToServerResolutionFailed(String hostAndPort) {}
-
 
   public void proxyToServerResolutionSucceeded(String serverHostAndPort,
       InetSocketAddress resolvedRemoteAddress) {}
 
-
   public void proxyToServerConnectionStarted() {}
-
 
   public void proxyToServerConnectionSSLHandshakeStarted() {}
 
-
   public void proxyToServerConnectionFailed() {}
 
-
   public void proxyToServerConnectionSucceeded(ChannelHandlerContext serverCtx) {}
+
+  private static class DefaultHttpFilter extends AbstractHttpFilter {
+
+    public DefaultHttpFilter(HttpRequest originalRequest) {
+      super(originalRequest);
+    }
+
+  }
 }

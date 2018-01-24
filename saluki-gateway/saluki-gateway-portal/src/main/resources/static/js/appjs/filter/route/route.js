@@ -1,4 +1,4 @@
-var prefix = "/zuul/route";
+var prefix = "/filter/route";
 $(function() {
 	load();
 });

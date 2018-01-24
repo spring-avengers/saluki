@@ -9,7 +9,7 @@ $.validator.setDefaults({
 function save() {
 	$("#routeForm").ajaxSubmit({
 		type : "POST",
-		url : "/zuul/route/save",
+		url : "/filter/route/save",
 		dataType : 'json',
 		error : function(request) {
 			parent.layer.alert("Connection error");

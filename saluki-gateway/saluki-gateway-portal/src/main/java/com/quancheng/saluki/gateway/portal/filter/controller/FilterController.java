@@ -48,9 +48,9 @@ import com.quancheng.saluki.gateway.portal.utils.Query;
  * @version ZuulController.java, v 0.0.1 2018年1月9日 上午11:19:14 liushiming
  */
 @Controller
-@RequestMapping("/zuul/route")
-public class ZuulController extends BaseController {
-  String prefix = "zuul/route";
+@RequestMapping("/filter/route")
+public class FilterController extends BaseController {
+  String prefix = "filter/route";
 
   @Autowired
   private ProtobufService protobufService;

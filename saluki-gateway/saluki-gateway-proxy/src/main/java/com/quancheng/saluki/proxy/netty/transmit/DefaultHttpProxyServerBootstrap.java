@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package   com.quancheng.saluki.proxy.netty.transmit;
+package com.quancheng.saluki.proxy.netty.transmit;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -64,9 +64,9 @@ public class DefaultHttpProxyServerBootstrap implements HttpProxyServerBootstrap
   public DefaultHttpProxyServerBootstrap() {}
 
   public DefaultHttpProxyServerBootstrap(ServerGroup serverGroup,
-      InetSocketAddress requestedAddress, HttpFiltersSourceAdapter filtersSource, boolean transparent,
-      int idleConnectionTimeout, Collection<ActivityTracker> activityTrackers, int connectTimeout,
-      HostResolver serverResolver, long readThrottleBytesPerSecond,
+      InetSocketAddress requestedAddress, HttpFiltersSourceAdapter filtersSource,
+      boolean transparent, int idleConnectionTimeout, Collection<ActivityTracker> activityTrackers,
+      int connectTimeout, HostResolver serverResolver, long readThrottleBytesPerSecond,
       long writeThrottleBytesPerSecond, InetSocketAddress localAddress, String proxyAlias,
       int maxInitialLineLength, int maxHeaderSize, int maxChunkSize,
       boolean allowRequestToOriginServer) {

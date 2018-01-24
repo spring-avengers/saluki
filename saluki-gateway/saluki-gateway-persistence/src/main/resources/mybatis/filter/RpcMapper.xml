@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.quancheng.saluki.gateway.portal.filter.dao.RpcDao">
+<mapper namespace="com.quancheng.saluki.gateway.persistence.filter.dao.RpcDao">
 
 	<select id="get"
-		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RpcDO">
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
 		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
@@ -21,7 +21,7 @@
 	</select>
 
 	<select id="list"
-		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RpcDO">
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
 		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
@@ -55,7 +55,7 @@
 	</select>
 
 	<insert id="save"
-		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RpcDO"
+		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into gateway_rpc
 		(
@@ -84,8 +84,8 @@
 	</insert>
 
 	<update id="update"
-		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RpcDO">
-		update gateway_rpc
+	parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
+	update gateway_rpc
 		<set>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>

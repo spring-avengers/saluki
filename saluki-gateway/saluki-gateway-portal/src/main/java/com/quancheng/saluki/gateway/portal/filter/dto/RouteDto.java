@@ -15,8 +15,8 @@ package com.quancheng.saluki.gateway.portal.filter.dto;
 
 import java.io.Serializable;
 
-import com.quancheng.saluki.gateway.portal.filter.domain.RpcDO;
-import com.quancheng.saluki.gateway.portal.filter.domain.RouteDO;
+import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
+import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 
 /**
  * @author liushiming

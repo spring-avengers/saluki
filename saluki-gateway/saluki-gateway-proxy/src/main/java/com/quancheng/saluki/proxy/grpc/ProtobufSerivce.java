@@ -27,8 +27,8 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.quancheng.saluki.core.grpc.exception.RpcBizException;
-import com.quancheng.saluki.gateway.portal.filter.dao.RpcDao;
-import com.quancheng.saluki.gateway.portal.filter.domain.RpcDO;
+import com.quancheng.saluki.gateway.persistence.filter.dao.RpcDao;
+import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 
 /**
  * @author liushiming

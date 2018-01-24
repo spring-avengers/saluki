@@ -21,6 +21,7 @@
 		<module>saluki-gateway-portal</module>
 		<module>saluki-gateway-proxy</module>
 		<module>saluki-gateway-oauth2</module>
+		<module>saluki-gateway-persistence</module>
 	</modules>
 	<properties>
 		<nekohtml.version>1.9.22</nekohtml.version>

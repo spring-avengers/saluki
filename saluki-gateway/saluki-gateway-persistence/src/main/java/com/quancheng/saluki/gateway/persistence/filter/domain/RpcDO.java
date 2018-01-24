@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.gateway.portal.filter.domain;
+package com.quancheng.saluki.gateway.persistence.filter.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

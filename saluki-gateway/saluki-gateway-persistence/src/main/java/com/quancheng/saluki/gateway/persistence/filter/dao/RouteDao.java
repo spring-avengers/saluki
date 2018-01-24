@@ -11,34 +11,33 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.gateway.portal.filter.dao;
+package com.quancheng.saluki.gateway.persistence.filter.dao;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
-import com.quancheng.saluki.gateway.portal.filter.domain.RpcDO;
+import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
 
 /**
  * @author liushiming
- * @version GrpcDao.java, v 0.0.1 2018年1月4日 上午10:48:12 liushiming
+ * @version RouteDao.java, v 0.0.1 2018年1月4日 上午10:38:23 liushiming
  */
 @Mapper
-public interface RpcDao {
-  RpcDO get(@Param("serviceName") String serviceName, @Param("methodName") String methodName,
-      @Param("group") String group, @Param("version") String version);
+public interface RouteDao {
 
-  List<RpcDO> list(Map<String, Object> map);
+  RouteDO get(Long routeId);
+
+  List<RouteDO> list(Map<String, Object> map);
 
   int count(Map<String, Object> map);
 
-  int save(RpcDO route);
+  int save(RouteDO route);
 
-  int update(RpcDO route);
+  int update(RouteDO route);
 
-  int remove(Long id);
+  int remove(Long routeId);
 
   int batchRemove(Long[] routeIds);
 

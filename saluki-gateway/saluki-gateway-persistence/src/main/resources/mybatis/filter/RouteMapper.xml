@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.quancheng.saluki.gateway.portal.filter.dao.RouteDao">
+<mapper namespace="com.quancheng.saluki.gateway.persistence.filter.dao.RouteDao">
 
 	<select id="get"
-		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select
 		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
 		`service_name`,`method_name`,`service_group`,`service_version`,`grpc`,`dubbo`,
@@ -15,7 +15,7 @@
 	</select>
 
 	<select id="list"
-		resultType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select
 		`route_id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,
 		`service_name`,`method_name`,`service_group`,`service_version`,`grpc`,`dubbo`,
@@ -55,7 +55,7 @@
 	</select>
 
 	<insert id="save"
-		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO"
+		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO"
 		useGeneratedKeys="true" keyProperty="routeId">
 		insert into gateway_route
 		(
@@ -94,7 +94,7 @@
 	</insert>
 
 	<update id="update"
-		parameterType="com.quancheng.saluki.gateway.portal.filter.domain.RouteDO">
+		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		update gateway_route
 		<set>
 			<if test="path != null and path != ''">`path`=#{path},</if>

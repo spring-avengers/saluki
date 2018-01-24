@@ -28,4 +28,4 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: mybatis/**/*Mapper.xml
-  typeAliasesPackage: com.bootdo.**.domain
+  typeAliasesPackage: com.quancheng.saluki.**.domain

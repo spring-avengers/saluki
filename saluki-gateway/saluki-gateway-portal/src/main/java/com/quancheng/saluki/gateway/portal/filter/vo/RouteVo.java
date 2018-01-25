@@ -19,7 +19,7 @@ import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 
 /**
  * @author liushiming
- * @version ZuulVo.java, v 0.0.1 2018年1月9日 下午1:26:56 liushiming
+ * @version routeVo.java, v 0.0.1 2018年1月9日 下午1:26:56 liushiming
  */
 public class RouteVo implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -145,38 +145,38 @@ public class RouteVo implements Serializable {
     this.serviceFileName = serviceFileName;
   }
 
-  public RouteDto buildZuulDto() {
-    RouteDto zuulDto = new RouteDto();
-    zuulDto.setRouteId(this.routeId);
-    zuulDto.setFromPath(this.fromPath);
-    zuulDto.setFromPathpattern(this.fromPathpattern);
-    zuulDto.setServiceId(this.serviceId);
-    zuulDto.setRpc(this.rpc);
-    zuulDto.setToHostport(this.toHostport);
-    zuulDto.setToPath(this.toPath);
+  public RouteDto buildRouteDto() {
+    RouteDto routeDto = new RouteDto();
+    routeDto.setRouteId(this.routeId);
+    routeDto.setFromPath(this.fromPath);
+    routeDto.setFromPathpattern(this.fromPathpattern);
+    routeDto.setServiceId(this.serviceId);
+    routeDto.setRpc(this.rpc);
+    routeDto.setToHostport(this.toHostport);
+    routeDto.setToPath(this.toPath);
 
-    zuulDto.setServiceName(this.serviceName);
-    zuulDto.setMethodName(this.methodName);
-    zuulDto.setServiceGroup(this.serviceGroup);
-    zuulDto.setServiceVersion(this.serviceVersion);
-    return zuulDto;
+    routeDto.setServiceName(this.serviceName);
+    routeDto.setMethodName(this.methodName);
+    routeDto.setServiceGroup(this.serviceGroup);
+    routeDto.setServiceVersion(this.serviceVersion);
+    return routeDto;
   }
 
-  public static RouteVo buildZuulVo(RouteDto zuulDto) {
-    RouteVo zuulVo = new RouteVo();
-    zuulVo.setRouteId(zuulDto.getRouteId());
-    zuulVo.setFromPath(zuulDto.getFromPath());
-    zuulVo.setFromPathpattern(zuulDto.getFromPathpattern());
-    zuulVo.setServiceId(zuulDto.getServiceId());
-    zuulVo.setRpc(zuulDto.getRpc());
-    zuulVo.setToHostport(zuulDto.getToHostport());
-    zuulVo.setToPath(zuulDto.getToPath());
+  public static RouteVo buildRouteVo(RouteDto routeDto) {
+    RouteVo routeVo = new RouteVo();
+    routeVo.setRouteId(routeDto.getRouteId());
+    routeVo.setFromPath(routeDto.getFromPath());
+    routeVo.setFromPathpattern(routeDto.getFromPathpattern());
+    routeVo.setServiceId(routeDto.getServiceId());
+    routeVo.setRpc(routeDto.getRpc());
+    routeVo.setToHostport(routeDto.getToHostport());
+    routeVo.setToPath(routeDto.getToPath());
 
-    zuulVo.setServiceName(zuulDto.getServiceName());
-    zuulVo.setMethodName(zuulDto.getMethodName());
-    zuulVo.setServiceGroup(zuulDto.getServiceGroup());
-    zuulVo.setServiceVersion(zuulDto.getServiceVersion());
-    return zuulVo;
+    routeVo.setServiceName(routeDto.getServiceName());
+    routeVo.setMethodName(routeDto.getMethodName());
+    routeVo.setServiceGroup(routeDto.getServiceGroup());
+    routeVo.setServiceVersion(routeDto.getServiceVersion());
+    return routeVo;
   }
 
   @Override

@@ -76,7 +76,7 @@ public class FilterController extends BaseController {
   @GetMapping("/edit/{id}")
   String edit(@PathVariable("id") Long id, Model model) {
     RouteDto zuulDto = fitlerService.get(id);
-    RouteVo zuulVo = RouteVo.buildZuulVo(zuulDto);
+    RouteVo zuulVo = RouteVo.buildRouteVo(zuulDto);
     model.addAttribute("route", zuulVo);
     return prefix + "/edit";
   }
@@ -93,7 +93,7 @@ public class FilterController extends BaseController {
     List<RouteDto> zuulDtos = pageDto.getRows();
     List<RouteVo> vos = Lists.newArrayListWithCapacity(zuulDtos.size());
     for (RouteDto zuulDto : zuulDtos) {
-      vos.add(RouteVo.buildZuulVo(zuulDto));
+      vos.add(RouteVo.buildRouteVo(zuulDto));
     }
     pageVo.setRows(vos);
     return pageVo;
@@ -117,7 +117,7 @@ public class FilterController extends BaseController {
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
-          RouteDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildRouteDto();
           zuulDto.setProtoContext(protoContext);
           fitlerService.save(zuulDto);
         }
@@ -135,14 +135,14 @@ public class FilterController extends BaseController {
           byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
           byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-          RouteDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildRouteDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
           fitlerService.save(zuulDto);
         }
       } // 其他路由
       else {
-        RouteDto zuulDto = zuulVo.buildZuulDto();
+        RouteDto zuulDto = zuulVo.buildRouteDto();
         fitlerService.save(zuulDto);
       }
     } catch (IOException e) {
@@ -179,7 +179,7 @@ public class FilterController extends BaseController {
         } else {
           String serviceFileName = zuulVo.getServiceFileName();
           byte[] protoContext = protobufService.compileDirectoryProto(zipFile, serviceFileName);
-          RouteDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildRouteDto();
           zuulDto.setProtoContext(protoContext);
           fitlerService.update(zuulDto);
         }
@@ -197,14 +197,14 @@ public class FilterController extends BaseController {
           byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
           String fileNameOutput = outputFile.getOriginalFilename();
           byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-          RouteDto zuulDto = zuulVo.buildZuulDto();
+          RouteDto zuulDto = zuulVo.buildRouteDto();
           zuulDto.setProtoReq(protoInput);
           zuulDto.setProtoRep(protoOutput);
           fitlerService.update(zuulDto);
         }
       } // 其他路由
       else {
-        RouteDto zuulDto = zuulVo.buildZuulDto();
+        RouteDto zuulDto = zuulVo.buildRouteDto();
         fitlerService.update(zuulDto);
       }
     } catch (IOException e) {

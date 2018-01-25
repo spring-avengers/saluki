@@ -193,36 +193,36 @@ public class RouteDto implements Serializable {
     return rpcDO;
   }
 
-  public static RouteDto buildZuulDto(RouteDO route, RpcDO grpc) {
-    RouteDto zuulDto = new RouteDto();
-    zuulDto.setRouteId(route.getId());
-    zuulDto.setFromPath(route.getFromPath());
-    zuulDto.setFromPathpattern(route.getFromPathpattern());
-    zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRpc(route.getRpc());
-    zuulDto.setToHostport(route.getToHostport());
-    zuulDto.setToPath(route.getToPath());
+  public static RouteDto buildRouteDto(RouteDO route, RpcDO grpc) {
+    RouteDto routeDto = new RouteDto();
+    routeDto.setRouteId(route.getId());
+    routeDto.setFromPath(route.getFromPath());
+    routeDto.setFromPathpattern(route.getFromPathpattern());
+    routeDto.setServiceId(route.getServiceId());
+    routeDto.setRpc(route.getRpc());
+    routeDto.setToHostport(route.getToHostport());
+    routeDto.setToPath(route.getToPath());
 
-    zuulDto.setServiceName(grpc.getServiceName());
-    zuulDto.setMethodName(grpc.getMethodName());
-    zuulDto.setServiceGroup(grpc.getServiceName());
-    zuulDto.setServiceVersion(grpc.getServiceVersion());
-    zuulDto.setProtoContext(grpc.getProtoContext());
-    zuulDto.setProtoRep(grpc.getProtoReq());
-    zuulDto.setProtoRep(grpc.getProtoRep());
-    return zuulDto;
+    routeDto.setServiceName(grpc.getServiceName());
+    routeDto.setMethodName(grpc.getMethodName());
+    routeDto.setServiceGroup(grpc.getServiceName());
+    routeDto.setServiceVersion(grpc.getServiceVersion());
+    routeDto.setProtoContext(grpc.getProtoContext());
+    routeDto.setProtoRep(grpc.getProtoReq());
+    routeDto.setProtoRep(grpc.getProtoRep());
+    return routeDto;
   }
 
-  public static RouteDto buildZuulDto(RouteDO route) {
-    RouteDto zuulDto = new RouteDto();
-    zuulDto.setRouteId(route.getId());
-    zuulDto.setFromPath(route.getFromPath());
-    zuulDto.setFromPathpattern(route.getFromPathpattern());
-    zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRpc(route.getRpc());
-    zuulDto.setToHostport(route.getToHostport());
-    zuulDto.setToPath(route.getToPath());
-    return zuulDto;
+  public static RouteDto buildRouteDto(RouteDO route) {
+    RouteDto routeDto = new RouteDto();
+    routeDto.setRouteId(route.getId());
+    routeDto.setFromPath(route.getFromPath());
+    routeDto.setFromPathpattern(route.getFromPathpattern());
+    routeDto.setServiceId(route.getServiceId());
+    routeDto.setRpc(route.getRpc());
+    routeDto.setToHostport(route.getToHostport());
+    routeDto.setToPath(route.getToPath());
+    return routeDto;
   }
 
 

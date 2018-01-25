@@ -32,7 +32,7 @@ import com.quancheng.saluki.gateway.portal.utils.Query;
 
 /**
  * @author liushiming
- * @version ZuulServiceImpl.java, v 0.0.1 2018年1月8日 上午11:38:49 liushiming
+ * @version routeServiceImpl.java, v 0.0.1 2018年1月8日 上午11:38:49 liushiming
  */
 @Service
 public class FilterServiceImpl implements FilterService {
@@ -41,7 +41,7 @@ public class FilterServiceImpl implements FilterService {
   private RouteDao routeDao;
 
   @Autowired
-  private RpcDao grpcDao;
+  private RpcDao rpcDao;
 
   @Override
   public PageDO<RouteDto> queryList(Query query) {
@@ -49,7 +49,7 @@ public class FilterServiceImpl implements FilterService {
     List<RouteDO> routes = routeDao.list(query);
     List<RouteDto> dtos = Lists.newArrayListWithCapacity(routes.size());
     for (RouteDO routeDo : routes) {
-      RouteDto dto = RouteDto.buildZuulDto(routeDo);
+      RouteDto dto = RouteDto.buildRouteDto(routeDo);
       dtos.add(dto);
     }
     PageDO<RouteDto> page = new PageDO<>();
@@ -61,21 +61,21 @@ public class FilterServiceImpl implements FilterService {
   @Override
   public RouteDto get(Long routeId) {
     RouteDO route = routeDao.get(routeId);
-    RpcDO grpc = grpcDao.get(routeId);
-    RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
-    return zuulDto;
+    RpcDO rpc = rpcDao.get(routeId);
+    RouteDto routeDto = RouteDto.buildRouteDto(route, rpc);
+    return routeDto;
   }
 
   @Override
   public List<RouteDto> list(Map<String, Object> map) {
     List<RouteDO> routes = routeDao.list(map);
-    List<RouteDto> zuulDtos = Lists.newArrayList();
+    List<RouteDto> routeDtos = Lists.newArrayList();
     for (RouteDO route : routes) {
-      RpcDO grpc = grpcDao.get(route.getId());
-      RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
-      zuulDtos.add(zuulDto);
+      RpcDO rpc = rpcDao.get(route.getId());
+      RouteDto routeDto = RouteDto.buildRouteDto(route, rpc);
+      routeDtos.add(routeDto);
     }
-    return zuulDtos;
+    return routeDtos;
   }
 
   @Override
@@ -85,35 +85,44 @@ public class FilterServiceImpl implements FilterService {
   }
 
   @Override
-  public int save(RouteDto zuulDto) {
-    RouteDO routeDo = zuulDto.buildRoute();
-    RpcDO grpcDo = zuulDto.buildRpc();
-    int success1 = grpcDao.save(grpcDo);
+  public int save(RouteDto routeDto) {
+    RouteDO routeDo = routeDto.buildRoute();
+    RpcDO rpcDo = routeDto.buildRpc();
     int success2 = routeDao.save(routeDo);
-    if (success1 > 0 && success2 > 0) {
-      return CommonResponse.SUCCESS;
-    } else {
-      return CommonResponse.ERROR;
+    Long routeId = routeDo.getId();
+    rpcDo.setRouteId(routeId);
+    if (routeDo.getRpc()) {
+      int success1 = rpcDao.save(rpcDo);
+      if (success1 > 0 && success2 > 0) {
+        return CommonResponse.SUCCESS;
+      } else {
+        return CommonResponse.ERROR;
+      }
     }
+    return success2;
+
   }
 
   @Override
-  public int update(RouteDto zuulDto) {
-    RouteDO routeDo = zuulDto.buildRoute();
-    RpcDO grpcDo = zuulDto.buildRpc();
-    int success1 = grpcDao.update(grpcDo);
+  public int update(RouteDto routeDto) {
+    RouteDO routeDo = routeDto.buildRoute();
+    RpcDO rpcDo = routeDto.buildRpc();
     int success2 = routeDao.update(routeDo);
-    if (success1 > 0 && success2 > 0) {
-      return CommonResponse.SUCCESS;
-    } else {
-      return CommonResponse.ERROR;
+    if (routeDo.getRpc()) {
+      int success1 = rpcDao.update(rpcDo);
+      if (success1 > 0 && success2 > 0) {
+        return CommonResponse.SUCCESS;
+      } else {
+        return CommonResponse.ERROR;
+      }
     }
+    return success2;
   }
 
   @Override
   public int remove(Long routeId) {
     int success1 = routeDao.remove(routeId);
-    int success2 = grpcDao.removeByRouteId(routeId);
+    int success2 = rpcDao.removeByRouteId(routeId);
     if (success1 > 0 && success2 > 0) {
       return CommonResponse.SUCCESS;
     } else {
@@ -124,7 +133,7 @@ public class FilterServiceImpl implements FilterService {
   @Override
   public int batchRemove(Long[] routeIds) {
     int success1 = routeDao.batchRemove(routeIds);
-    int success2 = grpcDao.batchRemove(routeIds);
+    int success2 = rpcDao.batchRemove(routeIds);
     if (success1 > 0 && success2 > 0) {
       return CommonResponse.SUCCESS;
     } else {

@@ -54,7 +54,11 @@
 
 	<insert id="save"
 		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO"
-		useGeneratedKeys="true" keyProperty="routeId">
+		useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="java.lang.Long" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 		insert into gateway_route
 		(
 		`from_path`,

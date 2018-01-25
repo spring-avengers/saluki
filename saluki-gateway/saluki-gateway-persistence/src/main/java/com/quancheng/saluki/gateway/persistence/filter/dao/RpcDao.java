@@ -26,6 +26,10 @@ import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 public interface RpcDao {
   RpcDO get(@Param("routeId") Long routeId);
 
+  RpcDO getByService(@Param("serviceName") String serviceName,
+      @Param("methodName") String methodName, @Param("group") String group,
+      @Param("version") String version);
+
   int save(RpcDO route);
 
   int update(RpcDO route);

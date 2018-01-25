@@ -58,7 +58,7 @@ public class ProtobufSerivce {
 
   private Pair<Descriptor, Descriptor> findDirectyprotobuf(String serviceName,
       final String methodName, final String group, final String version) {
-    RpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpcDo = grpcDao.getByService(serviceName, methodName, group, version);
     byte[] protoContent = grpcDo.getProtoContext();
     FileDescriptorSet descriptorSet = null;
     if (protoContent != null && protoContent.length > 0) {
@@ -81,7 +81,7 @@ public class ProtobufSerivce {
 
   private Pair<Descriptor, Descriptor> findSingleProtobuf(String serviceName,
       final String methodName, final String group, final String version) {
-    RpcDO grpcDo = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpcDo = grpcDao.getByService(serviceName, methodName, group, version);
     byte[] in = grpcDo.getProtoReq();
     byte[] out = grpcDo.getProtoRep();
     FileDescriptorSet inputDescriptorSet = null;

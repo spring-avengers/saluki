@@ -10,6 +10,20 @@
 		from gateway_rpc
 		where route_id = #{routeId}
 	</select>
+	
+	<select id="getByService" resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
+		select
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		from gateway_grpc
+		where
+		service_name = #{serviceName}
+		and
+		method_name = #{methodName}
+		and
+		service_group = #{group}
+		and
+		service_version = #{version}
+	</select>
 
 	<insert id="save"
 		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO"

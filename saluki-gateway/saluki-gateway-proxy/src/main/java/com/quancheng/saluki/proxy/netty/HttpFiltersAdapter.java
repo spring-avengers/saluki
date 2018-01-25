@@ -11,9 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package  com.quancheng.saluki.proxy.netty;
+package com.quancheng.saluki.proxy.netty;
 
 import java.net.InetSocketAddress;
+
+import com.quancheng.saluki.proxy.config.SpringContextHolder;
+import com.quancheng.saluki.proxy.route.RouteService;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
@@ -28,10 +31,12 @@ public class HttpFiltersAdapter {
 
   protected final HttpRequest originalRequest;
   protected final ChannelHandlerContext ctx;
+  private final RouteService routeService;
 
   public HttpFiltersAdapter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
     this.originalRequest = originalRequest;
     this.ctx = ctx;
+    this.routeService = SpringContextHolder.getBean(RouteService.class);
   }
 
   public HttpFiltersAdapter(HttpRequest originalRequest) {
@@ -48,6 +53,14 @@ public class HttpFiltersAdapter {
     return null;
   }
 
+  // dynamics route
+  public String dynamicsRouting(HttpRequest originalRequest) {
+    return routeService.dynamicsRouting(originalRequest.uri());
+  }
+
+  public String rewriteUrl(HttpRequest originalRequest) {
+    return routeService.rewriteURL(originalRequest.uri());
+  }
 
   public void proxyToServerRequestSending() {}
 

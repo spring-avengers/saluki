@@ -57,7 +57,6 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   private final String serverHostAndPort;
   private final Object connectLock = new Object();
 
-
   private volatile InetSocketAddress remoteAddress;
   private volatile InetSocketAddress localAddress;
   private volatile HttpFiltersAdapter currentFilters;

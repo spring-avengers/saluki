@@ -71,7 +71,6 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private volatile ProxyToServerConnection currentServerConnection;
   private volatile HttpFiltersAdapter currentFilters;
-  private volatile boolean mitming = false;
   private volatile HttpRequest currentRequest;
 
   public ClientToProxyConnection(final DefaultHttpProxyServer proxyServer, ChannelPipeline pipeline,
@@ -132,7 +131,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       }
     }
     LOG.debug("Finding ProxyToServerConnection for: {}", serverHostAndPort);
-    currentServerConnection = isMitming() || isTunneling() ? this.currentServerConnection
+    currentServerConnection = isTunneling() ? this.currentServerConnection
         : this.serverConnectionsByHostAndPort.get(serverHostAndPort);
     boolean newConnectionRequired = false;
     if (ProxyUtils.isCONNECT(httpRequest)) {
@@ -172,7 +171,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       LOG.debug("Reusing existing server connection: {}", currentServerConnection);
       numberOfReusedServerConnections.incrementAndGet();
     }
-    modifyRequestHeadersToReflectProxying(httpRequest);
+    modifyRequestToReflectProxying(httpRequest);
     HttpResponse proxyToServerFilterResponse = currentFilters.proxyToServerRequest(httpRequest);
     if (proxyToServerFilterResponse != null) {
       LOG.debug("Responding to client with short-circuit response from filter: {}",
@@ -198,7 +197,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   private boolean isRequestToOriginServer(HttpRequest httpRequest) {
-    if (httpRequest.method() == HttpMethod.CONNECT || isMitming()) {
+    if (httpRequest.method() == HttpMethod.CONNECT) {
       return false;
     }
     String uri = httpRequest.uri();
@@ -367,7 +366,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   public void serverDisconnected(ProxyToServerConnection serverConnection) {
     numberOfCurrentlyConnectedServers.decrementAndGet();
-    if (isTunneling() || isMitming()) {
+    if (isTunneling()) {
       disconnect();
     }
   }
@@ -555,17 +554,22 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     }
   }
 
+  private void modifyRequestToReflectProxying(HttpRequest httpRequest) {
+    // rewrite url
+    if (!proxyServer.isTransparent()) {
+      currentFilters.rewriteUrl(httpRequest);
+      modifyRequestHeadersToReflectProxying(httpRequest);
+    }
+  }
 
   private void modifyRequestHeadersToReflectProxying(HttpRequest httpRequest) {
-    if (!proxyServer.isTransparent()) {
-      LOG.debug("Modifying request headers for proxying");
-      HttpHeaders headers = httpRequest.headers();
-      ProxyUtils.removeSdchEncoding(headers);
-      switchProxyConnectionHeader(headers);
-      stripConnectionTokens(headers);
-      stripHopByHopHeaders(headers);
-      ProxyUtils.addVia(httpRequest, proxyServer.getProxyAlias());
-    }
+    LOG.debug("Modifying request headers for proxying");
+    HttpHeaders headers = httpRequest.headers();
+    ProxyUtils.removeSdchEncoding(headers);
+    switchProxyConnectionHeader(headers);
+    stripConnectionTokens(headers);
+    stripHopByHopHeaders(headers);
+    ProxyUtils.addVia(httpRequest, proxyServer.getProxyAlias());
   }
 
 
@@ -676,27 +680,25 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
 
   private String identifyHostAndPort(HttpRequest httpRequest) {
-    String hostAndPort = ProxyUtils.parseHostAndPort(httpRequest);
+    // dynamics route by request
+    String hostAndPort = currentFilters.dynamicsRouting(httpRequest);
+    if (hostAndPort != null) {
+      return hostAndPort;
+    }
+    hostAndPort = ProxyUtils.parseHostAndPort(httpRequest);
     if (StringUtils.isBlank(hostAndPort)) {
       List<String> hosts = httpRequest.headers().getAll(HttpHeaderNames.HOST);
       if (hosts != null && !hosts.isEmpty()) {
         hostAndPort = hosts.get(0);
       }
     }
+
     return hostAndPort;
   }
 
 
   private void writeEmptyBuffer() {
     write(Unpooled.EMPTY_BUFFER);
-  }
-
-  public boolean isMitming() {
-    return mitming;
-  }
-
-  protected void setMitming(boolean isMitming) {
-    this.mitming = isMitming;
   }
 
 

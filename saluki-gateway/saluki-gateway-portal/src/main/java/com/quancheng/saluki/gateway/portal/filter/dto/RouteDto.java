@@ -28,17 +28,17 @@ public class RouteDto implements Serializable {
 
   private Long routeId;
 
-  private String path;
+  private String fromPath;
+
+  private String fromPathpattern;
+
+  private String toHostport;
+
+  private String toPath;
 
   private String serviceId;
 
-  private String url;
-
-  private Boolean retryable;
-
-  private Boolean enabled;
-
-  private Boolean stripPrefix;
+  private Boolean rpc = false;
 
   private String serviceName;
 
@@ -54,16 +54,36 @@ public class RouteDto implements Serializable {
 
   private byte[] protoRep;
 
-  private Boolean grpc;
-
-  private Boolean dubbo;
-
-  public String getPath() {
-    return path;
+  public String getFromPath() {
+    return fromPath;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+  public void setFromPath(String fromPath) {
+    this.fromPath = fromPath;
+  }
+
+  public String getFromPathpattern() {
+    return fromPathpattern;
+  }
+
+  public void setFromPathpattern(String fromPathpattern) {
+    this.fromPathpattern = fromPathpattern;
+  }
+
+  public String getToHostport() {
+    return toHostport;
+  }
+
+  public void setToHostport(String toHostport) {
+    this.toHostport = toHostport;
+  }
+
+  public String getToPath() {
+    return toPath;
+  }
+
+  public void setToPath(String toPath) {
+    this.toPath = toPath;
   }
 
   public String getServiceId() {
@@ -74,36 +94,12 @@ public class RouteDto implements Serializable {
     this.serviceId = serviceId;
   }
 
-  public String getUrl() {
-    return url;
+  public Boolean getRpc() {
+    return rpc;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public Boolean isRetryable() {
-    return retryable;
-  }
-
-  public void setRetryable(Boolean retryable) {
-    this.retryable = retryable;
-  }
-
-  public Boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Boolean isStripPrefix() {
-    return stripPrefix;
-  }
-
-  public void setStripPrefix(Boolean stripPrefix) {
-    this.stripPrefix = stripPrefix;
+  public void setRpc(Boolean rpc) {
+    this.rpc = rpc;
   }
 
   public String getServiceName() {
@@ -162,22 +158,6 @@ public class RouteDto implements Serializable {
     this.protoRep = protoRep;
   }
 
-  public Boolean isGrpc() {
-    return grpc;
-  }
-
-  public void setGrpc(Boolean grpc) {
-    this.grpc = grpc;
-  }
-
-  public Boolean isDubbo() {
-    return dubbo;
-  }
-
-  public void setDubbo(Boolean dubbo) {
-    this.dubbo = dubbo;
-  }
-
   public Long getRouteId() {
     return routeId;
   }
@@ -189,46 +169,39 @@ public class RouteDto implements Serializable {
   public RouteDO buildRoute() {
     RouteDO routeDo = new RouteDO();
     if (this.routeId != null && this.routeId != 0) {
-      routeDo.setRouteId(this.routeId);
+      routeDo.setId(this.routeId);
     }
-    routeDo.setPath(this.path);
+    routeDo.setFromPath(this.fromPath);
+    routeDo.setFromPathpattern(this.fromPathpattern);
     routeDo.setServiceId(this.serviceId);
-    routeDo.setUrl(this.url);
-    routeDo.setRetryable(this.retryable);
-    routeDo.setEnabled(this.enabled);
-    routeDo.setStripPrefix(this.stripPrefix);
-    routeDo.setServiceName(this.serviceName);
-    routeDo.setMethodName(this.methodName);
-    routeDo.setServiceGroup(this.serviceGroup);
-    routeDo.setServiceVersion(this.serviceVersion);
-    routeDo.setGrpc(this.grpc);
-    routeDo.setDubbo(this.dubbo);
+    routeDo.setToHostport(this.toHostport);
+    routeDo.setToPath(this.toPath);
+    routeDo.setRpc(this.rpc);
     return routeDo;
   }
 
-  public RpcDO buildGrpc() {
-    RpcDO grpc = new RpcDO();
-    grpc.setServiceName(this.serviceName);
-    grpc.setMethodName(this.methodName);
-    grpc.setServiceGroup(this.serviceGroup);
-    grpc.setServiceVersion(this.serviceVersion);
-    grpc.setProtoContext(this.protoContext);
-    grpc.setProtoRep(this.protoReq);
-    grpc.setProtoRep(this.protoRep);
-    return grpc;
+  public RpcDO buildRpc() {
+    RpcDO rpcDO = new RpcDO();
+    rpcDO.setServiceName(this.serviceName);
+    rpcDO.setMethodName(this.methodName);
+    rpcDO.setServiceGroup(this.serviceGroup);
+    rpcDO.setServiceVersion(this.serviceVersion);
+    rpcDO.setProtoContext(this.protoContext);
+    rpcDO.setProtoRep(this.protoReq);
+    rpcDO.setProtoRep(this.protoRep);
+    rpcDO.setRouteId(this.routeId);
+    return rpcDO;
   }
 
   public static RouteDto buildZuulDto(RouteDO route, RpcDO grpc) {
     RouteDto zuulDto = new RouteDto();
-    zuulDto.setRouteId(route.getRouteId());
-    zuulDto.setPath(route.getPath());
-    zuulDto.setUrl(route.getUrl());
+    zuulDto.setRouteId(route.getId());
+    zuulDto.setFromPath(route.getFromPath());
+    zuulDto.setFromPathpattern(route.getFromPathpattern());
     zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRetryable(route.isRetryable());
-    zuulDto.setEnabled(route.isEnabled());
-    zuulDto.setStripPrefix(route.isStripPrefix());
-    zuulDto.setGrpc(route.isGrpc());
-    zuulDto.setDubbo(route.isDubbo());
+    zuulDto.setRpc(route.getRpc());
+    zuulDto.setToHostport(route.getToHostport());
+    zuulDto.setToPath(route.getToPath());
 
     zuulDto.setServiceName(grpc.getServiceName());
     zuulDto.setMethodName(grpc.getMethodName());
@@ -242,19 +215,13 @@ public class RouteDto implements Serializable {
 
   public static RouteDto buildZuulDto(RouteDO route) {
     RouteDto zuulDto = new RouteDto();
-    zuulDto.setRouteId(route.getRouteId());
-    zuulDto.setPath(route.getPath());
-    zuulDto.setUrl(route.getUrl());
+    zuulDto.setRouteId(route.getId());
+    zuulDto.setFromPath(route.getFromPath());
+    zuulDto.setFromPathpattern(route.getFromPathpattern());
     zuulDto.setServiceId(route.getServiceId());
-    zuulDto.setRetryable(route.isRetryable());
-    zuulDto.setEnabled(route.isEnabled());
-    zuulDto.setStripPrefix(route.isStripPrefix());
-    zuulDto.setGrpc(route.isGrpc());
-    zuulDto.setDubbo(route.isDubbo());
-    zuulDto.setServiceName(route.getServiceName());
-    zuulDto.setMethodName(route.getMethodName());
-    zuulDto.setServiceGroup(route.getServiceGroup());
-    zuulDto.setServiceVersion(route.getServiceVersion());
+    zuulDto.setRpc(route.getRpc());
+    zuulDto.setToHostport(route.getToHostport());
+    zuulDto.setToPath(route.getToPath());
     return zuulDto;
   }
 

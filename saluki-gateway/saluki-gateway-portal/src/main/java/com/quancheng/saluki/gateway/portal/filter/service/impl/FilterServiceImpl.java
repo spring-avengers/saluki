@@ -61,11 +61,7 @@ public class FilterServiceImpl implements FilterService {
   @Override
   public RouteDto get(Long routeId) {
     RouteDO route = routeDao.get(routeId);
-    String serviceName = route.getServiceName();
-    String methodName = route.getMethodName();
-    String group = route.getServiceGroup();
-    String version = route.getServiceVersion();
-    RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+    RpcDO grpc = grpcDao.get(routeId);
     RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
     return zuulDto;
   }
@@ -75,11 +71,7 @@ public class FilterServiceImpl implements FilterService {
     List<RouteDO> routes = routeDao.list(map);
     List<RouteDto> zuulDtos = Lists.newArrayList();
     for (RouteDO route : routes) {
-      String serviceName = route.getServiceName();
-      String methodName = route.getMethodName();
-      String group = route.getServiceGroup();
-      String version = route.getServiceVersion();
-      RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
+      RpcDO grpc = grpcDao.get(route.getId());
       RouteDto zuulDto = RouteDto.buildZuulDto(route, grpc);
       zuulDtos.add(zuulDto);
     }
@@ -95,7 +87,7 @@ public class FilterServiceImpl implements FilterService {
   @Override
   public int save(RouteDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
-    RpcDO grpcDo = zuulDto.buildGrpc();
+    RpcDO grpcDo = zuulDto.buildRpc();
     int success1 = grpcDao.save(grpcDo);
     int success2 = routeDao.save(routeDo);
     if (success1 > 0 && success2 > 0) {
@@ -108,7 +100,7 @@ public class FilterServiceImpl implements FilterService {
   @Override
   public int update(RouteDto zuulDto) {
     RouteDO routeDo = zuulDto.buildRoute();
-    RpcDO grpcDo = zuulDto.buildGrpc();
+    RpcDO grpcDo = zuulDto.buildRpc();
     int success1 = grpcDao.update(grpcDo);
     int success2 = routeDao.update(routeDo);
     if (success1 > 0 && success2 > 0) {
@@ -120,14 +112,8 @@ public class FilterServiceImpl implements FilterService {
 
   @Override
   public int remove(Long routeId) {
-    RouteDO route = routeDao.get(routeId);
-    String serviceName = route.getServiceName();
-    String methodName = route.getMethodName();
-    String group = route.getServiceGroup();
-    String version = route.getServiceVersion();
-    RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
     int success1 = routeDao.remove(routeId);
-    int success2 = grpcDao.remove(grpc.getId());
+    int success2 = grpcDao.removeByRouteId(routeId);
     if (success1 > 0 && success2 > 0) {
       return CommonResponse.SUCCESS;
     } else {
@@ -137,18 +123,12 @@ public class FilterServiceImpl implements FilterService {
 
   @Override
   public int batchRemove(Long[] routeIds) {
-    List<Long> ids = Lists.newArrayList();
-    for (Long routeId : routeIds) {
-      RouteDO route = routeDao.get(routeId);
-      String serviceName = route.getServiceName();
-      String methodName = route.getMethodName();
-      String group = route.getServiceGroup();
-      String version = route.getServiceVersion();
-      RpcDO grpc = grpcDao.get(serviceName, methodName, group, version);
-      ids.add(grpc.getId());
+    int success1 = routeDao.batchRemove(routeIds);
+    int success2 = grpcDao.batchRemove(routeIds);
+    if (success1 > 0 && success2 > 0) {
+      return CommonResponse.SUCCESS;
+    } else {
+      return CommonResponse.ERROR;
     }
-    routeDao.batchRemove(routeIds);
-    Long[] idArray = new Long[ids.size()];
-    return grpcDao.batchRemove(ids.toArray(idArray));
   }
 }

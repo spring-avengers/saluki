@@ -24,19 +24,20 @@ import com.quancheng.saluki.gateway.portal.filter.dto.RouteDto;
 public class RouteVo implements Serializable {
   private static final long serialVersionUID = 1L;
 
+
   private Long routeId;
 
-  private String path;
+  private String fromPath;
+
+  private String fromPathpattern;
+
+  private String toHostport;
+
+  private String toPath;
 
   private String serviceId;
 
-  private String url;
-
-  private Boolean retryable;
-
-  private Boolean enabled;
-
-  private Boolean stripPrefix;
+  private Boolean rpc = false;
 
   private String serviceName;
 
@@ -48,12 +49,6 @@ public class RouteVo implements Serializable {
 
   private String serviceFileName;
 
-  private Boolean grpc;
-
-  private Boolean dubbo;
-
-  private Boolean httpRest;
-
   public Long getRouteId() {
     return routeId;
   }
@@ -62,12 +57,36 @@ public class RouteVo implements Serializable {
     this.routeId = routeId;
   }
 
-  public String getPath() {
-    return path;
+  public String getFromPath() {
+    return fromPath;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+  public void setFromPath(String fromPath) {
+    this.fromPath = fromPath;
+  }
+
+  public String getFromPathpattern() {
+    return fromPathpattern;
+  }
+
+  public void setFromPathpattern(String fromPathpattern) {
+    this.fromPathpattern = fromPathpattern;
+  }
+
+  public String getToHostport() {
+    return toHostport;
+  }
+
+  public void setToHostport(String toHostport) {
+    this.toHostport = toHostport;
+  }
+
+  public String getToPath() {
+    return toPath;
+  }
+
+  public void setToPath(String toPath) {
+    this.toPath = toPath;
   }
 
   public String getServiceId() {
@@ -78,36 +97,12 @@ public class RouteVo implements Serializable {
     this.serviceId = serviceId;
   }
 
-  public String getUrl() {
-    return url;
+  public Boolean getRpc() {
+    return rpc;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public Boolean isRetryable() {
-    return retryable;
-  }
-
-  public void setRetryable(Boolean retryable) {
-    this.retryable = retryable;
-  }
-
-  public Boolean getEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Boolean isStripPrefix() {
-    return stripPrefix;
-  }
-
-  public void setStripPrefix(Boolean stripPrefix) {
-    this.stripPrefix = stripPrefix;
+  public void setRpc(Boolean rpc) {
+    this.rpc = rpc;
   }
 
   public String getServiceName() {
@@ -150,44 +145,19 @@ public class RouteVo implements Serializable {
     this.serviceFileName = serviceFileName;
   }
 
-  public Boolean getGrpc() {
-    return grpc;
-  }
-
-  public void setGrpc(Boolean grpc) {
-    this.grpc = grpc;
-  }
-
-  public Boolean getDubbo() {
-    return dubbo;
-  }
-
-  public void setDubbo(Boolean dubbo) {
-    this.dubbo = dubbo;
-  }
-
-  public Boolean isHttpRest() {
-    return httpRest;
-  }
-
-  public void setHttpRest(Boolean httpRest) {
-    this.httpRest = httpRest;
-  }
-
   public RouteDto buildZuulDto() {
     RouteDto zuulDto = new RouteDto();
     zuulDto.setRouteId(this.routeId);
-    zuulDto.setPath(this.path);
-    zuulDto.setUrl(this.url);
+    zuulDto.setFromPath(this.fromPath);
+    zuulDto.setFromPathpattern(this.fromPathpattern);
     zuulDto.setServiceId(this.serviceId);
-    zuulDto.setRetryable(this.retryable);
-    zuulDto.setEnabled(this.enabled);
-    zuulDto.setStripPrefix(this.stripPrefix);
-    zuulDto.setGrpc(this.grpc);
-    zuulDto.setDubbo(this.dubbo);
+    zuulDto.setRpc(this.rpc);
+    zuulDto.setToHostport(this.toHostport);
+    zuulDto.setToPath(this.toPath);
+
     zuulDto.setServiceName(this.serviceName);
     zuulDto.setMethodName(this.methodName);
-    zuulDto.setServiceGroup(this.getServiceGroup());
+    zuulDto.setServiceGroup(this.serviceGroup);
     zuulDto.setServiceVersion(this.serviceVersion);
     return zuulDto;
   }
@@ -195,29 +165,29 @@ public class RouteVo implements Serializable {
   public static RouteVo buildZuulVo(RouteDto zuulDto) {
     RouteVo zuulVo = new RouteVo();
     zuulVo.setRouteId(zuulDto.getRouteId());
-    zuulVo.setPath(zuulDto.getPath());
-    zuulVo.setUrl(zuulDto.getUrl());
+    zuulVo.setFromPath(zuulDto.getFromPath());
+    zuulVo.setFromPathpattern(zuulDto.getFromPathpattern());
     zuulVo.setServiceId(zuulDto.getServiceId());
-    zuulVo.setRetryable(zuulDto.isRetryable());
-    zuulVo.setEnabled(zuulDto.isEnabled());
-    zuulVo.setStripPrefix(zuulDto.isStripPrefix());
-    zuulVo.setGrpc(zuulDto.isGrpc());
-    zuulVo.setDubbo(zuulDto.isDubbo());
+    zuulVo.setRpc(zuulDto.getRpc());
+    zuulVo.setToHostport(zuulDto.getToHostport());
+    zuulVo.setToPath(zuulDto.getToPath());
+
     zuulVo.setServiceName(zuulDto.getServiceName());
     zuulVo.setMethodName(zuulDto.getMethodName());
     zuulVo.setServiceGroup(zuulDto.getServiceGroup());
     zuulVo.setServiceVersion(zuulDto.getServiceVersion());
-    zuulVo.setHttpRest(!zuulDto.isDubbo() && !zuulDto.isGrpc());
     return zuulVo;
   }
 
   @Override
   public String toString() {
-    return "ZuulVo [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
-        + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
-        + ", serviceName=" + serviceName + ", methodName=" + methodName + ", serviceGroup="
-        + serviceGroup + ", serviceVersion=" + serviceVersion + ", serviceFileName="
-        + serviceFileName + ", grpc=" + grpc + ", dubbo=" + dubbo + ", httpRest=" + httpRest + "]";
+    return "RouteVo [routeId=" + routeId + ", fromPath=" + fromPath + ", fromPathpattern="
+        + fromPathpattern + ", toHostport=" + toHostport + ", toPath=" + toPath + ", serviceId="
+        + serviceId + ", rpc=" + rpc + ", serviceName=" + serviceName + ", methodName=" + methodName
+        + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
+        + ", serviceFileName=" + serviceFileName + "]";
   }
+
+
 
 }

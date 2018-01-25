@@ -232,27 +232,28 @@ INSERT INTO `sys_user_role` VALUES ('1', '1', '1');
 INSERT INTO `sys_user_role` VALUES ('2', '2', '2');
 
 DROP TABLE IF EXISTS `gateway_route`;
+
 CREATE TABLE `gateway_route` (
-  `route_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `path` varchar(255) DEFAULT NULL COMMENT '路由路径',
-  `service_id` varchar(255) DEFAULT NULL COMMENT '服务ID',
-  `service_name` varchar(255) DEFAULT NULL COMMENT '服务名',
-  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
-  `service_group` varchar(100) DEFAULT NULL COMMENT '服务组名',
-  `service_version` varchar(100) DEFAULT NULL COMMENT '服务版本',
-  `url` varchar(255) DEFAULT NULL COMMENT 'url',
-  `retryable` tinyint(1) DEFAULT NULL COMMENT '是否从事',
-  `enabled` tinyint(1) DEFAULT NULL COMMENT '是否开启',
-  `strip_prefix` tinyint(1) DEFAULT NULL COMMENT '是否忽略后缀',
-  `grpc` tinyint(1) DEFAULT NULL COMMENT '是否grpc请求',
-  `dubbo` tinyint(1) DEFAULT NULL COMMENT '是否dubbo请求',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `from_path` varchar(255) DEFAULT NULL COMMENT '请求路径',
+  `from_pathpattern` varchar(255) DEFAULT NULL COMMENT '请求路径匹配符',
+  `to_hostport` varchar(255) DEFAULT NULL COMMENT '目标地址',
+  `to_path` varchar(100) DEFAULT NULL COMMENT '目标路径',
+  `service_id` varchar(100) DEFAULT NULL COMMENT '服务ID',
+  `rpc` tinyint(1) DEFAULT NULL COMMENT '是否RPC请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
- PRIMARY KEY (`route_id`),
- UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='网关路由表';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `serviceDefinition` (`to_hostport`,`to_path`,`service_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网关路由表';
+
+
+
+# Dump of table gateway_rpc
+# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `gateway_rpc`;
+
 CREATE TABLE `gateway_rpc` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `service_name` varchar(255) DEFAULT NULL COMMENT '服务名',
@@ -264,7 +265,9 @@ CREATE TABLE `gateway_rpc` (
   `proto_rep` blob COMMENT 'proto请求',
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+  `route_id` bigint(20) unsigned NOT NULL COMMENT '路由ID',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8 COMMENT='rpc服务映射表';
+  UNIQUE KEY `serviceDefinition` (`service_name`,`method_name`,`service_group`,`service_version`),
+  KEY `route` (`route_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='rpc服务映射表';
 

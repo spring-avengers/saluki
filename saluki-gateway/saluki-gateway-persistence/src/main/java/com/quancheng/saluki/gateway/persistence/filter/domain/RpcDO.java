@@ -27,6 +27,8 @@ public class RpcDO implements Serializable {
 
   private Long id;
 
+  private Long routeId;
+
   private String serviceName;
 
   private String methodName;
@@ -51,6 +53,14 @@ public class RpcDO implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Long getRouteId() {
+    return routeId;
+  }
+
+  public void setRouteId(Long routeId) {
+    this.routeId = routeId;
   }
 
   public String getServiceName() {
@@ -129,9 +139,9 @@ public class RpcDO implements Serializable {
 
   @Override
   public String toString() {
-    return "GrpcDO [id=" + id + ", serviceName=" + serviceName + ", methodName=" + methodName
-        + ", serivceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
-        + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
+    return "RpcDO [id=" + id + ", routeId=" + routeId + ", serviceName=" + serviceName
+        + ", methodName=" + methodName + ", serviceGroup=" + serviceGroup + ", serviceVersion="
+        + serviceVersion + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
         + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
         + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }

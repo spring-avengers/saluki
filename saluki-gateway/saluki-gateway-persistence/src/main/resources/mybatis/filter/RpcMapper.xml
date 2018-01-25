@@ -6,52 +6,9 @@
 	<select id="get"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
-		where
-		service_name = #{serviceName}
-		and
-		method_name =
-		#{methodName}
-		and
-		service_group = #{group}
-		and
-		service_version =
-		#{version}
-	</select>
-
-	<select id="list"
-		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
-		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
-		from gateway_rpc
-		<where>
-			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
-			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
-			<if test="group != null and group != ''"> and service_group = #{group} </if>
-			<if test="version != null and version != ''"> and service_version = #{version} </if>
-		</where>
-		<choose>
-			<when test="sort != null and sort.trim() != ''">
-				order by ${sort} ${order}
-			</when>
-			<otherwise>
-				order by id desc
-			</otherwise>
-		</choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-
-	<select id="count" resultType="int">
-		select count(*) from gateway_rpc
-		<where>
-			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
-			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
-			<if test="group != null and group != ''"> and service_group = #{group} </if>
-			<if test="version != null and version != ''"> and service_version = #{version} </if>
-		</where>
+		where route_id = #{routeId}
 	</select>
 
 	<insert id="save"
@@ -59,6 +16,7 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into gateway_rpc
 		(
+		`route_id`,
 		`service_name`,
 		`method_name`,
 		`service_group`,
@@ -71,6 +29,7 @@
 		)
 		values
 		(
+		#{routeId},
 		#{serviceName},
 		#{methodName},
 		#{serviceGroup},
@@ -84,8 +43,8 @@
 	</insert>
 
 	<update id="update"
-	parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
-	update gateway_rpc
+		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
+		update gateway_rpc
 		<set>
 			<if test="serviceName != null and serviceName != ''">`service_name`=#{serviceName},</if>
 			<if test="methodName != null and methodName != ''">`method_name`=#{methodName},</if>
@@ -100,14 +59,14 @@
 	</update>
 
 	<delete id="remove">
-		delete from gateway_rpc where id = #{value}
+		delete from gateway_rpc where route_id = #{value}
 	</delete>
 
 	<delete id="batchRemove">
-		delete from gateway_rpc where id in
-		<foreach item="id" collection="array" open="(" separator=","
+		delete from gateway_rpc where route_id in
+		<foreach item="routeId" collection="array" open="(" separator=","
 			close=")">
-			#{id}
+			#{route_id}
 		</foreach>
 	</delete>
 </mapper>

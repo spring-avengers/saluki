@@ -24,50 +24,62 @@ public class RouteDO implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private Long routeId;
+  private Long id;
 
-  private String path;
+  private String fromPath;
+
+  private String fromPathpattern;
+
+  private String toHostport;
+
+  private String toPath;
 
   private String serviceId;
 
-  private String url;
-
-  private Boolean retryable;
-
-  private Boolean enabled;
-
-  private Boolean stripPrefix;
-
-  private String serviceName;
-
-  private String methodName;
-
-  private String serviceGroup;
-
-  private String serviceVersion;
-
-  private Boolean grpc = false;
-
-  private Boolean dubbo = false;
+  private Boolean rpc = false;
 
   private Timestamp gmtCreate;
 
   private Timestamp gmtModified;
 
-  public Long getRouteId() {
-    return routeId;
+  public Long getId() {
+    return id;
   }
 
-  public void setRouteId(Long routeId) {
-    this.routeId = routeId;
+  public void setId(Long id) {
+    this.id = id;
   }
 
-  public String getPath() {
-    return path;
+  public String getFromPath() {
+    return fromPath;
   }
 
-  public void setPath(String path) {
-    this.path = path;
+  public void setFromPath(String fromPath) {
+    this.fromPath = fromPath;
+  }
+
+  public String getFromPathpattern() {
+    return fromPathpattern;
+  }
+
+  public void setFromPathpattern(String fromPathpattern) {
+    this.fromPathpattern = fromPathpattern;
+  }
+
+  public String getToHostport() {
+    return toHostport;
+  }
+
+  public void setToHostport(String toHostport) {
+    this.toHostport = toHostport;
+  }
+
+  public String getToPath() {
+    return toPath;
+  }
+
+  public void setToPath(String toPath) {
+    this.toPath = toPath;
   }
 
   public String getServiceId() {
@@ -78,84 +90,12 @@ public class RouteDO implements Serializable {
     this.serviceId = serviceId;
   }
 
-  public String getUrl() {
-    return url;
+  public Boolean getRpc() {
+    return rpc;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public Boolean isRetryable() {
-    return retryable;
-  }
-
-  public void setRetryable(Boolean retryable) {
-    this.retryable = retryable;
-  }
-
-  public Boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Boolean isStripPrefix() {
-    return stripPrefix;
-  }
-
-  public void setStripPrefix(Boolean stripPrefix) {
-    this.stripPrefix = stripPrefix;
-  }
-
-  public String getServiceName() {
-    return serviceName;
-  }
-
-  public void setServiceName(String serviceName) {
-    this.serviceName = serviceName;
-  }
-
-  public String getMethodName() {
-    return methodName;
-  }
-
-  public void setMethodName(String methodName) {
-    this.methodName = methodName;
-  }
-
-  public String getServiceGroup() {
-    return serviceGroup;
-  }
-
-  public void setServiceGroup(String serviceGroup) {
-    this.serviceGroup = serviceGroup;
-  }
-
-  public String getServiceVersion() {
-    return serviceVersion;
-  }
-
-  public void setServiceVersion(String serviceVersion) {
-    this.serviceVersion = serviceVersion;
-  }
-
-  public Boolean isDubbo() {
-    return dubbo;
-  }
-
-  public void setDubbo(Boolean dubbo) {
-    this.dubbo = dubbo;
-  }
-
-  public Boolean isGrpc() {
-    return grpc;
-  }
-
-  public void setGrpc(Boolean grpc) {
-    this.grpc = grpc;
+  public void setRpc(Boolean rpc) {
+    this.rpc = rpc;
   }
 
   public Timestamp getGmtCreate() {
@@ -176,13 +116,9 @@ public class RouteDO implements Serializable {
 
   @Override
   public String toString() {
-    return "RouteDO [routeId=" + routeId + ", path=" + path + ", serviceId=" + serviceId + ", url="
-        + url + ", retryable=" + retryable + ", enabled=" + enabled + ", stripPrefix=" + stripPrefix
-        + ", serviceName=" + serviceName + ", methodName=" + methodName + ", serviceGroup="
-        + serviceGroup + ", serviceVersion=" + serviceVersion + ", grpc=" + grpc + ", dubbo="
-        + dubbo + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
+    return "RouteDO [id=" + id + ", fromPath=" + fromPath + ", fromPathpattern=" + fromPathpattern
+        + ", toHostport=" + toHostport + ", toPath=" + toPath + ", serviceId=" + serviceId
+        + ", rpc=" + rpc + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
-
-
 
 }

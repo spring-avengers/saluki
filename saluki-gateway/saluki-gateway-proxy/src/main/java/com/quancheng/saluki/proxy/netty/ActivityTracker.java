@@ -2,8 +2,6 @@ package com.quancheng.saluki.proxy.netty;
 
 import java.net.InetSocketAddress;
 
-import javax.net.ssl.SSLSession;
-
 import com.quancheng.saluki.proxy.netty.transmit.flow.FlowContext;
 import com.quancheng.saluki.proxy.netty.transmit.flow.FullFlowContext;
 
@@ -31,8 +29,6 @@ public abstract class ActivityTracker {
 
   public void clientConnected(InetSocketAddress clientAddress) {}
 
-  public void clientSSLHandshakeSucceeded(InetSocketAddress clientAddress, SSLSession sslSession) {}
-
-  public void clientDisconnected(InetSocketAddress clientAddress, SSLSession sslSession) {}
+  public void clientDisconnected(InetSocketAddress clientAddress) {}
 
 }

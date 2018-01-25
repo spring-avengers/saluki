@@ -1,4 +1,4 @@
-package  com.quancheng.saluki.proxy.netty.transmit.connection;
+package com.quancheng.saluki.proxy.netty.transmit.connection;
 
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.AWAITING_CHUNK;
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.AWAITING_INITIAL;
@@ -18,12 +18,10 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.SSLSession;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.quancheng.saluki.proxy.netty.ActivityTracker;
-import com.quancheng.saluki.proxy.netty.HttpFiltersRunner;
+import com.quancheng.saluki.proxy.netty.HttpFiltersAdapter;
 import com.quancheng.saluki.proxy.netty.transmit.ConnectionState;
 import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
 import com.quancheng.saluki.proxy.netty.transmit.flow.ConnectionFlowStep;
@@ -72,18 +70,13 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   private final GlobalTrafficShapingHandler globalTrafficShapingHandler;
 
   private volatile ProxyToServerConnection currentServerConnection;
-
-  private volatile HttpFiltersRunner currentFilters;
-
-  private volatile SSLSession clientSslSession;
-
+  private volatile HttpFiltersAdapter currentFilters;
   private volatile boolean mitming = false;
-
   private volatile HttpRequest currentRequest;
 
   public ClientToProxyConnection(final DefaultHttpProxyServer proxyServer, ChannelPipeline pipeline,
       GlobalTrafficShapingHandler globalTrafficShapingHandler) {
-    super(AWAITING_INITIAL, proxyServer, false);
+    super(AWAITING_INITIAL, proxyServer);
     initChannelPipeline(pipeline);
     this.globalTrafficShapingHandler = globalTrafficShapingHandler;
     LOG.debug("Created ClientToProxyConnection");
@@ -224,7 +217,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     currentServerConnection.write(buf);
   }
 
-  public void respond(ProxyToServerConnection serverConnection, HttpFiltersRunner filters,
+  public void respond(ProxyToServerConnection serverConnection, HttpFiltersAdapter filters,
       HttpRequest currentHttpRequest, HttpResponse currentHttpResponse, HttpObject httpObject) {
     this.currentRequest = null;
     httpObject = filters.serverToProxyResponse(httpObject);
@@ -762,7 +755,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     try {
       InetSocketAddress clientAddress = getClientAddress();
       for (ActivityTracker tracker : proxyServer.getActivityTrackers()) {
-        tracker.clientDisconnected(clientAddress, clientSslSession);
+        tracker.clientDisconnected(clientAddress);
       }
     } catch (Exception e) {
       LOG.error("Unable to recordClientDisconnected", e);

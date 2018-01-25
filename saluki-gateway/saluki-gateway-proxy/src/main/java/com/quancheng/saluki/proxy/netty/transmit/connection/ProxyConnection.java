@@ -5,7 +5,7 @@ import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.AWAITING
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.DISCONNECTED;
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.NEGOTIATING_CONNECT;
 
-import com.quancheng.saluki.proxy.netty.HttpFiltersRunner;
+import com.quancheng.saluki.proxy.netty.HttpFiltersAdapter;
 import com.quancheng.saluki.proxy.netty.transmit.ConnectionState;
 import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
 import com.quancheng.saluki.proxy.netty.transmit.flow.ConnectionFlowStep;
@@ -41,7 +41,6 @@ public abstract class ProxyConnection<I extends HttpObject>
   public final ProxyConnectionLogger LOG = new ProxyConnectionLogger(this);
 
   public final DefaultHttpProxyServer proxyServer;
-  public final boolean runsAsSslClient;
 
   public volatile ChannelHandlerContext ctx;
   public volatile Channel channel;
@@ -49,11 +48,9 @@ public abstract class ProxyConnection<I extends HttpObject>
   private volatile boolean tunneling = false;
   public volatile long lastReadTime = 0;
 
-  public ProxyConnection(ConnectionState initialState, DefaultHttpProxyServer proxyServer,
-      boolean runsAsSslClient) {
+  public ProxyConnection(ConnectionState initialState, DefaultHttpProxyServer proxyServer) {
     become(initialState);
     this.proxyServer = proxyServer;
-    this.runsAsSslClient = runsAsSslClient;
   }
 
 
@@ -294,7 +291,7 @@ public abstract class ProxyConnection<I extends HttpObject>
     this.channel.config().setAutoRead(true);
   }
 
-  public HttpFiltersRunner getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public HttpFiltersAdapter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return proxyServer.getFiltersSource().filterRequest(httpRequest, ctx);
   }
 

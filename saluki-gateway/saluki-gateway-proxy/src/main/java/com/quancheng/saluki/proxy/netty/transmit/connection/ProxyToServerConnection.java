@@ -1,4 +1,4 @@
-package   com.quancheng.saluki.proxy.netty.transmit.connection;
+package com.quancheng.saluki.proxy.netty.transmit.connection;
 
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.AWAITING_CHUNK;
 import static com.quancheng.saluki.proxy.netty.transmit.ConnectionState.AWAITING_INITIAL;
@@ -15,7 +15,7 @@ import javax.net.ssl.SSLProtocolException;
 
 import com.google.common.net.HostAndPort;
 import com.quancheng.saluki.proxy.netty.ActivityTracker;
-import com.quancheng.saluki.proxy.netty.HttpFiltersRunner;
+import com.quancheng.saluki.proxy.netty.HttpFiltersAdapter;
 import com.quancheng.saluki.proxy.netty.transmit.ConnectionState;
 import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
 import com.quancheng.saluki.proxy.netty.transmit.flow.ConnectionFlow;
@@ -60,7 +60,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
 
   private volatile InetSocketAddress remoteAddress;
   private volatile InetSocketAddress localAddress;
-  private volatile HttpFiltersRunner currentFilters;
+  private volatile HttpFiltersAdapter currentFilters;
   private volatile ConnectionFlow connectionFlow;
   private volatile boolean disableSni = false;
   private volatile HttpRequest initialRequest;
@@ -68,20 +68,19 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   private volatile HttpResponse currentHttpResponse;
   private volatile GlobalTrafficShapingHandler trafficHandler;
 
-
-
   public static ProxyToServerConnection create(DefaultHttpProxyServer proxyServer,
-      ClientToProxyConnection clientConnection, String serverHostAndPort, HttpFiltersRunner initialFilters,
-      HttpRequest initialHttpRequest, GlobalTrafficShapingHandler globalTrafficShapingHandler)
-      throws UnknownHostException {
+      ClientToProxyConnection clientConnection, String serverHostAndPort,
+      HttpFiltersAdapter initialFilters, HttpRequest initialHttpRequest,
+      GlobalTrafficShapingHandler globalTrafficShapingHandler) throws UnknownHostException {
     return new ProxyToServerConnection(proxyServer, clientConnection, serverHostAndPort,
         initialFilters, globalTrafficShapingHandler);
   }
 
   private ProxyToServerConnection(DefaultHttpProxyServer proxyServer,
-      ClientToProxyConnection clientConnection, String serverHostAndPort, HttpFiltersRunner initialFilters,
-      GlobalTrafficShapingHandler globalTrafficShapingHandler) throws UnknownHostException {
-    super(DISCONNECTED, proxyServer, true);
+      ClientToProxyConnection clientConnection, String serverHostAndPort,
+      HttpFiltersAdapter initialFilters, GlobalTrafficShapingHandler globalTrafficShapingHandler)
+      throws UnknownHostException {
+    super(DISCONNECTED, proxyServer);
     this.clientConnection = clientConnection;
     this.serverHostAndPort = serverHostAndPort;
     this.trafficHandler = globalTrafficShapingHandler;
@@ -150,7 +149,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
     }
   };
 
-  public void write(Object msg, HttpFiltersRunner filters) {
+  public void write(Object msg, HttpFiltersAdapter filters) {
     this.currentFilters = filters;
     write(msg);
   }
@@ -287,7 +286,7 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
   }
 
   @Override
-  public HttpFiltersRunner getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
+  public HttpFiltersAdapter getHttpFiltersFromProxyServer(HttpRequest httpRequest) {
     return currentFilters;
   }
 

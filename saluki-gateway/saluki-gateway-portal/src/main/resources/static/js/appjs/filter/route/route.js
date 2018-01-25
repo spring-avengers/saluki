@@ -4,7 +4,7 @@ $(function() {
 });
 
 function load() {
-	$('#zuulTable')
+	$('#routeTable')
 			.bootstrapTable(
 					{
 						method : 'get',
@@ -40,24 +40,24 @@ function load() {
 									}
 								},
 								{
-									field : 'path',
-									title : '请求路径'
+									field : 'fromPath',
+									title : '源路径'
+								},
+								{
+									field : 'fromPathpattern',
+									title : '源路径匹配'
+								},
+								{
+									field : 'toHostport',
+									title : '目标地址'
+								},
+								{
+									field : 'toPath',
+									title : '目标路径'
 								},
 								{
 									field : 'serviceId',
-									title : '服务Id'
-								},
-								{
-									field : 'url',
-									title : '转发URL'
-								},
-								{
-									field : 'retryable',
-									title : '重试'
-								},
-								{
-									field : 'stripPrefix',
-									title : '匹配前缀'
+									title : '服务ID'
 								},
 								{
 									title : '操作',
@@ -91,18 +91,8 @@ function chirdTable(index, row, $detail) {
 	rows.push(row);
 	$(cur_table).bootstrapTable({
 		columns : [ {
-			field : 'grpc',
-			title : 'grpc服务',
-			formatter : function(value, row, index) {
-				if (value) {
-					return "是";
-				} else {
-					return "否"
-				}
-			}
-		}, {
-			field : 'dubbo',
-			title : 'dubbo服务',
+			field : 'rpc',
+			title : 'Rpc服务',
 			formatter : function(value, row, index) {
 				if (value) {
 					return "是";
@@ -169,7 +159,7 @@ function edit(id) {
 	});
 }
 function batchRemove() {
-	var rows = $('#zuulTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
+	var rows = $('#routeTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {
 		layer.msg("请选择要删除的数据");
 		return;

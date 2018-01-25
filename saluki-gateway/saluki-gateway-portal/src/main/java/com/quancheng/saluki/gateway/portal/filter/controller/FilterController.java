@@ -140,7 +140,7 @@ public class FilterController extends BaseController {
           zuulDto.setProtoRep(protoOutput);
           fitlerService.save(zuulDto);
         }
-      } // rest路由
+      } // 其他路由
       else {
         RouteDto zuulDto = zuulVo.buildZuulDto();
         fitlerService.save(zuulDto);
@@ -202,7 +202,7 @@ public class FilterController extends BaseController {
           zuulDto.setProtoRep(protoOutput);
           fitlerService.update(zuulDto);
         }
-      } // rest路由
+      } // 其他路由
       else {
         RouteDto zuulDto = zuulVo.buildZuulDto();
         fitlerService.update(zuulDto);

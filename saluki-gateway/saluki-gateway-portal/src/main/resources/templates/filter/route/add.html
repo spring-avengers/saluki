@@ -13,114 +13,84 @@
 							<fieldset>
 								<legend>基础配置</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="path">请求路径</label>
+									<label class="col-sm-2 control-label" for="fromPath">原始路径</label>
 									<div class="col-sm-4">
-										<input class="form-control" id="path" name="path"
-											th:value="${path}" type="text" placeholder="path" />
+										<input class="form-control" id="fromPath" name="fromPath"
+											type="text" placeholder="path" />
 									</div>
-									<label class="col-sm-2 control-label" for="serviceId">服务Id</label>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="fromPathpattern">路径匹配</label>
+									<div class="col-sm-4">
+										<input id="fromPathpattern" name="fromPathpattern"
+											class="form-control" type="text" placeholder="pathpattern" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="rpc" class="col-sm-2 control-label">是否RPC</label>
+									<div class="col-sm-4">
+										<select id="rpc" name="rpc" class="form-control">
+											<option value="0">否</option>
+											<option value="1">是</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="toHostport">目标地址</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="toHostport" name="toHostport"
+											type="text" placeholder="hostAndPort" />
+									</div>
+									<label class="col-sm-2 control-label" for="toPath">目标路径</label>
+									<div class="col-sm-4">
+										<input id="toPath" name="toPath" class="form-control"
+											type="text" placeholder="path" />
+									</div>
+								</div>
+							</fieldset>
+							<fieldset>
+								<legend>Rest服务发现</legend>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="serviceId">服务ID</label>
 									<div class="col-sm-4">
 										<input class="form-control" id="serviceId" name="serviceId"
-											th:value="${serviceId}" type="text" placeholder="serviceId" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="url">转发url</label>
-									<div class="col-sm-10">
-										<input id="url" name="url" th:value="${url}"
-											class="form-control" type="text" placeholder="url" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="stripPrefix" class="col-sm-2 control-label">忽略前缀</label>
-									<div class="col-sm-4">
-										<select id="stripPrefix" name="stripPrefix"
-											th:value="${stripPrefix}" class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="retryable" class="col-sm-2 control-label">重试</label>
-									<div class="col-sm-4">
-										<select id="retryable" name="retryable"
-											th:value="${retryable}" class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="enabled" class="col-sm-2 control-label">开启</label>
-									<div class="col-sm-4">
-										<select id="enabled" name="enabled" th:value="${enabled}"
-											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
-										</select>
+											type="text" placeholder="serviceId" />
 									</div>
 								</div>
 							</fieldset>
 							<fieldset>
-								<legend>Rpc选择</legend>
+								<legend>Rpc服务发现</legend>
 								<div class="form-group">
-									<label for="grpc" class="col-sm-2 control-label">是否gRpc</label>
-									<div class="col-sm-4">
-										<select id="grpc" name="grpc" th:value="${grpc}"
-											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
-										</select>
-									</div>
-									<label for="dubbo" class="col-sm-2 control-label">是否dubbo</label>
-									<div class="col-sm-4">
-										<select id="dubbo" name="dubbo" th:value="${dubbo}"
-											class="form-control">
-											<option value="0">否</option>
-											<option value="1">是</option>
-										</select>
-									</div>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Rpc服务配置</legend>
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="serviceName">接口名</label>
+									<label class="col-sm-2 control-label" for="serviceName">服务名</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceName"
-											name="serviceName" th:value="${serviceName}" type="text"
-											placeholder="serviceName" />
+											name="serviceName" type="text" placeholder="serviceName" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="methodName">方法名</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="methodName" name="methodName"
-											th:value="${methodName}" type="text" placeholder="methodName" />
+											type="text" placeholder="methodName" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="serviceGroup">组别</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceGroup"
-											name="serviceGroup" th:value="${serviceGroup}" type="text"
-											placeholder="group" />
+											name="serviceGroup" type="text" placeholder="group" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="serviceVersion">版本</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceVersion"
-											name="serviceVersion" th:value="${serviceVersion}"
-											type="text" placeholder="version" />
+											name="serviceVersion" type="text" placeholder="version" />
 									</div>
 								</div>
-							</fieldset>
-							<fieldset>
-								<legend>gRpc目录文件上传</legend>
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="zipFile">gRpc目录文件</label>
+									<label class="col-sm-2 control-label" for="zipFile">gRpc
+										Proto定义</label>
 									<div class="col-sm-4">
 										<span id="zipfilename" style="vertical-align: left">未上传文件</span>
 										<div class="file-container"
@@ -128,16 +98,19 @@
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
 											<input type="file" id="zipFile" name="zipFile"
-												th:value="${zipFile}" onchange="loadZipFile(this.files[0])"
+												onchange="loadZipFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>
 										<span class="help-block">(包括服务定义、入参、出参的proto文件,以zip包的方式提交)</span>
 									</div>
-									<label class="col-sm-2 control-label" for="serviceFileName">服务定义文件名</label>
-									<div class="col-sm-4">
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="serviceFileName">gRpc
+										Proto服务文件名</label>
+									<div class="col-sm-10">
 										<input class="form-control" id="serviceFileName"
-											name="serviceFileName" th:value="${serviceFileName}"
-											type="text" placeholder="serviceFileName" />
+											name="serviceFileName" type="text"
+											placeholder="serviceFileName" />
 									</div>
 								</div>
 							</fieldset>
@@ -152,7 +125,7 @@
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
 											<input type="file" id="input" name="input"
-												th:value="${input}" onchange="loadInputFile(this.files[0])"
+												  onchange="loadInputFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>
 										<span class="help-block">(入参proto文件，仅能包含一个message对象)</span>
@@ -165,7 +138,6 @@
 											<button class="btn btn-success fileinput-button"
 												type="button">上传</button>
 											<input type="file" id="output" name="output"
-												th:value="${output}"
 												onchange="loadOutputFile(this.files[0])"
 												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
 										</div>

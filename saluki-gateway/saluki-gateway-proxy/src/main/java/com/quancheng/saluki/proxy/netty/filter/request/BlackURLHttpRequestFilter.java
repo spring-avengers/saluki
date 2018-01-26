@@ -22,10 +22,10 @@ import io.netty.handler.codec.http.HttpResponse;
  * @author liushiming
  * @version WriteURLHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:09:50 liushiming
  */
-public class WriteURLHttpRequestFilter extends HttpRequestFilter {
+public class BlackURLHttpRequestFilter extends HttpRequestFilter {
 
   public static HttpRequestFilter newFilter() {
-    return new WriteURLHttpRequestFilter();
+    return new BlackURLHttpRequestFilter();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class WriteURLHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public int filterOrder() {
-    return RequestFilterOrder.WRITEURL.getFilterOrder();
+    return RequestFilterOrder.BLACKURL.getFilterOrder();
   }
 
 }

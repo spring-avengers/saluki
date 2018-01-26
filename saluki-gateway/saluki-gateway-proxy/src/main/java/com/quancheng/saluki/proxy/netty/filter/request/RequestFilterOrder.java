@@ -23,14 +23,14 @@ public enum RequestFilterOrder {
   /**
    * 各种限制
    */
-  URLPARAM(1), //
-  COOKIE(2), //
-  UA(3), //
-  WRITEURL(4), //
-  WRITEIP(5), //
-  BLACKIP(6), //
-  SCANNER(7), //
-  RATELIMIT(8), //
+  URLPARAM(1), // URL参数黑名单参数拦截
+  COOKIE(2), // Cookie黑名单拦截
+  UA(3), // User-Agent黑名单拦截
+  BLACKURL(4), // URL路径黑名单拦截
+  WRITEIP(5), // IP白名单
+  BLACKIP(6), // IP黑名单
+  SCANNER(7), // 扫描
+  RATELIMIT(8), // 限流
 
 
 

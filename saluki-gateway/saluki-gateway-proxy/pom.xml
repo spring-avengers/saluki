@@ -29,15 +29,6 @@
 			<artifactId>druid</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.protobuf-java-format</groupId>
-			<artifactId>protobuf-java-format</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.quancheng.saluki</groupId>
-			<artifactId>spring-boot-starter-saluki</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 		</dependency>
@@ -66,10 +57,36 @@
 			<artifactId>dnsjava</artifactId>
 			<version>2.1.8</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-consul-discovery</artifactId> 
-			<exclusions> <exclusion> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-web</artifactId> 
-			</exclusion> </exclusions> </dependency> -->
-		<!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-zuul</artifactId> 
-			<version>1.4.2.RELEASE</version> </dependency> -->
+
+		<!-- grpc support -->
+		<dependency>
+			<groupId>com.googlecode.protobuf-java-format</groupId>
+			<artifactId>protobuf-java-format</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.quancheng.saluki</groupId>
+			<artifactId>spring-boot-starter-saluki</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- dubbo support -->
+		<!-- <dependency>
+			<groupId>com.alibaba.spring.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
+			<version>1.0.0</version>
+		</dependency> -->
+
+		<!-- spring cloud support -->
+		<!-- <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-web</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+
 	</dependencies>
 </project>

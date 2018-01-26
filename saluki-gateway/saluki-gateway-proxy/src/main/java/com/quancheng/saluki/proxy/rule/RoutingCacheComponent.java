@@ -70,7 +70,9 @@ public class RoutingCacheComponent {
     // load all rpc
     List<RpcDO> rpcs = rpcDao.list(Maps.newHashMap());
     for (RpcDO rpc : rpcs) {
-      RPC_CACHE.put(rpc.getRouteId(), rpc);
+      // 这里防止mybatis一些持久化状态的问题，拷贝出一份来安全点
+      RpcDO rpcCopy = rpc.copy();
+      RPC_CACHE.put(rpcCopy.getRouteId(), rpcCopy);
     }
   }
 
@@ -92,7 +94,9 @@ public class RoutingCacheComponent {
 
           @Override
           public RpcDO load(Long key) throws Exception {
-            return rpcDao.get(key);
+            // 这里防止mybatis一些持久化状态的问题，拷贝出一份来安全点
+            RpcDO rpcCopy = rpcDao.get(key);
+            return rpcCopy;
           }
 
         });

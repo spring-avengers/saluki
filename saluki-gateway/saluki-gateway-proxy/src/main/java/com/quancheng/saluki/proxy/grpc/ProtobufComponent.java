@@ -17,9 +17,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
@@ -27,46 +25,36 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.quancheng.saluki.core.grpc.exception.RpcBizException;
-import com.quancheng.saluki.gateway.persistence.filter.dao.RpcDao;
 import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 
 /**
  * @author liushiming
  * @version GrpcRouteService.java, v 0.0.1 2018年1月7日 下午12:59:14 liushiming
  */
-@Service
-public class ProtobufSerivce {
+@Component
+public class ProtobufComponent {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProtobufSerivce.class);
-
-  @Autowired
-  private RpcDao grpcDao;
+  private static final Logger LOG = LoggerFactory.getLogger(ProtobufComponent.class);
 
 
-  @Cacheable(value = "serviceTypes",
-      key = "#serviceName" + "_" + "#methodName" + "_" + "#group" + "_" + "#version")
-  public Pair<Descriptor, Descriptor> resolveServiceInputOutputType(String serviceName,
-      final String methodName, final String group, final String version) {
-    Pair<Descriptor, Descriptor> argsDesc =
-        this.findSingleProtobuf(serviceName, methodName, group, version);
+  public Pair<Descriptor, Descriptor> resolveServiceInputOutputType(final RpcDO rpcDo) {
+    Pair<Descriptor, Descriptor> argsDesc = this.findSingleProtobuf(rpcDo);
     if (argsDesc == null) {
-      argsDesc = this.findDirectyprotobuf(serviceName, methodName, group, version);
+      argsDesc = this.findDirectyprotobuf(rpcDo);
     }
     return argsDesc;
   }
 
 
-  private Pair<Descriptor, Descriptor> findDirectyprotobuf(String serviceName,
-      final String methodName, final String group, final String version) {
-    RpcDO grpcDo = grpcDao.getByService(serviceName, methodName, group, version);
-    byte[] protoContent = grpcDo.getProtoContext();
+  private Pair<Descriptor, Descriptor> findDirectyprotobuf(final RpcDO rpcDo) {
+    byte[] protoContent = rpcDo.getProtoContext();
     FileDescriptorSet descriptorSet = null;
     if (protoContent != null && protoContent.length > 0) {
       try {
         descriptorSet = FileDescriptorSet.parseFrom(protoContent);
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(descriptorSet);
-        ProtoMethodName protoMethodName =
-            ProtoMethodName.parseFullGrpcMethodName(serviceName + "/" + methodName);
+        ProtoMethodName protoMethodName = ProtoMethodName
+            .parseFullGrpcMethodName(rpcDo.getServiceName() + "/" + rpcDo.getMethodName());
         MethodDescriptor protoMethodDesc = serviceResolver.resolveServiceMethod(protoMethodName);
         return new ImmutablePair<Descriptor, Descriptor>(protoMethodDesc.getInputType(),
             protoMethodDesc.getOutputType());
@@ -79,11 +67,9 @@ public class ProtobufSerivce {
     return null;
   }
 
-  private Pair<Descriptor, Descriptor> findSingleProtobuf(String serviceName,
-      final String methodName, final String group, final String version) {
-    RpcDO grpcDo = grpcDao.getByService(serviceName, methodName, group, version);
-    byte[] in = grpcDo.getProtoReq();
-    byte[] out = grpcDo.getProtoRep();
+  private Pair<Descriptor, Descriptor> findSingleProtobuf(final RpcDO rpcDo) {
+    byte[] in = rpcDo.getProtoReq();
+    byte[] out = rpcDo.getProtoRep();
     FileDescriptorSet inputDescriptorSet = null;
     FileDescriptorSet outputDescriptorSet = null;
     if (in != null && in.length > 0 && out != null && out.length > 0) {

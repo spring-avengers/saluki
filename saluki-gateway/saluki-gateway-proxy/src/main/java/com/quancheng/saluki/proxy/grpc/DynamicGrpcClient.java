@@ -30,6 +30,7 @@ import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
+import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 
 import io.grpc.MethodDescriptor;
 import io.grpc.MethodDescriptor.Marshaller;
@@ -47,7 +48,7 @@ public class DynamicGrpcClient {
   private GenericService genricService;
 
   @Autowired
-  private ProtobufSerivce protobufService;
+  private ProtobufComponent protobufService;
 
   private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 
@@ -55,11 +56,14 @@ public class DynamicGrpcClient {
     JSON2PROTOBUF.setDefaultCharset(CharsetUtil.UTF_8);
   }
 
-  public String call(final String serviceName, final String methodName, final String group,
-      final String version, final String jsonInput) {
+  public String call(final RpcDO rpcDo, final String jsonInput) {
     try {
-      Pair<Descriptor, Descriptor> inOutType =
-          protobufService.resolveServiceInputOutputType(serviceName, methodName, group, version);
+
+      final String serviceName = rpcDo.getServiceName();
+      final String methodName = rpcDo.getMethodName();
+      final String group = rpcDo.getServiceGroup();
+      final String version = rpcDo.getServiceVersion();
+      Pair<Descriptor, Descriptor> inOutType = protobufService.resolveServiceInputOutputType(rpcDo);
       Descriptor inPutType = inOutType.getLeft();
       Descriptor outPutType = inOutType.getRight();
       MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
@@ -75,7 +79,7 @@ public class DynamicGrpcClient {
     } catch (Exception e) {
       throw new RpcFrameworkException(String.format(
           "service definition is wrong,please check the proto file you update,service is %s, method is %s",
-          serviceName, methodName), e);
+          rpcDo.getServiceName(), rpcDo.getMethodName()), e);
     }
   }
 

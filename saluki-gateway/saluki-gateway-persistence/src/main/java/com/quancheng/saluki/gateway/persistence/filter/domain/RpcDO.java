@@ -137,6 +137,21 @@ public class RpcDO implements Serializable {
     this.gmtModified = gmtModified;
   }
 
+  public RpcDO copy() {
+    RpcDO rpcDo = new RpcDO();
+    rpcDo.setId(this.id);
+    rpcDo.setServiceName(this.getServiceName());
+    rpcDo.setMethodName(this.methodName);
+    rpcDo.setServiceGroup(this.serviceGroup);
+    rpcDo.setServiceVersion(this.serviceVersion);
+    rpcDo.setProtoContext(this.protoContext);
+    rpcDo.setProtoReq(this.protoReq);
+    rpcDo.setProtoRep(this.protoRep);
+    rpcDo.setGmtCreate(this.gmtCreate);
+    rpcDo.setGmtModified(this.gmtModified);
+    return rpcDo;
+  }
+
   @Override
   public String toString() {
     return "RpcDO [id=" + id + ", routeId=" + routeId + ", serviceName=" + serviceName

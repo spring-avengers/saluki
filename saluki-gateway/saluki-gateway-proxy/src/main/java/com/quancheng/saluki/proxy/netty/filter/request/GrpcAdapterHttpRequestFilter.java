@@ -52,15 +52,16 @@ public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
       FullHttpRequest request = (FullHttpRequest) originalRequest;
       String urlPath = request.uri();
       RpcDO rpc = routeRuleCache.getRpc(urlPath);
-      String serviceName = rpc.getServiceName();
-      String methodName = rpc.getMethodName();
-      String group = rpc.getServiceGroup();
-      String version = rpc.getServiceVersion();
-      ByteBuf jsonBuf = request.content();
-      String jsonInput = jsonBuf.toString(CharsetUtil.UTF_8);
-      String jsonOutput = grpcClient.call(serviceName, methodName, group, version, jsonInput);
-      return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-          Unpooled.wrappedBuffer(jsonOutput.getBytes(CharsetUtil.UTF_8)));
+      if (rpc != null) {
+        ByteBuf jsonBuf = request.content();
+        String jsonInput = jsonBuf.toString(CharsetUtil.UTF_8);
+        String jsonOutput = grpcClient.call(rpc, jsonInput);
+        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+            Unpooled.wrappedBuffer(jsonOutput.getBytes(CharsetUtil.UTF_8)));
+      } else {
+        // 如果从缓存没有查到grpc的映射信息，说明不是泛化调用，返回空，继续走下一个filter或者去走rest服务发现等
+        return null;
+      }
     }
     return null;
   }

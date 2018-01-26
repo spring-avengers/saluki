@@ -22,9 +22,9 @@ import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * @author liushiming
- * @version ScannerHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:15 liushiming
+ * @version WriteIpListHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:54 liushiming
  */
-public class ScannerHttpRequestFilter extends HttpRequestFilter {
+public class WriteIpHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
@@ -35,7 +35,7 @@ public class ScannerHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public int filterOrder() {
-    return FilterOrder.SCANNER.getFilterOrder();
+    return FilterOrder.WRITEIP.getFilterOrder();
   }
 
 }

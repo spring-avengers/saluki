@@ -13,10 +13,29 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
-/** 
- * @author liushiming 
- * @version UaHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:28 liushiming 
+import com.quancheng.saluki.proxy.netty.filter.FilterOrder;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+
+/**
+ * @author liushiming
+ * @version UaHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:28 liushiming
  */
-public class UaHttpRequestFilter {
+public class UaHttpRequestFilter extends HttpRequestFilter {
+
+  @Override
+  public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
+      ChannelHandlerContext channelHandlerContext) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public int filterOrder() {
+    return FilterOrder.UA.getFilterOrder();
+  }
 
 }

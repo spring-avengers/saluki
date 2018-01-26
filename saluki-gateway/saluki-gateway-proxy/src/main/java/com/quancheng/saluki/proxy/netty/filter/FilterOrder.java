@@ -11,12 +11,42 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.proxy.netty.filter.request;
+package com.quancheng.saluki.proxy.netty.filter;
 
-/** 
- * @author liushiming 
- * @version WriteIpListHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:54 liushiming 
+/**
+ * @author liushiming
+ * @version FilterOrder.java, v 0.0.1 2018年1月26日 下午4:07:44 liushiming
  */
-public class WriteIpListHttpRequestFilter {
+public enum FilterOrder {
+
+
+  /**
+   * 各种限制
+   */
+  URLPARAM(1), //
+  COOKIE(2), //
+  UA(3), //
+  WRITEURL(4), //
+  WRITEIP(5), //
+  BLACKIP(6), //
+  SCANNER(7), //
+  RATELIMIT(8), //
+
+
+
+  /**
+   * 协议适配
+   */
+  GRPC(100), //
+  DUBBO(101);
+  private int filterOrder;
+
+  FilterOrder(int filteOrder) {
+    this.filterOrder = filteOrder;
+  }
+
+  public int getFilterOrder() {
+    return filterOrder;
+  }
 
 }

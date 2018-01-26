@@ -13,14 +13,16 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import com.quancheng.saluki.proxy.netty.filter.FilterOrder;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 
-/** 
- * @author liushiming 
- * @version CookieHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午3:56:53 liushiming 
+/**
+ * @author liushiming
+ * @version CookieHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午3:56:53 liushiming
  */
 public class CookieHttpRequestFilter extends HttpRequestFilter {
 
@@ -33,8 +35,7 @@ public class CookieHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public int filterOrder() {
-    // TODO Auto-generated method stub
-    return 0;
+    return FilterOrder.COOKIE.getFilterOrder();
   }
 
 }

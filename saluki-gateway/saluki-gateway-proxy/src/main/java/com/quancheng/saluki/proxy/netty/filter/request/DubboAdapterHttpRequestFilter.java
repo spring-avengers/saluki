@@ -22,20 +22,19 @@ import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * @author liushiming
- * @version ScannerHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:00:15 liushiming
+ * @version DubboAdapterHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:07:13 liushiming
  */
-public class ScannerHttpRequestFilter extends HttpRequestFilter {
+public class DubboAdapterHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public int filterOrder() {
-    return FilterOrder.SCANNER.getFilterOrder();
+    return FilterOrder.DUBBO.getFilterOrder();
   }
 
 }

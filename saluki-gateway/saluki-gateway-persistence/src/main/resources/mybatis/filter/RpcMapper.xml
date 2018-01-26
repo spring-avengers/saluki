@@ -24,6 +24,31 @@
 		and
 		service_version = #{version}
 	</select>
+	
+	
+	<select id="list"
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
+		select
+		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		from gateway_rpc
+		<where>
+			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
+			<if test="methodName != null and methodName != ''"> and method_name = #{methodName} </if>
+			<if test="group != null and group != ''"> and service_group = #{group} </if>
+			<if test="version != null and version != ''"> and service_version = #{version} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
 
 	<insert id="save"
 		parameterType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO"

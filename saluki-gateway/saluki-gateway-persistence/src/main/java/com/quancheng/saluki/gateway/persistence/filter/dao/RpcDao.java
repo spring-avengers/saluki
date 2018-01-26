@@ -13,6 +13,9 @@
  */
 package com.quancheng.saluki.gateway.persistence.filter.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,6 +32,8 @@ public interface RpcDao {
   RpcDO getByService(@Param("serviceName") String serviceName,
       @Param("methodName") String methodName, @Param("group") String group,
       @Param("version") String version);
+
+  List<RpcDO> list(Map<String, Object> map);
 
   int save(RpcDO route);
 

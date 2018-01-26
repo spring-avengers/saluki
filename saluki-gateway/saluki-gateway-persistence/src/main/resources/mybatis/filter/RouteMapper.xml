@@ -12,6 +12,16 @@
 		id = #{value}
 	</select>
 
+
+	<select id="load"
+		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
+		select
+		`id`,`from_path`,`from_pathpattern`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
+		from gateway_route
+		where
+		from_path = #{value} or from_pathpattern like concat(concat(#{value},'%')) 
+	</select>
+
 	<select id="list"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select

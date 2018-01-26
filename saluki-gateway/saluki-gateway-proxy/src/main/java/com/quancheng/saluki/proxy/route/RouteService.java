@@ -13,7 +13,16 @@
  */
 package com.quancheng.saluki.proxy.route;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
+
+import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
+import com.quancheng.saluki.proxy.cache.RouteCacheComponent;
+
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpRequest;
 
 /**
  * @author liushiming
@@ -22,12 +31,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class RouteService {
 
-  public String dynamicsRouting(String requestURI) {
-    return null;
+  private PathMatcher pathMatcher = new AntPathMatcher();
+
+  @Autowired
+  private RouteCacheComponent routeCache;
+
+  private volatile RouteDO route;
+
+  public void dynamicsRouting(HttpRequest httpRequest) {
+    String url = httpRequest.uri();
+    route = routeCache.getRoute(url);
+    if (route != null) {
+      String expectPath = route.getFromPath();
+      String expectPathPattern = route.getFromPathpattern();
+      String targetPath = route.getToPath();
+      String targetHostAndPort = route.getToHostport();
+      if (expectPath.equals(url) || pathMatcher.match(expectPathPattern, url)) {
+        if (targetHostAndPort != null)
+          httpRequest.headers().set(HttpHeaderNames.HOST, targetHostAndPort);
+        if (targetPath != null)
+          httpRequest.setUri(targetPath);
+      }
+
+    }
   }
 
 
-  public String rewriteURL(String requestURI) {
-    return null;
-  }
 }

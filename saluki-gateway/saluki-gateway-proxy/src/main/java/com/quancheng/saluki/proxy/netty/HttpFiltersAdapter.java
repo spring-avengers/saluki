@@ -54,12 +54,8 @@ public class HttpFiltersAdapter {
   }
 
   // dynamics route
-  public String dynamicsRouting(HttpRequest originalRequest) {
-    return routeService.dynamicsRouting(originalRequest.uri());
-  }
-
-  public String rewriteUrl(HttpRequest originalRequest) {
-    return routeService.rewriteURL(originalRequest.uri());
+  public void dynamicsRouting(HttpRequest originalRequest) {
+    routeService.dynamicsRouting(originalRequest);
   }
 
   public void proxyToServerRequestSending() {}

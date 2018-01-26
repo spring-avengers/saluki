@@ -29,6 +29,8 @@ public interface RouteDao {
 
   RouteDO get(Long routeId);
 
+  RouteDO load(String key);
+
   List<RouteDO> list(Map<String, Object> map);
 
   int count(Map<String, Object> map);

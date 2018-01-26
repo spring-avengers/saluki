@@ -27,6 +27,7 @@ import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
 import com.quancheng.saluki.proxy.netty.transmit.flow.ConnectionFlowStep;
 import com.quancheng.saluki.proxy.netty.transmit.flow.FlowContext;
 import com.quancheng.saluki.proxy.netty.transmit.flow.FullFlowContext;
+import com.quancheng.saluki.proxy.utils.NetworkUtils;
 import com.quancheng.saluki.proxy.utils.ProxyUtils;
 
 import io.netty.buffer.ByteBuf;
@@ -68,6 +69,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
   private final AtomicInteger numberOfCurrentlyConnectedServers = new AtomicInteger(0);
   private final AtomicInteger numberOfReusedServerConnections = new AtomicInteger(0);
   private final GlobalTrafficShapingHandler globalTrafficShapingHandler;
+  private final InetSocketAddress proxyListenAddress;
 
   private volatile ProxyToServerConnection currentServerConnection;
   private volatile HttpFiltersAdapter currentFilters;
@@ -78,6 +80,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     super(AWAITING_INITIAL, proxyServer);
     initChannelPipeline(pipeline);
     this.globalTrafficShapingHandler = globalTrafficShapingHandler;
+    this.proxyListenAddress = proxyServer.getListenAddress();
     LOG.debug("Created ClientToProxyConnection");
   }
 
@@ -121,7 +124,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     }
     String serverHostAndPort = identifyHostAndPort(httpRequest);
     LOG.debug("Ensuring that hostAndPort are available in {}", httpRequest.uri());
-    if (serverHostAndPort == null || StringUtils.isBlank(serverHostAndPort)) {
+    if (serverHostAndPort == null || StringUtils.isBlank(serverHostAndPort)
+        || NetworkUtils.equalAddress(this.proxyListenAddress, serverHostAndPort)) {
       LOG.warn("No host and port found in {}", httpRequest.uri());
       boolean keepAlive = writeBadGateway(httpRequest);
       if (keepAlive) {
@@ -171,7 +175,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
       LOG.debug("Reusing existing server connection: {}", currentServerConnection);
       numberOfReusedServerConnections.incrementAndGet();
     }
-    modifyRequestToReflectProxying(httpRequest);
+    modifyRequestHeadersToReflectProxying(httpRequest);
     HttpResponse proxyToServerFilterResponse = currentFilters.proxyToServerRequest(httpRequest);
     if (proxyToServerFilterResponse != null) {
       LOG.debug("Responding to client with short-circuit response from filter: {}",
@@ -554,13 +558,6 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     }
   }
 
-  private void modifyRequestToReflectProxying(HttpRequest httpRequest) {
-    // rewrite url
-    if (!proxyServer.isTransparent()) {
-      currentFilters.rewriteUrl(httpRequest);
-      modifyRequestHeadersToReflectProxying(httpRequest);
-    }
-  }
 
   private void modifyRequestHeadersToReflectProxying(HttpRequest httpRequest) {
     LOG.debug("Modifying request headers for proxying");
@@ -681,18 +678,14 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
   private String identifyHostAndPort(HttpRequest httpRequest) {
     // dynamics route by request
-    String hostAndPort = currentFilters.dynamicsRouting(httpRequest);
-    if (hostAndPort != null) {
-      return hostAndPort;
-    }
-    hostAndPort = ProxyUtils.parseHostAndPort(httpRequest);
+    currentFilters.dynamicsRouting(httpRequest);
+    String hostAndPort = ProxyUtils.parseHostAndPort(httpRequest);
     if (StringUtils.isBlank(hostAndPort)) {
       List<String> hosts = httpRequest.headers().getAll(HttpHeaderNames.HOST);
       if (hosts != null && !hosts.isEmpty()) {
         hostAndPort = hosts.get(0);
       }
     }
-
     return hostAndPort;
   }
 

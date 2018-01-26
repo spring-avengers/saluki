@@ -75,7 +75,6 @@ function reLoad() {
 	$('#zuulTable').bootstrapTable('refresh');
 }
 function chirdTable(index, row, $detail) {
-	alert(row.serviceName)
 	var cur_table = $detail.html('<table></table>').find('table');
 	var rows = [];
 	rows.push(row);

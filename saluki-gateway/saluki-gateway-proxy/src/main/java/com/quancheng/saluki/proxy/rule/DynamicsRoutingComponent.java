@@ -14,7 +14,7 @@
 package com.quancheng.saluki.proxy.rule;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
@@ -27,13 +27,13 @@ import io.netty.handler.codec.http.HttpRequest;
  * @author liushiming
  * @version RouteService.java, v 0.0.1 2018年1月25日 下午4:00:29 liushiming
  */
-@Service
+@Component
 public class DynamicsRoutingComponent {
 
   private static final PathMatcher pathMatcher = new AntPathMatcher();
 
   @Autowired
-  private ProxyRuleCacheComponent routeCache;
+  private RoutingCacheComponent routeCache;
 
   public void doRouting(HttpRequest httpRequest) {
     String url = httpRequest.uri();

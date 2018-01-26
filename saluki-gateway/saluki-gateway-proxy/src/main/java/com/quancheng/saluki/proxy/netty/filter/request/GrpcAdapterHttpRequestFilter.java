@@ -13,8 +13,6 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
-import com.quancheng.saluki.proxy.netty.filter.FilterOrder;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
@@ -26,6 +24,10 @@ import io.netty.handler.codec.http.HttpResponse;
  */
 public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
 
+  public static HttpRequestFilter newFilter() {
+    return new GrpcAdapterHttpRequestFilter();
+  }
+
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
@@ -34,7 +36,7 @@ public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
 
   @Override
   public int filterOrder() {
-    return FilterOrder.GRPC.getFilterOrder();
+    return RequestFilterOrder.GRPC.getFilterOrder();
   }
 
 }

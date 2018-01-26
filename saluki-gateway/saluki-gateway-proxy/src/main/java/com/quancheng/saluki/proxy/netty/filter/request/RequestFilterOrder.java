@@ -11,13 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.proxy.netty.filter;
+package com.quancheng.saluki.proxy.netty.filter.request;
 
 /**
  * @author liushiming
  * @version FilterOrder.java, v 0.0.1 2018年1月26日 下午4:07:44 liushiming
  */
-public enum FilterOrder {
+public enum RequestFilterOrder {
 
 
   /**
@@ -41,7 +41,7 @@ public enum FilterOrder {
   DUBBO(101);
   private int filterOrder;
 
-  FilterOrder(int filteOrder) {
+  RequestFilterOrder(int filteOrder) {
     this.filterOrder = filteOrder;
   }
 

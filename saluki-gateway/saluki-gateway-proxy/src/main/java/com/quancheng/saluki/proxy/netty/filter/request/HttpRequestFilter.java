@@ -1,4 +1,4 @@
-package  com.quancheng.saluki.proxy.netty.filter;
+package  com.quancheng.saluki.proxy.netty.filter.request;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.quancheng.saluki.proxy.netty.groovy;
+package com.quancheng.saluki.proxy.netty.filter;
 
 import java.io.File;
 import java.io.IOException;

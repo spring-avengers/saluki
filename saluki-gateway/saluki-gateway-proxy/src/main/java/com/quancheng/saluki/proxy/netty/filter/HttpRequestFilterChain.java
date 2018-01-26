@@ -71,6 +71,7 @@ public class HttpRequestFilterChain {
       ChannelHandlerContext channelHandlerContext) {
     for (HttpRequestFilter filter : filters) {
       HttpResponse response = filter.doFilter(originalRequest, httpObject, channelHandlerContext);
+      // 如果一个filter有返回值，将会中断下一个filter，这里需要注意filter的顺序，默认grpc->dubbo
       if (response != null) {
         return response;
       }

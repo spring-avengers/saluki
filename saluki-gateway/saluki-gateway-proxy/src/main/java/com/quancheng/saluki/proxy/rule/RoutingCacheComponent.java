@@ -43,11 +43,9 @@ public class RoutingCacheComponent {
 
   private static final Logger logger = LoggerFactory.getLogger(RoutingCacheComponent.class);
 
-  private static final String DEFAULT_RPC_KEY_SPLIT = "/";
-
   private LoadingCache<String, RouteDO> ROUTE_CACHE;
 
-  private LoadingCache<String, RpcDO> RPC_CACHE;
+  private LoadingCache<Long, RpcDO> RPC_CACHE;
 
   @Autowired
   private RouteDao routeDao;
@@ -72,9 +70,7 @@ public class RoutingCacheComponent {
     // load all rpc
     List<RpcDO> rpcs = rpcDao.list(Maps.newHashMap());
     for (RpcDO rpc : rpcs) {
-      String key = this.buildCacheKey(rpc.getServiceName(), rpc.getMethodName(),
-          rpc.getServiceGroup(), rpc.getServiceVersion());
-      RPC_CACHE.put(key, rpc);
+      RPC_CACHE.put(rpc.getRouteId(), rpc);
     }
   }
 
@@ -84,28 +80,19 @@ public class RoutingCacheComponent {
         .initialCapacity(10) //
         .maximumSize(1000) //
         .recordStats() //
-        .removalListener(new RemovalListener<String, RpcDO>() {
+        .removalListener(new RemovalListener<Long, RpcDO>() {
 
           @Override
-          public void onRemoval(RemovalNotification<String, RpcDO> notification) {
+          public void onRemoval(RemovalNotification<Long, RpcDO> notification) {
             logger
                 .info("remove key:" + notification.getKey() + ",value:" + notification.getValue());
           }
         }) //
-        .build(new CacheLoader<String, RpcDO>() {
+        .build(new CacheLoader<Long, RpcDO>() {
 
           @Override
-          public RpcDO load(String key) throws Exception {
-            String[] fullMethodNames = StringUtils.split(key, DEFAULT_RPC_KEY_SPLIT);
-            if (fullMethodNames.length == 4) {
-              String serviceName = fullMethodNames[0];
-              String methodName = fullMethodNames[1];
-              String serviceGroup = fullMethodNames[2];
-              String serviceVersion = fullMethodNames[3];
-              return rpcDao.getByService(serviceName, methodName, serviceGroup, serviceVersion);
-            } else {
-              return null;
-            }
+          public RpcDO load(Long key) throws Exception {
+            return rpcDao.get(key);
           }
 
         });
@@ -135,13 +122,6 @@ public class RoutingCacheComponent {
         });
   }
 
-  private String buildCacheKey(String serviceName, String methodName, String group,
-      String version) {
-    return serviceName + DEFAULT_RPC_KEY_SPLIT + methodName + DEFAULT_RPC_KEY_SPLIT + group
-        + DEFAULT_RPC_KEY_SPLIT + version;
-  }
-
-
   public RouteDO getRoute(String urlPath) {
     try {
       return ROUTE_CACHE.get(urlPath);
@@ -150,13 +130,17 @@ public class RoutingCacheComponent {
     }
   }
 
-  public RpcDO getRpc(String serviceName, String methodName, String group, String version) {
-    String key = this.buildCacheKey(serviceName, methodName, group, version);
-    try {
-      return RPC_CACHE.get(key);
-    } catch (Throwable e) {
-      return null;
+  public RpcDO getRpc(String urlPath) {
+    RouteDO route = getRoute(urlPath);
+    if (route != null) {
+      Long routeId = route.getId();
+      try {
+        return RPC_CACHE.get(routeId);
+      } catch (Throwable e) {
+        return null;
+      }
     }
+    return null;
   }
 
 

@@ -13,16 +13,33 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
+import com.quancheng.saluki.proxy.config.SpringContextHolder;
+import com.quancheng.saluki.proxy.grpc.DynamicGrpcClient;
+import com.quancheng.saluki.proxy.rule.RoutingCacheComponent;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
+import io.netty.util.CharsetUtil;
 
 /**
  * @author liushiming
  * @version GrpcAdapterHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午4:06:35 liushiming
  */
 public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
+
+  private final DynamicGrpcClient grpcClient = SpringContextHolder.getBean(DynamicGrpcClient.class);
+
+  private final RoutingCacheComponent routeRuleCache =
+      SpringContextHolder.getBean(RoutingCacheComponent.class);
 
   public static HttpRequestFilter newFilter() {
     return new GrpcAdapterHttpRequestFilter();
@@ -31,6 +48,20 @@ public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
+    if (originalRequest instanceof FullHttpRequest) {
+      FullHttpRequest request = (FullHttpRequest) originalRequest;
+      String urlPath = request.uri();
+      RpcDO rpc = routeRuleCache.getRpc(urlPath);
+      String serviceName = rpc.getServiceName();
+      String methodName = rpc.getMethodName();
+      String group = rpc.getServiceGroup();
+      String version = rpc.getServiceVersion();
+      ByteBuf jsonBuf = request.content();
+      String jsonInput = jsonBuf.toString(CharsetUtil.UTF_8);
+      String jsonOutput = grpcClient.call(serviceName, methodName, group, version, jsonInput);
+      return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+          Unpooled.wrappedBuffer(jsonOutput.getBytes(CharsetUtil.UTF_8)));
+    }
     return null;
   }
 

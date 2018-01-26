@@ -26,6 +26,7 @@ public class GroovyCompiler {
 
   private static final GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
 
+  @SuppressWarnings("rawtypes")
   public static Class compile(String sCode) {
     LOG.warn("Compiling filter: " + sCode);
     Class groovyClass = groovyClassLoader.parseClass(sCode);

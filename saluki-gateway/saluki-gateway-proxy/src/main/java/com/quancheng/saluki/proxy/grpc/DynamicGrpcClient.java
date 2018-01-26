@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.ExtensionRegistryLite;
+import com.google.protobuf.Message;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
@@ -33,6 +34,7 @@ import com.quancheng.saluki.core.grpc.service.GenericService;
 import io.grpc.MethodDescriptor;
 import io.grpc.MethodDescriptor.Marshaller;
 import io.grpc.MethodDescriptor.MethodType;
+import io.netty.util.CharsetUtil;
 
 /**
  * @author liushiming
@@ -49,8 +51,11 @@ public class DynamicGrpcClient {
 
   private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 
+  static {
+    JSON2PROTOBUF.setDefaultCharset(CharsetUtil.UTF_8);
+  }
 
-  public Object call(final String serviceName, final String methodName, final String group,
+  public String call(final String serviceName, final String methodName, final String group,
       final String version, final String jsonInput) {
     try {
       Pair<Descriptor, Descriptor> inOutType =
@@ -60,7 +65,9 @@ public class DynamicGrpcClient {
       MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =
           this.createGrpcMethodDescriptor(serviceName, methodName, inPutType, outPutType);
       DynamicMessage message = this.createGrpcDynamicMessage(inPutType, jsonInput);
-      return genricService.$invoke(serviceName, group, version, methodName, methodDesc, message);
+      Message response = (Message) genricService.$invoke(serviceName, group, version, methodName,
+          methodDesc, message);
+      return JSON2PROTOBUF.printToString(response);
     } catch (IOException e) {
       throw new RpcServiceException(String.format(
           "json covert to DynamicMessage failed! the json is :%s, the protobuf type is: %s",

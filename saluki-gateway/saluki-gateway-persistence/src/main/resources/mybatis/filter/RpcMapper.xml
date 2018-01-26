@@ -13,8 +13,8 @@
 	
 	<select id="getByService" resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
-		from gateway_grpc
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		from gateway_rpc
 		where
 		service_name = #{serviceName}
 		and
@@ -29,7 +29,7 @@
 	<select id="list"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
 		<where>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>

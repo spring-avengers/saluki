@@ -29,7 +29,6 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    // TODO Auto-generated method stub
     return null;
   }
 

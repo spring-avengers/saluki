@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.proxy.route;
+package com.quancheng.saluki.proxy.rule;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,6 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
-import com.quancheng.saluki.proxy.cache.ProxyRuleCacheComponent;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpRequest;
@@ -29,7 +28,7 @@ import io.netty.handler.codec.http.HttpRequest;
  * @version RouteService.java, v 0.0.1 2018年1月25日 下午4:00:29 liushiming
  */
 @Service
-public class DynamicsRoutingService {
+public class DynamicsRoutingComponent {
 
   private static final PathMatcher pathMatcher = new AntPathMatcher();
 

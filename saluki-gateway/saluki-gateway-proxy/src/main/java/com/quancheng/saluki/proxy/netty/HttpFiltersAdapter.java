@@ -16,7 +16,7 @@ package com.quancheng.saluki.proxy.netty;
 import java.net.InetSocketAddress;
 
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
-import com.quancheng.saluki.proxy.route.DynamicsRoutingService;
+import com.quancheng.saluki.proxy.rule.DynamicsRoutingComponent;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
@@ -31,12 +31,12 @@ public class HttpFiltersAdapter {
 
   protected final HttpRequest originalRequest;
   protected final ChannelHandlerContext ctx;
-  private final DynamicsRoutingService routeService;
+  private final DynamicsRoutingComponent routeService;
 
   public HttpFiltersAdapter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
     this.originalRequest = originalRequest;
     this.ctx = ctx;
-    this.routeService = SpringContextHolder.getBean(DynamicsRoutingService.class);
+    this.routeService = SpringContextHolder.getBean(DynamicsRoutingComponent.class);
   }
 
   public HttpFiltersAdapter(HttpRequest originalRequest) {

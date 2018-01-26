@@ -39,9 +39,9 @@ import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
  * @version RouteCacheComponent.java, v 0.0.1 2018年1月26日 上午11:25:08 liushiming
  */
 @Component
-public class RouteCacheComponent {
+public class ProxyRuleCacheComponent {
 
-  private static final Logger logger = LoggerFactory.getLogger(RouteCacheComponent.class);
+  private static final Logger logger = LoggerFactory.getLogger(ProxyRuleCacheComponent.class);
 
   private static final String DEFAULT_RPC_KEY_SPLIT = "/";
 

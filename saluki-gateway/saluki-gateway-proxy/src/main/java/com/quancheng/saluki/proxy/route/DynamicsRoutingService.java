@@ -19,7 +19,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
-import com.quancheng.saluki.proxy.cache.RouteCacheComponent;
+import com.quancheng.saluki.proxy.cache.ProxyRuleCacheComponent;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpRequest;
@@ -29,18 +29,16 @@ import io.netty.handler.codec.http.HttpRequest;
  * @version RouteService.java, v 0.0.1 2018年1月25日 下午4:00:29 liushiming
  */
 @Service
-public class RouteService {
+public class DynamicsRoutingService {
 
-  private PathMatcher pathMatcher = new AntPathMatcher();
+  private static final PathMatcher pathMatcher = new AntPathMatcher();
 
   @Autowired
-  private RouteCacheComponent routeCache;
+  private ProxyRuleCacheComponent routeCache;
 
-  private volatile RouteDO route;
-
-  public void dynamicsRouting(HttpRequest httpRequest) {
+  public void doRouting(HttpRequest httpRequest) {
     String url = httpRequest.uri();
-    route = routeCache.getRoute(url);
+    RouteDO route = routeCache.getRoute(url);
     if (route != null) {
       String expectPath = route.getFromPath();
       String expectPathPattern = route.getFromPathpattern();
@@ -55,6 +53,5 @@ public class RouteService {
 
     }
   }
-
 
 }

@@ -49,7 +49,8 @@ public class FilterServiceImpl implements FilterService {
     List<RouteDO> routes = routeDao.list(query);
     List<RouteDto> dtos = Lists.newArrayListWithCapacity(routes.size());
     for (RouteDO routeDo : routes) {
-      RouteDto dto = RouteDto.buildRouteDto(routeDo);
+      RpcDO rpcDO = rpcDao.get(routeDo.getId());
+      RouteDto dto = RouteDto.buildRouteDto(routeDo, rpcDO);
       dtos.add(dto);
     }
     PageDO<RouteDto> page = new PageDO<>();

@@ -29,17 +29,6 @@ function load() {
 									title : '序号'
 								},
 								{
-									field : 'httpRest',
-									title : 'httpRest',
-									formatter : function(value, row, index) {
-										if (value) {
-											return "是";
-										} else {
-											return "否"
-										}
-									}
-								},
-								{
 									field : 'fromPath',
 									title : '源路径'
 								},
@@ -76,7 +65,7 @@ function load() {
 									}
 								} ],
 						onExpandRow : function(index, row, $detail) {
-							if (!row.httpRest) {
+							if (row.rpc) {
 								chirdTable(index, row, $detail);
 							}
 						}
@@ -86,6 +75,7 @@ function reLoad() {
 	$('#zuulTable').bootstrapTable('refresh');
 }
 function chirdTable(index, row, $detail) {
+	alert(row.serviceName)
 	var cur_table = $detail.html('<table></table>').find('table');
 	var rows = [];
 	rows.push(row);

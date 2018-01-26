@@ -193,7 +193,7 @@ public class RouteDto implements Serializable {
     return rpcDO;
   }
 
-  public static RouteDto buildRouteDto(RouteDO route, RpcDO grpc) {
+  public static RouteDto buildRouteDto(RouteDO route, RpcDO rpc) {
     RouteDto routeDto = new RouteDto();
     routeDto.setRouteId(route.getId());
     routeDto.setFromPath(route.getFromPath());
@@ -203,13 +203,15 @@ public class RouteDto implements Serializable {
     routeDto.setToHostport(route.getToHostport());
     routeDto.setToPath(route.getToPath());
 
-    routeDto.setServiceName(grpc.getServiceName());
-    routeDto.setMethodName(grpc.getMethodName());
-    routeDto.setServiceGroup(grpc.getServiceName());
-    routeDto.setServiceVersion(grpc.getServiceVersion());
-    routeDto.setProtoContext(grpc.getProtoContext());
-    routeDto.setProtoRep(grpc.getProtoReq());
-    routeDto.setProtoRep(grpc.getProtoRep());
+    if (rpc != null) {
+      routeDto.setServiceName(rpc.getServiceName());
+      routeDto.setMethodName(rpc.getMethodName());
+      routeDto.setServiceGroup(rpc.getServiceName());
+      routeDto.setServiceVersion(rpc.getServiceVersion());
+      routeDto.setProtoContext(rpc.getProtoContext());
+      routeDto.setProtoRep(rpc.getProtoReq());
+      routeDto.setProtoRep(rpc.getProtoRep());
+    }
     return routeDto;
   }
 

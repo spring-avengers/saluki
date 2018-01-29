@@ -53,6 +53,7 @@ public class DynamicDubboClient extends RpcDynamicClient {
       final String methodName = rpcDo.getMethodName();
       final String group = rpcDo.getServiceGroup();
       final String version = rpcDo.getServiceVersion();
+      final String paramType = rpcDo.getInputParam();
       ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>();
       reference.setApplication(applicationConfig);
       reference.setRegistry(registryConfig);
@@ -63,7 +64,7 @@ public class DynamicDubboClient extends RpcDynamicClient {
       reference.setVersion(version);
       ReferenceConfigCache cache = ReferenceConfigCache.getCache();
       GenericService genericService = cache.get(reference);
-      Pair<String[], Object[]> typeAndValue = paramTypeAndValue(rpcDo.getInputParam(), jsonInput);
+      Pair<String[], Object[]> typeAndValue = paramTypeAndValue(paramType, jsonInput);
       Object response =
           genericService.$invoke(methodName, typeAndValue.getLeft(), typeAndValue.getRight());
       return JSON.toJSONString(response);

@@ -140,6 +140,7 @@ public class RpcDO implements Serializable {
   public RpcDO copy() {
     RpcDO rpcDo = new RpcDO();
     rpcDo.setId(this.id);
+    rpcDo.setRouteId(this.routeId);
     rpcDo.setServiceName(this.getServiceName());
     rpcDo.setMethodName(this.methodName);
     rpcDo.setServiceGroup(this.serviceGroup);

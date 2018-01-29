@@ -138,7 +138,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
-				<version>1.2.31</version>
+				<version>1.2.45</version>
 			</dependency>
 			<!-- ehchache -->
 			<dependency>

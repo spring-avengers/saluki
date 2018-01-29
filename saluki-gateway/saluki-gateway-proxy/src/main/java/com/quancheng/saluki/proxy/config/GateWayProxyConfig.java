@@ -13,13 +13,16 @@
  */
 package com.quancheng.saluki.proxy.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.ProtocolConfig;
+import com.alibaba.dubbo.config.RegistryConfig;
 import com.quancheng.saluki.boot.SalukiReference;
-import com.quancheng.saluki.core.grpc.service.GenericService;
-import com.quancheng.saluki.proxy.grpc.DynamicGrpcClient;
+import com.quancheng.saluki.proxy.protocol.grpc.DynamicGrpcClient;
 
 /**
  * @author liushiming
@@ -29,15 +32,49 @@ import com.quancheng.saluki.proxy.grpc.DynamicGrpcClient;
 public class GateWayProxyConfig {
 
   @Configuration
-  @ConditionalOnClass(GenericService.class)
+  @ConditionalOnClass(com.quancheng.saluki.core.grpc.service.GenericService.class)
   protected class GrpcConfig {
 
     @SalukiReference
-    protected GenericService generciService;
+    protected com.quancheng.saluki.core.grpc.service.GenericService generciService;
 
     @Bean
     protected DynamicGrpcClient dynamicGrpcClient() {
       return new DynamicGrpcClient(generciService);
+    }
+
+  }
+  @Configuration
+  @ConditionalOnClass(com.alibaba.dubbo.rpc.service.GenericService.class)
+  protected class DubboCoonfig {
+    @Value("${saluki.dubbo.registryAddress}")
+    private String registry;
+    @Value("${saluki.dubbo.protocol}")
+    private String protocol = "dubbo";
+    @Value("${saluki.dubbo.threads}")
+    private int threads = 200;
+
+    @Bean
+    protected ApplicationConfig dubboApplicationConfig() {
+      ApplicationConfig appConfig = new ApplicationConfig();
+      appConfig.setName("gateway_proxy");
+      return appConfig;
+    }
+
+    @Bean
+    protected ProtocolConfig dubboProtocolConfig() {
+      ProtocolConfig protocolConfig = new ProtocolConfig();
+      protocolConfig.setName(protocol);
+      protocolConfig.setThreads(threads);
+      return protocolConfig;
+    }
+
+    @Bean
+    protected RegistryConfig dubboRegistryConfig() {
+      RegistryConfig registryConfig = new RegistryConfig();
+      registryConfig.setAddress(registry);
+      registryConfig.setClient("curator");
+      return registryConfig;
     }
 
   }

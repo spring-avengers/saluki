@@ -1,5 +1,5 @@
 
-package com.quancheng.saluki.proxy.grpc;
+package com.quancheng.saluki.proxy.protocol.grpc;
 
 import com.google.common.base.Joiner;
 

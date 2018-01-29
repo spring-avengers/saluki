@@ -15,7 +15,7 @@ package com.quancheng.saluki.proxy.netty.filter.request;
 
 import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
-import com.quancheng.saluki.proxy.grpc.DynamicGrpcClient;
+import com.quancheng.saluki.proxy.protocol.grpc.DynamicGrpcClient;
 import com.quancheng.saluki.proxy.rule.RoutingCacheComponent;
 
 import io.netty.buffer.ByteBuf;
@@ -55,7 +55,7 @@ public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
       if (rpc != null) {
         ByteBuf jsonBuf = request.content();
         String jsonInput = jsonBuf.toString(CharsetUtil.UTF_8);
-        String jsonOutput = grpcClient.call(rpc, jsonInput);
+        String jsonOutput = grpcClient.doRemoteCall(rpc, jsonInput);
         return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
             Unpooled.wrappedBuffer(jsonOutput.getBytes(CharsetUtil.UTF_8)));
       } else {

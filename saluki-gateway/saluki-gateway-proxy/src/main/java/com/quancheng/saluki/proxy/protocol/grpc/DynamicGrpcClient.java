@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.proxy.grpc;
+package com.quancheng.saluki.proxy.protocol.grpc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,6 +28,7 @@ import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
 import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
+import com.quancheng.saluki.proxy.protocol.RpcDynamicClient;
 
 import io.grpc.MethodDescriptor;
 import io.grpc.MethodDescriptor.Marshaller;
@@ -38,7 +39,7 @@ import io.netty.util.CharsetUtil;
  * @author liushiming
  * @version DynamicGrpcClient1.java, v 0.0.1 2018年1月5日 下午5:38:46 liushiming
  */
-public class DynamicGrpcClient {
+public class DynamicGrpcClient extends RpcDynamicClient {
 
   private final GenericService genricService;
 
@@ -50,10 +51,12 @@ public class DynamicGrpcClient {
   }
 
   public DynamicGrpcClient(GenericService genricService) {
+    super();
     this.genricService = genricService;
   }
 
-  public String call(final RpcDO rpcDo, final String jsonInput) {
+  @Override
+  public String doRemoteCall(final RpcDO rpcDo, final String jsonInput) {
     try {
 
       final String serviceName = rpcDo.getServiceName();
@@ -73,7 +76,7 @@ public class DynamicGrpcClient {
       throw new RpcServiceException(String.format(
           "json covert to DynamicMessage failed! the json is :%s, the protobuf type is: %s",
           jsonInput), e);
-    } catch (Exception e) {
+    } catch (Throwable e) {
       throw new RpcFrameworkException(String.format(
           "service definition is wrong,please check the proto file you update,service is %s, method is %s",
           rpcDo.getServiceName(), rpcDo.getMethodName()), e);

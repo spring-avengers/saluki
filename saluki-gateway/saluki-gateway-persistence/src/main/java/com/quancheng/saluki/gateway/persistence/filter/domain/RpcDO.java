@@ -37,11 +37,15 @@ public class RpcDO implements Serializable {
 
   private String serviceVersion;
 
+  /**
+   * grpc input 参数
+   */
   private byte[] protoContext;
 
-  private byte[] protoReq;
-
-  private byte[] protoRep;
+  /**
+   * dubbo input 参数
+   */
+  private String inputParam;
 
   private Timestamp gmtCreate;
 
@@ -79,7 +83,13 @@ public class RpcDO implements Serializable {
     this.methodName = methodName;
   }
 
+  public String getInputParam() {
+    return inputParam;
+  }
 
+  public void setInputParam(String inputParam) {
+    this.inputParam = inputParam;
+  }
 
   public String getServiceGroup() {
     return serviceGroup;
@@ -103,22 +113,6 @@ public class RpcDO implements Serializable {
 
   public void setProtoContext(byte[] protoContext) {
     this.protoContext = protoContext;
-  }
-
-  public byte[] getProtoReq() {
-    return protoReq;
-  }
-
-  public void setProtoReq(byte[] protoReq) {
-    this.protoReq = protoReq;
-  }
-
-  public byte[] getProtoRep() {
-    return protoRep;
-  }
-
-  public void setProtoRep(byte[] protoRep) {
-    this.protoRep = protoRep;
   }
 
   public Timestamp getGmtCreate() {
@@ -146,8 +140,6 @@ public class RpcDO implements Serializable {
     rpcDo.setServiceGroup(this.serviceGroup);
     rpcDo.setServiceVersion(this.serviceVersion);
     rpcDo.setProtoContext(this.protoContext);
-    rpcDo.setProtoReq(this.protoReq);
-    rpcDo.setProtoRep(this.protoRep);
     rpcDo.setGmtCreate(this.gmtCreate);
     rpcDo.setGmtModified(this.gmtModified);
     return rpcDo;
@@ -157,9 +149,8 @@ public class RpcDO implements Serializable {
   public String toString() {
     return "RpcDO [id=" + id + ", routeId=" + routeId + ", serviceName=" + serviceName
         + ", methodName=" + methodName + ", serviceGroup=" + serviceGroup + ", serviceVersion="
-        + serviceVersion + ", protoContext=" + Arrays.toString(protoContext) + ", protoReq="
-        + Arrays.toString(protoReq) + ", protoRep=" + Arrays.toString(protoRep) + ", gmtCreate="
-        + gmtCreate + ", gmtModified=" + gmtModified + "]";
+        + serviceVersion + ", protoContext=" + Arrays.toString(protoContext) + ", inputParam="
+        + inputParam + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
 
 

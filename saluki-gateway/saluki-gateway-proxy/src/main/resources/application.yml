@@ -1,8 +1,3 @@
-spring:
-  profiles:
-    active: dev
-  application:
-    name: example-client
 server:
   port: 9000
 mybatis:
@@ -12,3 +7,5 @@ mybatis:
 saluki:
   grpc:
     registryAddress: localhost:8500
+  dubbo:
+    registryAddress: zookeeper://224.0.0.0:1111

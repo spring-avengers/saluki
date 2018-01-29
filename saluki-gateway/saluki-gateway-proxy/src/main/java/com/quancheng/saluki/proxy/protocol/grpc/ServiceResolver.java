@@ -1,4 +1,4 @@
-package com.quancheng.saluki.proxy.grpc;
+package com.quancheng.saluki.proxy.protocol.grpc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

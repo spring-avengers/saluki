@@ -93,10 +93,20 @@
 
 		<!-- dubbo support -->
 		<dependency>
-			<groupId>com.alibaba.spring.boot</groupId>
-			<artifactId>dubbo-spring-boot-starter</artifactId>
-			<version>1.0.0</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>2.6.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+
 
 		<!-- spring cloud support -->
 		<!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-consul-discovery</artifactId> 

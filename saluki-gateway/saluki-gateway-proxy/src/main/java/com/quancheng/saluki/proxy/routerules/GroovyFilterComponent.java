@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
  * @version FilterCacheComponent.java, v 0.0.1 2018年1月26日 下午4:42:26 liushiming
  */
 @Component
-public class DynamicsFilterComponent {
+public class GroovyFilterComponent {
 
 
   private AtomicBoolean requestChanged = new AtomicBoolean(true);

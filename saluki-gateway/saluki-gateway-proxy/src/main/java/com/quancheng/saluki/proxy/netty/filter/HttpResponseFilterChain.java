@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
 import com.quancheng.saluki.proxy.netty.filter.response.ClickjackHttpResponseFilter;
 import com.quancheng.saluki.proxy.netty.filter.response.HttpResponseFilter;
-import com.quancheng.saluki.proxy.routerules.DynamicsFilterComponent;
+import com.quancheng.saluki.proxy.routerules.GroovyFilterComponent;
 
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -24,8 +24,8 @@ public class HttpResponseFilterChain {
   }
 
   public static HttpResponseFilterChain responseFilterChain() {
-    DynamicsFilterComponent filterComponent =
-        SpringContextHolder.getBean(DynamicsFilterComponent.class);
+    GroovyFilterComponent filterComponent =
+        SpringContextHolder.getBean(GroovyFilterComponent.class);
     if (filterComponent.responseChanged()) {
       List<String> groovyFilters = filterComponent.loadResponseGroovyCode();
       for (String groovyFilter : groovyFilters) {

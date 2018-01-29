@@ -13,16 +13,26 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author liushiming
  * @version BlackIpListHttpRequesFilter.java, v 0.0.1 2018年1月26日 下午3:57:43 liushiming
  */
 public class BlackIpHttpRequesFilter extends HttpRequestFilter {
+
+  private static final Logger logger = LoggerFactory.getLogger(BlackIpHttpRequesFilter.class);
 
   public static HttpRequestFilter newFilter() {
     return new BlackIpHttpRequesFilter();
@@ -31,6 +41,20 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
+    if (httpObject instanceof HttpRequest) {
+      logger.debug("filter:{}", this.getClass().getName());
+      HttpRequest httpRequest = (HttpRequest) httpObject;
+      String realIp = getRealIp(httpRequest, channelHandlerContext);
+      List<Pattern> patterns = super.getRule(BlackIpHttpRequesFilter.class);
+      for (Pattern pat : patterns) {
+        Matcher matcher = pat.matcher(realIp);
+        if (matcher.find()) {
+          writeFilterLog(logger, realIp, BlackIpHttpRequesFilter.class.getSimpleName(),
+              pat.toString());
+          return createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+        }
+      }
+    }
     return null;
   }
 
@@ -38,5 +62,7 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
   public int filterOrder() {
     return RequestFilterOrder.BLACKIP.getFilterOrder();
   }
+
+
 
 }

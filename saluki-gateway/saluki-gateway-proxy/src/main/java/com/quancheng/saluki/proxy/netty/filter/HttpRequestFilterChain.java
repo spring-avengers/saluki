@@ -16,7 +16,7 @@ import com.quancheng.saluki.proxy.netty.filter.request.ScannerHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.URLParamHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.UaHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.WriteIpHttpRequestFilter;
-import com.quancheng.saluki.proxy.routerules.DynamicsFilterComponent;
+import com.quancheng.saluki.proxy.routerules.GroovyFilterComponent;
 import com.quancheng.saluki.proxy.netty.filter.request.BlackURLHttpRequestFilter;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -43,8 +43,8 @@ public class HttpRequestFilterChain {
   }
 
   public static HttpRequestFilterChain requestFilterChain() {
-    DynamicsFilterComponent filterComponent =
-        SpringContextHolder.getBean(DynamicsFilterComponent.class);
+    GroovyFilterComponent filterComponent =
+        SpringContextHolder.getBean(GroovyFilterComponent.class);
     if (filterComponent.requestChanged()) {
       List<String> groovyFilters = filterComponent.loadRequestGroovyCode();
       for (String groovyFilter : groovyFilters) {

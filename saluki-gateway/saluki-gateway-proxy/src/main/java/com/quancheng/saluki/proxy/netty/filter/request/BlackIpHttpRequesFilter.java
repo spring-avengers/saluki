@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.quancheng.saluki.proxy.netty.filter.FilterUtil;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
@@ -32,8 +31,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
  */
 public class BlackIpHttpRequesFilter extends HttpRequestFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(BlackIpHttpRequesFilter.class);
-
   public static HttpRequestFilter newFilter() {
     return new BlackIpHttpRequesFilter();
   }
@@ -42,15 +39,13 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
     if (httpObject instanceof HttpRequest) {
-      logger.debug("filter:{}", this.getClass().getName());
       HttpRequest httpRequest = (HttpRequest) httpObject;
-      String realIp = getRealIp(httpRequest, channelHandlerContext);
+      String realIp = FilterUtil.getRealIp(httpRequest, channelHandlerContext);
       List<Pattern> patterns = super.getRule(BlackIpHttpRequesFilter.class);
       for (Pattern pat : patterns) {
         Matcher matcher = pat.matcher(realIp);
         if (matcher.find()) {
-          writeFilterLog(logger, realIp, BlackIpHttpRequesFilter.class.getSimpleName(),
-              pat.toString());
+          writeFilterLog(realIp, BlackIpHttpRequesFilter.class, pat.toString());
           return createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
         }
       }

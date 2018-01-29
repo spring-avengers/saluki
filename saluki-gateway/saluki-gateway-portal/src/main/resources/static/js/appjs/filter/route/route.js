@@ -33,10 +33,6 @@ function load() {
 									title : '源路径'
 								},
 								{
-									field : 'fromPathpattern',
-									title : '源路径匹配'
-								},
-								{
 									field : 'toHostport',
 									title : '目标地址'
 								},
@@ -72,7 +68,7 @@ function load() {
 					});
 }
 function reLoad() {
-	$('#zuulTable').bootstrapTable('refresh');
+	$('#routeTable').bootstrapTable('refresh');
 }
 function chirdTable(index, row, $detail) {
 	var cur_table = $detail.html('<table></table>').find('table');
@@ -101,7 +97,15 @@ function chirdTable(index, row, $detail) {
 		}, {
 			field : 'serviceVersion',
 			title : '版本'
-		} ],
+		}, {
+			field : 'inputParam',
+			title : '入参类型（dubbo）'
+		}, {
+			formatter : function(value, row, index) {
+				return "N/A";
+			},
+			title : '入参类型（grpc）'
+		}, ],
 		data : rows
 	});
 }

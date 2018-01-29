@@ -15,10 +15,12 @@ package com.quancheng.saluki.proxy.netty;
 
 import java.net.InetSocketAddress;
 
+import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
-import com.quancheng.saluki.proxy.rule.DynamicsRoutingComponent;
+import com.quancheng.saluki.proxy.routerules.RoutingCacheComponent;
 
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -31,12 +33,12 @@ public class HttpFiltersAdapter {
 
   protected final HttpRequest originalRequest;
   protected final ChannelHandlerContext ctx;
-  private final DynamicsRoutingComponent routeService;
+  private final RoutingCacheComponent routeCaceh;
 
   public HttpFiltersAdapter(HttpRequest originalRequest, ChannelHandlerContext ctx) {
     this.originalRequest = originalRequest;
     this.ctx = ctx;
-    this.routeService = SpringContextHolder.getBean(DynamicsRoutingComponent.class);
+    this.routeCaceh = SpringContextHolder.getBean(RoutingCacheComponent.class);
   }
 
   public HttpFiltersAdapter(HttpRequest originalRequest) {
@@ -54,8 +56,17 @@ public class HttpFiltersAdapter {
   }
 
   // dynamics route
-  public void dynamicsRouting(HttpRequest originalRequest) {
-    routeService.doRouting(originalRequest);
+  public void dynamicsRouting(HttpRequest httpRequest) {
+    String actorPath = httpRequest.uri();
+    RouteDO route = routeCaceh.getRoute(actorPath);
+    if (route != null) {
+      String targetPath = route.getToPath();
+      String targetHostAndPort = route.getToHostport();
+      if (targetHostAndPort != null)
+        httpRequest.headers().set(HttpHeaderNames.HOST, targetHostAndPort);
+      if (targetPath != null)
+        httpRequest.setUri(targetPath);
+    }
   }
 
   public void proxyToServerRequestSending() {}

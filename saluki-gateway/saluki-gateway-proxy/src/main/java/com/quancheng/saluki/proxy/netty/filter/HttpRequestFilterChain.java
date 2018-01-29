@@ -16,8 +16,8 @@ import com.quancheng.saluki.proxy.netty.filter.request.ScannerHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.URLParamHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.UaHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.WriteIpHttpRequestFilter;
+import com.quancheng.saluki.proxy.routerules.DynamicsFilterComponent;
 import com.quancheng.saluki.proxy.netty.filter.request.BlackURLHttpRequestFilter;
-import com.quancheng.saluki.proxy.rule.DynamicsFilterComponent;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;

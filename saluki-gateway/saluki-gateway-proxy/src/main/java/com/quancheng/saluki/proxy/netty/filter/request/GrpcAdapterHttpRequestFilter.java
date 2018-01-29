@@ -16,7 +16,7 @@ package com.quancheng.saluki.proxy.netty.filter.request;
 import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
 import com.quancheng.saluki.proxy.protocol.grpc.DynamicGrpcClient;
-import com.quancheng.saluki.proxy.rule.RoutingCacheComponent;
+import com.quancheng.saluki.proxy.routerules.RoutingCacheComponent;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

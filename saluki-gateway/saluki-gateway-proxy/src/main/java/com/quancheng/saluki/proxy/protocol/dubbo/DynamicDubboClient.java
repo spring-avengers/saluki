@@ -20,7 +20,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
-import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.utils.ReferenceConfigCache;
@@ -40,7 +39,7 @@ public class DynamicDubboClient extends RpcDynamicClient {
 
   private final RegistryConfig registryConfig;
 
-  public DynamicDubboClient(ApplicationConfig applicationConfig, ProtocolConfig protocolConfig,
+  public DynamicDubboClient(final ApplicationConfig applicationConfig,
       RegistryConfig registryConfig) {
     super();
     this.applicationConfig = applicationConfig;

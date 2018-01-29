@@ -48,7 +48,7 @@ public class GrpcAdapterHttpRequestFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    if (originalRequest instanceof FullHttpRequest) {
+    if (originalRequest instanceof FullHttpRequest && grpcClient != null) {
       FullHttpRequest request = (FullHttpRequest) originalRequest;
       String urlPath = request.uri();
       RpcDO rpc = routeRuleCache.getRpc(urlPath);

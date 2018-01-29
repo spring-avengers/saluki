@@ -6,14 +6,14 @@
 	<select id="get"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`input_param`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
 		where route_id = #{routeId}
 	</select>
 	
 	<select id="getByService" resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`input_param`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
 		where
 		service_name = #{serviceName}
@@ -29,7 +29,7 @@
 	<select id="list"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO">
 		select
-		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`proto_req`,`proto_rep`,`gmt_create`,`gmt_modified`
+		`id`,`route_id`,`service_name`,`method_name`,`service_group`,`service_version`,`proto_context`,`input_param`,`gmt_create`,`gmt_modified`
 		from gateway_rpc
 		<where>
 			<if test="serviceName != null and serviceName != ''"> and service_name = #{serviceName} </if>
@@ -61,8 +61,7 @@
 		`service_group`,
 		`service_version`,
 		`proto_context`,
-		`proto_req`,
-		`proto_rep`,
+		`input_param`,
 		`gmt_create`,
 		`gmt_modified`
 		)
@@ -74,8 +73,7 @@
 		#{serviceGroup},
 		#{serviceVersion},
 		#{protoContext},
-		#{protoReq},
-		#{protoRep},
+		#{inputParam},
 		sysdate(),
 		sysdate()
 		)
@@ -90,8 +88,7 @@
 			<if test="serviceGroup != null and serviceGroup != ''">`service_group`=#{serviceGroup},</if>
 			<if test="serviceVersion != null and serviceVersion != ''">`service_version`=#{serviceVersion},</if>
 			<if test="protoContext != null and protoContext != ''">`proto_context` =#{protoContext},</if>
-			<if test="protoReq != null and protoReq != ''">`proto_req`=#{protoReq},</if>
-			<if test="protoRep != null and protoRep != ''">`proto_rep`=#{protoRep},</if>
+			<if test="inputParam != null and inputParam != ''">`input_param`=#{inputParam},</if>
 			`gmt_modified`=sysdate()
 		</set>
 		where id = #{id}

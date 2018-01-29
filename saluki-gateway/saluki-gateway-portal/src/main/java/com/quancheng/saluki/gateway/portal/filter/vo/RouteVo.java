@@ -49,6 +49,8 @@ public class RouteVo implements Serializable {
 
   private String serviceFileName;
 
+  private String inputParam;
+
   public Long getRouteId() {
     return routeId;
   }
@@ -145,11 +147,19 @@ public class RouteVo implements Serializable {
     this.serviceFileName = serviceFileName;
   }
 
+
+  public String getInputParam() {
+    return inputParam;
+  }
+
+  public void setInputParam(String inputParam) {
+    this.inputParam = inputParam;
+  }
+
   public RouteDto buildRouteDto() {
     RouteDto routeDto = new RouteDto();
     routeDto.setRouteId(this.routeId);
     routeDto.setFromPath(this.fromPath);
-    routeDto.setFromPathpattern(this.fromPathpattern);
     routeDto.setServiceId(this.serviceId);
     routeDto.setRpc(this.rpc);
     routeDto.setToHostport(this.toHostport);
@@ -159,6 +169,7 @@ public class RouteVo implements Serializable {
     routeDto.setMethodName(this.methodName);
     routeDto.setServiceGroup(this.serviceGroup);
     routeDto.setServiceVersion(this.serviceVersion);
+    routeDto.setInputParam(this.inputParam);
     return routeDto;
   }
 
@@ -166,7 +177,6 @@ public class RouteVo implements Serializable {
     RouteVo routeVo = new RouteVo();
     routeVo.setRouteId(routeDto.getRouteId());
     routeVo.setFromPath(routeDto.getFromPath());
-    routeVo.setFromPathpattern(routeDto.getFromPathpattern());
     routeVo.setServiceId(routeDto.getServiceId());
     routeVo.setRpc(routeDto.getRpc());
     routeVo.setToHostport(routeDto.getToHostport());
@@ -176,6 +186,7 @@ public class RouteVo implements Serializable {
     routeVo.setMethodName(routeDto.getMethodName());
     routeVo.setServiceGroup(routeDto.getServiceGroup());
     routeVo.setServiceVersion(routeDto.getServiceVersion());
+    routeVo.setInputParam(routeDto.getInputParam());
     return routeVo;
   }
 

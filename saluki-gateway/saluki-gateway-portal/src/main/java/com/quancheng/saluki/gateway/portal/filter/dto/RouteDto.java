@@ -30,8 +30,6 @@ public class RouteDto implements Serializable {
 
   private String fromPath;
 
-  private String fromPathpattern;
-
   private String toHostport;
 
   private String toPath;
@@ -50,9 +48,7 @@ public class RouteDto implements Serializable {
 
   private byte[] protoContext;
 
-  private byte[] protoReq;
-
-  private byte[] protoRep;
+  private String inputParam;
 
   public String getFromPath() {
     return fromPath;
@@ -62,13 +58,6 @@ public class RouteDto implements Serializable {
     this.fromPath = fromPath;
   }
 
-  public String getFromPathpattern() {
-    return fromPathpattern;
-  }
-
-  public void setFromPathpattern(String fromPathpattern) {
-    this.fromPathpattern = fromPathpattern;
-  }
 
   public String getToHostport() {
     return toHostport;
@@ -142,22 +131,6 @@ public class RouteDto implements Serializable {
     this.protoContext = protoContext;
   }
 
-  public byte[] getProtoReq() {
-    return protoReq;
-  }
-
-  public void setProtoReq(byte[] protoReq) {
-    this.protoReq = protoReq;
-  }
-
-  public byte[] getProtoRep() {
-    return protoRep;
-  }
-
-  public void setProtoRep(byte[] protoRep) {
-    this.protoRep = protoRep;
-  }
-
   public Long getRouteId() {
     return routeId;
   }
@@ -166,13 +139,20 @@ public class RouteDto implements Serializable {
     this.routeId = routeId;
   }
 
+  public String getInputParam() {
+    return inputParam;
+  }
+
+  public void setInputParam(String inputParam) {
+    this.inputParam = inputParam;
+  }
+
   public RouteDO buildRoute() {
     RouteDO routeDo = new RouteDO();
     if (this.routeId != null && this.routeId != 0) {
       routeDo.setId(this.routeId);
     }
     routeDo.setFromPath(this.fromPath);
-    routeDo.setFromPathpattern(this.fromPathpattern);
     routeDo.setServiceId(this.serviceId);
     routeDo.setToHostport(this.toHostport);
     routeDo.setToPath(this.toPath);
@@ -187,8 +167,7 @@ public class RouteDto implements Serializable {
     rpcDO.setServiceGroup(this.serviceGroup);
     rpcDO.setServiceVersion(this.serviceVersion);
     rpcDO.setProtoContext(this.protoContext);
-    rpcDO.setProtoRep(this.protoReq);
-    rpcDO.setProtoRep(this.protoRep);
+    rpcDO.setInputParam(this.inputParam);
     rpcDO.setRouteId(this.routeId);
     return rpcDO;
   }
@@ -197,7 +176,6 @@ public class RouteDto implements Serializable {
     RouteDto routeDto = new RouteDto();
     routeDto.setRouteId(route.getId());
     routeDto.setFromPath(route.getFromPath());
-    routeDto.setFromPathpattern(route.getFromPathpattern());
     routeDto.setServiceId(route.getServiceId());
     routeDto.setRpc(route.getRpc());
     routeDto.setToHostport(route.getToHostport());
@@ -209,8 +187,7 @@ public class RouteDto implements Serializable {
       routeDto.setServiceGroup(rpc.getServiceName());
       routeDto.setServiceVersion(rpc.getServiceVersion());
       routeDto.setProtoContext(rpc.getProtoContext());
-      routeDto.setProtoRep(rpc.getProtoReq());
-      routeDto.setProtoRep(rpc.getProtoRep());
+      routeDto.setInputParam(rpc.getInputParam());
     }
     return routeDto;
   }
@@ -219,7 +196,6 @@ public class RouteDto implements Serializable {
     RouteDto routeDto = new RouteDto();
     routeDto.setRouteId(route.getId());
     routeDto.setFromPath(route.getFromPath());
-    routeDto.setFromPathpattern(route.getFromPathpattern());
     routeDto.setServiceId(route.getServiceId());
     routeDto.setRpc(route.getRpc());
     routeDto.setToHostport(route.getToHostport());

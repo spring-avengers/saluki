@@ -142,6 +142,7 @@ public class RpcDO implements Serializable {
     rpcDo.setProtoContext(this.protoContext);
     rpcDo.setGmtCreate(this.gmtCreate);
     rpcDo.setGmtModified(this.gmtModified);
+    rpcDo.setInputParam(this.inputParam);
     return rpcDo;
   }
 

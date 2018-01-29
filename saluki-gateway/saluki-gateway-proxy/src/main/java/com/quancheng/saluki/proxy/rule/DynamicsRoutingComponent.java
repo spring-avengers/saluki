@@ -15,8 +15,6 @@ package com.quancheng.saluki.proxy.rule;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 
 import com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO;
 
@@ -30,26 +28,20 @@ import io.netty.handler.codec.http.HttpRequest;
 @Component
 public class DynamicsRoutingComponent {
 
-  private static final PathMatcher pathMatcher = new AntPathMatcher();
 
   @Autowired
   private RoutingCacheComponent routeCache;
 
   public void doRouting(HttpRequest httpRequest) {
-    String url = httpRequest.uri();
-    RouteDO route = routeCache.getRoute(url);
+    String actorPath = httpRequest.uri();
+    RouteDO route = routeCache.getRoute(actorPath);
     if (route != null) {
-      String expectPath = route.getFromPath();
-      String expectPathPattern = route.getFromPathpattern();
       String targetPath = route.getToPath();
       String targetHostAndPort = route.getToHostport();
-      if (expectPath.equals(url) || pathMatcher.match(expectPathPattern, url)) {
-        if (targetHostAndPort != null)
-          httpRequest.headers().set(HttpHeaderNames.HOST, targetHostAndPort);
-        if (targetPath != null)
-          httpRequest.setUri(targetPath);
-      }
-
+      if (targetHostAndPort != null)
+        httpRequest.headers().set(HttpHeaderNames.HOST, targetHostAndPort);
+      if (targetPath != null)
+        httpRequest.setUri(targetPath);
     }
   }
 

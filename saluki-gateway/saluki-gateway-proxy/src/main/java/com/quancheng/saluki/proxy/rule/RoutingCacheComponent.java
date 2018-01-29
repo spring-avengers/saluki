@@ -14,14 +14,16 @@
 package com.quancheng.saluki.proxy.rule;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -43,6 +45,8 @@ public class RoutingCacheComponent {
 
   private static final Logger logger = LoggerFactory.getLogger(RoutingCacheComponent.class);
 
+  private static final PathMatcher pathMatcher = new AntPathMatcher();
+
   private LoadingCache<String, RouteDO> ROUTE_CACHE;
 
   private LoadingCache<Long, RpcDO> RPC_CACHE;
@@ -60,12 +64,9 @@ public class RoutingCacheComponent {
     // load all route
     List<RouteDO> routes = routeDao.list(Maps.newHashMap());
     for (RouteDO route : routes) {
-      String path = route.getFromPath();
-      String pathpattern = route.getFromPathpattern();
-      if (StringUtils.isNotEmpty(path))
-        ROUTE_CACHE.put(path, route);
-      if (StringUtils.isNotEmpty(pathpattern))
-        ROUTE_CACHE.put(pathpattern, route);
+      RouteDO routeCopy = route.copy();
+      String path = routeCopy.getFromPath();
+      ROUTE_CACHE.put(path, routeCopy);
     }
     // load all rpc
     List<RpcDO> rpcs = rpcDao.list(Maps.newHashMap());
@@ -126,16 +127,23 @@ public class RoutingCacheComponent {
         });
   }
 
-  public RouteDO getRoute(String urlPath) {
-    try {
-      return ROUTE_CACHE.get(urlPath);
-    } catch (Throwable e) {
-      return null;
+  public RouteDO getRoute(String actorPath) {
+    Set<String> allRoutePath = ROUTE_CACHE.asMap().keySet();
+    for (String path : allRoutePath) {
+      if (path.equals(actorPath) || pathMatcher.match(path, actorPath)) {
+        try {
+          return ROUTE_CACHE.get(path);
+        } catch (Throwable e) {
+          return null;
+        }
+      }
     }
+    return null;
+
   }
 
-  public RpcDO getRpc(String urlPath) {
-    RouteDO route = getRoute(urlPath);
+  public RpcDO getRpc(String actorPath) {
+    RouteDO route = getRoute(actorPath);
     if (route != null) {
       Long routeId = route.getId();
       try {

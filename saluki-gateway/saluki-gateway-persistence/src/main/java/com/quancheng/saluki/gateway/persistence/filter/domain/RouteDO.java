@@ -28,8 +28,6 @@ public class RouteDO implements Serializable {
 
   private String fromPath;
 
-  private String fromPathpattern;
-
   private String toHostport;
 
   private String toPath;
@@ -56,14 +54,6 @@ public class RouteDO implements Serializable {
 
   public void setFromPath(String fromPath) {
     this.fromPath = fromPath;
-  }
-
-  public String getFromPathpattern() {
-    return fromPathpattern;
-  }
-
-  public void setFromPathpattern(String fromPathpattern) {
-    this.fromPathpattern = fromPathpattern;
   }
 
   public String getToHostport() {
@@ -114,11 +104,24 @@ public class RouteDO implements Serializable {
     this.gmtModified = gmtModified;
   }
 
+  public RouteDO copy() {
+    RouteDO route = new RouteDO();
+    route.setId(this.id);
+    route.setFromPath(this.fromPath);
+    route.setToHostport(this.toHostport);
+    route.setToPath(this.toPath);
+    route.setServiceId(this.serviceId);
+    route.setRpc(this.rpc);
+    return route;
+  }
+
   @Override
   public String toString() {
-    return "RouteDO [id=" + id + ", fromPath=" + fromPath + ", fromPathpattern=" + fromPathpattern
-        + ", toHostport=" + toHostport + ", toPath=" + toPath + ", serviceId=" + serviceId
-        + ", rpc=" + rpc + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + "]";
+    return "RouteDO [id=" + id + ", fromPath=" + fromPath + ", toHostport=" + toHostport
+        + ", toPath=" + toPath + ", serviceId=" + serviceId + ", rpc=" + rpc + ", gmtCreate="
+        + gmtCreate + ", gmtModified=" + gmtModified + "]";
   }
+
+
 
 }

@@ -236,7 +236,6 @@ DROP TABLE IF EXISTS `gateway_route`;
 CREATE TABLE `gateway_route` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `from_path` varchar(255) DEFAULT NULL COMMENT '请求路径',
-  `from_pathpattern` varchar(255) DEFAULT NULL COMMENT '请求路径匹配符',
   `to_hostport` varchar(255) DEFAULT NULL COMMENT '目标地址',
   `to_path` varchar(100) DEFAULT NULL COMMENT '目标路径',
   `service_id` varchar(100) DEFAULT NULL COMMENT '服务ID',

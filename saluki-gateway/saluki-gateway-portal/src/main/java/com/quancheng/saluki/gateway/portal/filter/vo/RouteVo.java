@@ -29,8 +29,6 @@ public class RouteVo implements Serializable {
 
   private String fromPath;
 
-  private String fromPathpattern;
-
   private String toHostport;
 
   private String toPath;
@@ -65,14 +63,6 @@ public class RouteVo implements Serializable {
 
   public void setFromPath(String fromPath) {
     this.fromPath = fromPath;
-  }
-
-  public String getFromPathpattern() {
-    return fromPathpattern;
-  }
-
-  public void setFromPathpattern(String fromPathpattern) {
-    this.fromPathpattern = fromPathpattern;
   }
 
   public String getToHostport() {
@@ -192,11 +182,11 @@ public class RouteVo implements Serializable {
 
   @Override
   public String toString() {
-    return "RouteVo [routeId=" + routeId + ", fromPath=" + fromPath + ", fromPathpattern="
-        + fromPathpattern + ", toHostport=" + toHostport + ", toPath=" + toPath + ", serviceId="
-        + serviceId + ", rpc=" + rpc + ", serviceName=" + serviceName + ", methodName=" + methodName
-        + ", serviceGroup=" + serviceGroup + ", serviceVersion=" + serviceVersion
-        + ", serviceFileName=" + serviceFileName + "]";
+    return "RouteVo [routeId=" + routeId + ", fromPath=" + fromPath + ", toHostport=" + toHostport
+        + ", toPath=" + toPath + ", serviceId=" + serviceId + ", rpc=" + rpc + ", serviceName="
+        + serviceName + ", methodName=" + methodName + ", serviceGroup=" + serviceGroup
+        + ", serviceVersion=" + serviceVersion + ", serviceFileName=" + serviceFileName
+        + ", inputParam=" + inputParam + "]";
   }
 
 

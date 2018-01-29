@@ -6,7 +6,7 @@
 	<select id="get"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select
-		`id`,`from_path`,`from_pathpattern`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
+		`id`,`from_path`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
 		from gateway_route
 		where
 		id = #{value}
@@ -16,21 +16,21 @@
 	<select id="load"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select
-		`id`,`from_path`,`from_pathpattern`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
+		`id`,`from_path`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
 		from gateway_route
 		where
-		from_path = #{value} or from_pathpattern like concat(concat(#{value},'%')) 
+		from_path = #{value} or from_pathpattern like
+		concat(concat(#{value},'%'))
 	</select>
 
 	<select id="list"
 		resultType="com.quancheng.saluki.gateway.persistence.filter.domain.RouteDO">
 		select
-		`id`,`from_path`,`from_pathpattern`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
+		`id`,`from_path`,`to_hostport`,`to_path`,`service_id`,`rpc`,`gmt_create`,`gmt_modified`
 		from gateway_route
 		<where>
 			<if test="id != null and id != ''"> and id = #{id} </if>
 			<if test="fromPath != null and fromPath != ''"> and from_path = #{fromPath} </if>
-			<if test="fromPathpattern != null and fromPathpattern != ''"> and from_pathpattern = #{fromPathpattern} </if>
 			<if test="toHostport != null and toHostport != ''"> and to_hostport = #{toHostport} </if>
 			<if test="toPath != null and toPath != ''"> and to_path = #{toPath} </if>
 			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
@@ -54,7 +54,6 @@
 		<where>
 			<if test="id != null and id != ''"> and id = #{id} </if>
 			<if test="fromPath != null and fromPath != ''"> and from_path = #{fromPath} </if>
-			<if test="fromPathpattern != null and fromPathpattern != ''"> and from_pathpattern = #{fromPathpattern} </if>
 			<if test="toHostport != null and toHostport != ''"> and to_hostport = #{toHostport} </if>
 			<if test="toPath != null and toPath != ''"> and to_path = #{toPath} </if>
 			<if test="serviceId != null and serviceId != ''"> and service_id = #{serviceId} </if>
@@ -72,7 +71,6 @@
 		insert into gateway_route
 		(
 		`from_path`,
-		`from_pathpattern`,
 		`to_hostport`,
 		`to_path`,
 		`service_id`,
@@ -83,7 +81,6 @@
 		values
 		(
 		#{fromPath},
-		#{fromPathpattern},
 		#{toHostport},
 		#{toPath},
 		#{serviceId},
@@ -98,7 +95,6 @@
 		update gateway_route
 		<set>
 			<if test="fromPath != null and fromPath != ''"> from_path = #{fromPath} </if>
-			<if test="fromPathpattern != null and fromPathpattern != ''"> from_pathpattern = #{fromPathpattern} </if>
 			<if test="toHostport != null and toHostport != ''"> to_hostport = #{toHostport} </if>
 			<if test="toPath != null and toPath != ''"> to_path = #{toPath} </if>
 			<if test="serviceId != null and serviceId != ''"> service_id = #{serviceId} </if>

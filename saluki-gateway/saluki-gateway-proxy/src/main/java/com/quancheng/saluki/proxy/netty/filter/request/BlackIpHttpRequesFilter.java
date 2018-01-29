@@ -46,7 +46,7 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
         Matcher matcher = pat.matcher(realIp);
         if (matcher.find()) {
           writeFilterLog(realIp, BlackIpHttpRequesFilter.class, pat.toString());
-          return createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+          return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
         }
       }
     }

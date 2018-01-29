@@ -14,9 +14,12 @@
 package com.quancheng.saluki.proxy;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 
 import com.quancheng.saluki.proxy.netty.HttpFiltersSourceAdapter;
 import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
@@ -26,15 +29,20 @@ import com.quancheng.saluki.proxy.netty.transmit.DefaultHttpProxyServer;
  * @version SalukiGateWayApplication.java, v 0.0.1 2018年1月24日 下午4:37:37 liushiming
  */
 @MapperScan(value = {"com.quancheng.saluki.gateway.persistence.*.dao"})
-@SpringBootApplication
+@SpringBootApplication(
+    exclude = {ValidationAutoConfiguration.class, DataSourceAutoConfiguration.class})
 public class SalukiGateWayProxyApplication implements CommandLineRunner {
+
+  @Value("${server.port}")
+  private int httpPort;
+
   public static void main(String[] args) {
     SpringApplication.run(SalukiGateWayProxyApplication.class, args);
   }
 
   @Override
   public void run(String... arg0) throws Exception {
-    DefaultHttpProxyServer.bootstrap().withPort(9911)
+    DefaultHttpProxyServer.bootstrap().withPort(httpPort)
         .withFiltersSource(new HttpFiltersSourceAdapter())//
         .withAllowRequestToOriginServer(true)//
         .start();

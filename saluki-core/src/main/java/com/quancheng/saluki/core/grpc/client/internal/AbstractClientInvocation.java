@@ -23,7 +23,6 @@ import com.quancheng.saluki.core.grpc.client.internal.unary.GrpcBlockingUnaryCom
 import com.quancheng.saluki.core.grpc.client.internal.unary.GrpcFutureUnaryCommand;
 import com.quancheng.saluki.core.grpc.client.internal.unary.GrpcHystrixCommand;
 import com.quancheng.saluki.core.grpc.client.internal.unary.GrpcUnaryClientCall;
-import com.quancheng.saluki.core.grpc.client.internal.validate.RequestValidator;
 import com.quancheng.saluki.core.grpc.exception.RpcErrorMsgConstant;
 import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
@@ -49,15 +48,12 @@ public abstract class AbstractClientInvocation implements InvocationHandler {
 
   private final ClientServerMonitor monitor;
 
-  private final RequestValidator requstValidator;
-
   protected abstract GrpcRequest buildGrpcRequest(Method method, Object[] args);
 
 
   public AbstractClientInvocation(GrpcURL refUrl) {
     Long monitorinterval = refUrl.getParameter("monitorinterval", 60L);
     this.monitor = ClientServerMonitor.newClientServerMonitor(monitorinterval);
-    this.requstValidator = RequestValidator.newRequestValidator();
   }
 
   @Override
@@ -66,7 +62,6 @@ public abstract class AbstractClientInvocation implements InvocationHandler {
       return AbstractClientInvocation.this.toString();
     } else {
       GrpcRequest request = this.buildGrpcRequest(method, args);
-      requstValidator.doValidate(request);
       MethodType methodType = request.getMethodType();
       Channel channel = request.getChannel();
       try {

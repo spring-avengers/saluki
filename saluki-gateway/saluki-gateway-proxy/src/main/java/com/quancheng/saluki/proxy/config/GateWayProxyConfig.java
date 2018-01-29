@@ -13,11 +13,11 @@
  */
 package com.quancheng.saluki.proxy.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.service.GenericService;
 import com.quancheng.saluki.proxy.grpc.DynamicGrpcClient;
 
@@ -32,7 +32,7 @@ public class GateWayProxyConfig {
   @ConditionalOnClass(GenericService.class)
   protected class GrpcConfig {
 
-    @Autowired
+    @SalukiReference
     protected GenericService generciService;
 
     @Bean

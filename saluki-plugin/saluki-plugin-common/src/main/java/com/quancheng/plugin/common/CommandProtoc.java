@@ -1,14 +1,12 @@
 /*
- * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the
- * confidential and proprietary information of Quancheng-ec.com ("Confidential
- * Information"). You shall not disclose such Confidential Information and shall
- * use it only in accordance with the terms of the license agreement you entered
- * into with Quancheng-ec.com.
+ * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and
+ * proprietary information of Quancheng-ec.com ("Confidential Information"). You shall not disclose
+ * such Confidential Information and shall use it only in accordance with the terms of the license
+ * agreement you entered into with Quancheng-ec.com.
  */
 package com.quancheng.plugin.common;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -27,66 +25,55 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
  */
 public class CommandProtoc {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommandProtoc.class);
+  private static final Logger logger = LoggerFactory.getLogger(CommandProtoc.class);
 
-    private final String        discoveryRoot;
+  private final String discoveryRoot;
 
-    private final File protocDependenciesPath;
 
-    private CommandProtoc(String discoveryRoot, final File protocDependenciesPath){
-        this.discoveryRoot = discoveryRoot;
-        this.protocDependenciesPath = protocDependenciesPath;
-    }
+  private CommandProtoc(String discoveryRoot) {
+    this.discoveryRoot = discoveryRoot;
+  }
 
-    public static CommandProtoc configProtoPath(String discoveryRoot, final File protocDependenciesPath) {
-        return new CommandProtoc(discoveryRoot, protocDependenciesPath);
-    }
+  public static CommandProtoc configProtoPath(String discoveryRoot) {
+    return new CommandProtoc(discoveryRoot);
+  }
 
-    public FileDescriptorSet invoke(String protoPath) {
-        try {
-            Path descriptorPath = Files.createTempFile("descriptor", ".pb.bin");
-            ImmutableList.Builder<String> builder = ImmutableList.<String>builder()//
-                                                                               .add("--include_std_types")//
-                                                                               .add("-I" + discoveryRoot)
-                                                                               .add("--descriptor_set_out="  + descriptorPath.toAbsolutePath().toString())//
-                                                                               ;
-            if (protocDependenciesPath.exists()) {
-                File[] files = protocDependenciesPath.listFiles();
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        builder.add("-I" + file.getAbsolutePath());
-                    }
-                }
-            }
+  public FileDescriptorSet invoke(String protoPath) {
+    try {
+      Path descriptorPath = Files.createTempFile("descriptor", ".pb.bin");
+      ImmutableList.Builder<String> builder = ImmutableList.<String>builder()//
+          .add("--include_std_types")//
+          .add("-I" + discoveryRoot)
+          .add("--descriptor_set_out=" + descriptorPath.toAbsolutePath().toString())//
+      ;
+      ImmutableList<String> protocArgs = builder.add(protoPath).build();
 
-            ImmutableList<String> protocArgs = builder.add(protoPath).build();
-
-            int status;
-            String[] protocLogLines;
-            PrintStream stdoutBackup = System.out;
-            try {
-                ByteArrayOutputStream protocStdout = new ByteArrayOutputStream();
-                System.setOut(new PrintStream(protocStdout));
-                status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
-                protocLogLines = protocStdout.toString().split("\n");
-            } catch (IOException | InterruptedException e) {
-                throw new IllegalArgumentException("Unable to execute protoc binary", e);
-            } finally {
-                System.setOut(stdoutBackup);
-            }
-            if (status != 0) {
-                logger.warn("Protoc invocation failed with status: " + status);
-                for (String line : protocLogLines) {
-                    logger.warn("[Protoc log] " + line);
-                }
-
-                throw new IllegalArgumentException(String.format("Got exit code [%d] from protoc with args [%s]",
-                                                                 status, protocArgs));
-            }
-            return FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+      int status;
+      String[] protocLogLines;
+      PrintStream stdoutBackup = System.out;
+      try {
+        ByteArrayOutputStream protocStdout = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(protocStdout));
+        status = Protoc.runProtoc(protocArgs.toArray(new String[0]));
+        protocLogLines = protocStdout.toString().split("\n");
+      } catch (IOException | InterruptedException e) {
+        throw new IllegalArgumentException("Unable to execute protoc binary", e);
+      } finally {
+        System.setOut(stdoutBackup);
+      }
+      if (status != 0) {
+        logger.warn("Protoc invocation failed with status: " + status);
+        for (String line : protocLogLines) {
+          logger.warn("[Protoc log] " + line);
         }
+
+        throw new IllegalArgumentException(
+            String.format("Got exit code [%d] from protoc with args [%s]", status, protocArgs));
+      }
+      return FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
+    } catch (IOException e) {
+      throw new IllegalArgumentException(e);
     }
+  }
 
 }

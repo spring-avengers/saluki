@@ -43,16 +43,14 @@ public class CommonProto2Java {
 
   private Map<String, String> pojoTypes;
 
-  private CommonProto2Java(String discoveryRoot, String generatePath,
-      final File protocDependenciesPath) {
+  private CommonProto2Java(String discoveryRoot, String generatePath) {
     this.discoveryRoot = discoveryRoot;
     this.generatePath = generatePath;
-    this.commondProtoc = CommandProtoc.configProtoPath(discoveryRoot, protocDependenciesPath);
+    this.commondProtoc = CommandProtoc.configProtoPath(discoveryRoot);
   }
 
-  public static CommonProto2Java forConfig(String discoveryRoot, String generatePath,
-      final File protocDependenciesPath) {
-    return new CommonProto2Java(discoveryRoot, generatePath, protocDependenciesPath);
+  public static CommonProto2Java forConfig(String discoveryRoot, String generatePath) {
+    return new CommonProto2Java(discoveryRoot, generatePath);
   }
 
   public void generateFile(String protoPath) {

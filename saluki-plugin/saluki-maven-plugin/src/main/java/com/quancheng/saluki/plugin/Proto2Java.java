@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the
- * confidential and proprietary information of Quancheng-ec.com ("Confidential
- * Information"). You shall not disclose such Confidential Information and shall
- * use it only in accordance with the terms of the license agreement you entered
- * into with Quancheng-ec.com.
+ * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and
+ * proprietary information of Quancheng-ec.com ("Confidential Information"). You shall not disclose
+ * such Confidential Information and shall use it only in accordance with the terms of the license
+ * agreement you entered into with Quancheng-ec.com.
  */
 package com.quancheng.saluki.plugin;
 
@@ -28,51 +27,42 @@ import com.quancheng.plugin.common.CommonProto2Java;
 @Mojo(name = "proto2java", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class Proto2Java extends AbstractMojo {
 
-    @Parameter(defaultValue = "src/main/proto")
-    private String     protoPath;
+  @Parameter(defaultValue = "src/main/proto")
+  private String protoPath;
 
-    @Parameter(defaultValue = "src/main/java")
-    private String     buildPath;
+  @Parameter(defaultValue = "src/main/java")
+  private String buildPath;
 
-    /**
-     * This is the directory into which the {@code .java} will be created.
-     */
-    @Parameter(
-        required = true,
-        defaultValue = "${project.build.directory}/protoc-dependencies"
-    )
-    private File protocDependenciesPath;
+  private List<File> allProtoFile = Lists.newArrayList();
 
-    private List<File> allProtoFile = Lists.newArrayList();
-
-    @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        File deirectory = new File(protoPath);
-        listAllProtoFile(deirectory);
-        CommonProto2Java protp2ServicePojo = CommonProto2Java.forConfig(protoPath, buildPath, protocDependenciesPath);
-        for (File file : allProtoFile) {
-            if (file.exists()) {
-                String protoFilePath = file.getPath();
-                protp2ServicePojo.generateFile(protoFilePath);
-            }
-        }
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+    File deirectory = new File(protoPath);
+    listAllProtoFile(deirectory);
+    CommonProto2Java protp2ServicePojo = CommonProto2Java.forConfig(protoPath, buildPath);
+    for (File file : allProtoFile) {
+      if (file.exists()) {
+        String protoFilePath = file.getPath();
+        protp2ServicePojo.generateFile(protoFilePath);
+      }
     }
+  }
 
-    private File listAllProtoFile(File file) {
-        if (file != null) {
-            if (file.isDirectory()) {
-                File[] fileArray = file.listFiles();
-                if (fileArray != null) {
-                    for (int i = 0; i < fileArray.length; i++) {
-                        listAllProtoFile(fileArray[i]);
-                    }
-                }
-            } else {
-                if (StringUtils.endsWith(file.getName(), "proto")) {
-                    allProtoFile.add(file);
-                }
-            }
+  private File listAllProtoFile(File file) {
+    if (file != null) {
+      if (file.isDirectory()) {
+        File[] fileArray = file.listFiles();
+        if (fileArray != null) {
+          for (int i = 0; i < fileArray.length; i++) {
+            listAllProtoFile(fileArray[i]);
+          }
         }
-        return null;
+      } else {
+        if (StringUtils.endsWith(file.getName(), "proto")) {
+          allProtoFile.add(file);
+        }
+      }
     }
+    return null;
+  }
 }

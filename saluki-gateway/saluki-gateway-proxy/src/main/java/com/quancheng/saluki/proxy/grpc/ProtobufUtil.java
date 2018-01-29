@@ -17,7 +17,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
@@ -31,22 +30,22 @@ import com.quancheng.saluki.gateway.persistence.filter.domain.RpcDO;
  * @author liushiming
  * @version GrpcRouteService.java, v 0.0.1 2018年1月7日 下午12:59:14 liushiming
  */
-@Component
-public class ProtobufComponent {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProtobufComponent.class);
+public class ProtobufUtil {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ProtobufUtil.class);
 
 
-  public Pair<Descriptor, Descriptor> resolveServiceInputOutputType(final RpcDO rpcDo) {
-    Pair<Descriptor, Descriptor> argsDesc = this.findSingleProtobuf(rpcDo);
+  public static Pair<Descriptor, Descriptor> resolveServiceInputOutputType(final RpcDO rpcDo) {
+    Pair<Descriptor, Descriptor> argsDesc = findSingleProtobuf(rpcDo);
     if (argsDesc == null) {
-      argsDesc = this.findDirectyprotobuf(rpcDo);
+      argsDesc = findDirectyprotobuf(rpcDo);
     }
     return argsDesc;
   }
 
 
-  private Pair<Descriptor, Descriptor> findDirectyprotobuf(final RpcDO rpcDo) {
+  private static Pair<Descriptor, Descriptor> findDirectyprotobuf(final RpcDO rpcDo) {
     byte[] protoContent = rpcDo.getProtoContext();
     FileDescriptorSet descriptorSet = null;
     if (protoContent != null && protoContent.length > 0) {
@@ -67,7 +66,7 @@ public class ProtobufComponent {
     return null;
   }
 
-  private Pair<Descriptor, Descriptor> findSingleProtobuf(final RpcDO rpcDo) {
+  private static Pair<Descriptor, Descriptor> findSingleProtobuf(final RpcDO rpcDo) {
     byte[] in = rpcDo.getProtoReq();
     byte[] out = rpcDo.getProtoRep();
     FileDescriptorSet inputDescriptorSet = null;

@@ -18,15 +18,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.ExtensionRegistryLite;
 import com.google.protobuf.Message;
 import com.googlecode.protobuf.format.JsonFormat;
-import com.quancheng.saluki.boot.SalukiReference;
 import com.quancheng.saluki.core.grpc.exception.RpcFrameworkException;
 import com.quancheng.saluki.core.grpc.exception.RpcServiceException;
 import com.quancheng.saluki.core.grpc.service.GenericService;
@@ -41,19 +38,19 @@ import io.netty.util.CharsetUtil;
  * @author liushiming
  * @version DynamicGrpcClient1.java, v 0.0.1 2018年1月5日 下午5:38:46 liushiming
  */
-@Component
 public class DynamicGrpcClient {
 
-  @SalukiReference
-  private GenericService genricService;
+  private final GenericService genricService;
 
-  @Autowired
-  private ProtobufComponent protobufService;
 
   private static final JsonFormat JSON2PROTOBUF = new JsonFormat();
 
   static {
     JSON2PROTOBUF.setDefaultCharset(CharsetUtil.UTF_8);
+  }
+
+  public DynamicGrpcClient(GenericService genricService) {
+    this.genricService = genricService;
   }
 
   public String call(final RpcDO rpcDo, final String jsonInput) {
@@ -63,7 +60,7 @@ public class DynamicGrpcClient {
       final String methodName = rpcDo.getMethodName();
       final String group = rpcDo.getServiceGroup();
       final String version = rpcDo.getServiceVersion();
-      Pair<Descriptor, Descriptor> inOutType = protobufService.resolveServiceInputOutputType(rpcDo);
+      Pair<Descriptor, Descriptor> inOutType = ProtobufUtil.resolveServiceInputOutputType(rpcDo);
       Descriptor inPutType = inOutType.getLeft();
       Descriptor outPutType = inOutType.getRight();
       MethodDescriptor<DynamicMessage, DynamicMessage> methodDesc =

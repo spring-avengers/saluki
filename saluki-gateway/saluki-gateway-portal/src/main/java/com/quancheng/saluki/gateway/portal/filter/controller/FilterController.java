@@ -104,8 +104,6 @@ public class FilterController extends BaseController {
   @PostMapping("/save")
   @ResponseBody()
   CommonResponse save(RouteVo zuulVo,
-      @RequestParam(name = "input", required = false) MultipartFile inputFile,
-      @RequestParam(name = "output", required = false) MultipartFile outputFile,
       @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
     try {
       // grpc路由
@@ -121,28 +119,7 @@ public class FilterController extends BaseController {
           zuulDto.setProtoContext(protoContext);
           fitlerService.save(zuulDto);
         }
-      }
-      // else if (inputFile != null && outputFile != null) {
-      // InputStream inputStream = inputFile.getInputStream();
-      // InputStream outputStream = outputFile.getInputStream();
-      // CommonResponse responseInput = judgeFileType(inputStream, "proto");
-      // CommonResponse responseOutput = judgeFileType(outputStream, "proto");
-      // if (responseInput != null) {
-      // return responseInput;
-      // } else if (responseOutput != null) {
-      // return responseOutput;
-      // } else {
-      // String fileNameInput = inputFile.getOriginalFilename();
-      // byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
-      // String fileNameOutput = outputFile.getOriginalFilename();
-      // byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-      // RouteDto zuulDto = zuulVo.buildRouteDto();
-      // zuulDto.setProtoReq(protoInput);
-      // zuulDto.setProtoRep(protoOutput);
-      // fitlerService.save(zuulDto);
-      // }
-      // } // 其他路由
-      else {
+      } else {
         RouteDto zuulDto = zuulVo.buildRouteDto();
         fitlerService.save(zuulDto);
       }
@@ -167,8 +144,6 @@ public class FilterController extends BaseController {
   @PostMapping("/update")
   @ResponseBody()
   CommonResponse update(RouteVo zuulVo,
-      @RequestParam(name = "input", required = false) MultipartFile inputFile,
-      @RequestParam(name = "output", required = false) MultipartFile outputFile,
       @RequestParam(name = "zipFile", required = false) MultipartFile zipFile) {
     try {
       // grpc路由
@@ -184,28 +159,7 @@ public class FilterController extends BaseController {
           zuulDto.setProtoContext(protoContext);
           fitlerService.update(zuulDto);
         }
-      }
-      // else if (inputFile != null && outputFile != null) {
-      // InputStream inputStream = inputFile.getInputStream();
-      // InputStream outputStream = outputFile.getInputStream();
-      // CommonResponse responseInput = judgeFileType(inputStream, "proto");
-      // CommonResponse responseOutput = judgeFileType(outputStream, "proto");
-      // if (responseInput != null) {
-      // return responseInput;
-      // } else if (responseOutput != null) {
-      // return responseOutput;
-      // } else {
-      // String fileNameInput = inputFile.getOriginalFilename();
-      // byte[] protoInput = protobufService.compileFileProto(inputFile, fileNameInput);
-      // String fileNameOutput = outputFile.getOriginalFilename();
-      // byte[] protoOutput = protobufService.compileFileProto(outputFile, fileNameOutput);
-      // RouteDto zuulDto = zuulVo.buildRouteDto();
-      // zuulDto.setProtoReq(protoInput);
-      // zuulDto.setProtoRep(protoOutput);
-      // fitlerService.update(zuulDto);
-      // }
-      // } // 其他路由
-      else {
+      } else {
         RouteDto zuulDto = zuulVo.buildRouteDto();
         fitlerService.update(zuulDto);
       }

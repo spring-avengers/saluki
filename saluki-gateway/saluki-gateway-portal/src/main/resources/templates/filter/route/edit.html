@@ -68,8 +68,8 @@
 									<label class="col-sm-2 control-label" for="serviceName">服务名</label>
 									<div class="col-sm-10">
 										<input class="form-control" id="serviceName"
-											th:value="${route.serviceName}" name="serviceName" type="text"
-											placeholder="serviceName" />
+											th:value="${route.serviceName}" name="serviceName"
+											type="text" placeholder="serviceName" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -96,6 +96,20 @@
 											type="text" placeholder="version" />
 									</div>
 								</div>
+							</fieldset>
+							<fieldset>
+								<legend>dubbo参数定义</legend>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="inputParam">dubbo入参类名</label>
+									<div class="col-sm-10">
+										<input class="form-control" id="inputParam" name="inputParam"
+											th:value="${route.inputParam}" type="text"
+											placeholder="inputParam" />
+									</div>
+								</div>
+							</fieldset>
+							<fieldset>
+								<legend>gRpc参数定义</legend>
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="zipFile">gRpc
 										Proto定义</label>
@@ -122,37 +136,6 @@
 									</div>
 								</div>
 							</fieldset>
-							<!-- <fieldset>
-								<legend>gRpc入参出参文件上传</legend>
-								<div class="form-group">
-									<label class="col-sm-2 control-label" for="input">入参</label>
-									<div class="col-sm-4">
-										<span id="inputname" style="vertical-align: left">未上传文件</span>
-										<div class="file-container"
-											style="display: inline-block; position: relative; overflow: hidden; vertical-align: middle">
-											<button class="btn btn-success fileinput-button"
-												type="button">上传</button>
-											<input type="file" id="input" name="input"
-												  onchange="loadInputFile(this.files[0])"
-												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
-										</div>
-										<span class="help-block">(入参proto文件，仅能包含一个message对象)</span>
-									</div>
-									<label class="col-sm-2 control-label" for="output">出参</label>
-									<div class="col-sm-4">
-										<span id="outputname" style="vertical-align: left">未上传文件</span>
-										<div class="file-container"
-											style="display: inline-block; position: relative; overflow: hidden; vertical-align: middle">
-											<button class="btn btn-success fileinput-button"
-												type="button">上传</button>
-											<input type="file" id="output" name="output"
-												onchange="loadOutputFile(this.files[0])"
-												style="position: absolute; top: 0; left: 0; font-size: 34px; opacity: 0">
-										</div>
-										<span class="help-block">(出参proto文件，仅能包含一个message对象)</span>
-									</div>
-								</div>
-							</fieldset> -->
 							<fieldset>
 								<div class="form-group">
 									<div class="col-sm-12" align="center">

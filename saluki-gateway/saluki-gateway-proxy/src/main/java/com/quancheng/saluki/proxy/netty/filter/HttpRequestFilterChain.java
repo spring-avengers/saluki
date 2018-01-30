@@ -15,7 +15,7 @@ import com.quancheng.saluki.proxy.netty.filter.request.HttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.RateLimitHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.ScannerHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.URLParamHttpRequestFilter;
-import com.quancheng.saluki.proxy.netty.filter.request.UaHttpRequestFilter;
+import com.quancheng.saluki.proxy.netty.filter.request.BlackUaHttpRequestFilter;
 import com.quancheng.saluki.proxy.routerules.GroovyFilterComponent;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -33,7 +33,7 @@ public class HttpRequestFilterChain {
     filters.add(BlackCookieHttpRequestFilter.newFilter());
     filters.add(RateLimitHttpRequestFilter.newFilter());
     filters.add(ScannerHttpRequestFilter.newFilter());
-    filters.add(UaHttpRequestFilter.newFilter());
+    filters.add(BlackUaHttpRequestFilter.newFilter());
     filters.add(BlackURLHttpRequestFilter.newFilter());
     filters.add(URLParamHttpRequestFilter.newFilter());
     filters.add(DubboAdapterHttpRequestFilter.newFilter());

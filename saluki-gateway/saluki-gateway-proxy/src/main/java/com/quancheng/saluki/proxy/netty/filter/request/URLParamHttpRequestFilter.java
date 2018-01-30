@@ -13,10 +13,16 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * URL参数黑名单参数拦截
@@ -30,6 +36,37 @@ public class URLParamHttpRequestFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
+    if (httpObject instanceof HttpRequest) {
+      HttpRequest httpRequest = (HttpRequest) httpObject;
+      String url = null;
+      try {
+        String uri = httpRequest.uri().replaceAll("%", "%25");
+        url = URLDecoder.decode(uri, "UTF-8");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      if (url != null) {
+        int index = url.indexOf("?");
+        if (index > -1) {
+          String argsStr = url.substring(index + 1);
+          String[] args = argsStr.split("&");
+          for (String arg : args) {
+            String[] kv = arg.split("=");
+            if (kv.length == 2) {
+              List<Pattern> patterns = super.getRule(this.getClass());
+              for (Pattern pat : patterns) {
+                String param = kv[1].toLowerCase();
+                Matcher matcher = pat.matcher(param);
+                if (matcher.find()) {
+                  super.writeFilterLog(param, this.getClass(), pat.toString());
+                  return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     return null;
   }
 

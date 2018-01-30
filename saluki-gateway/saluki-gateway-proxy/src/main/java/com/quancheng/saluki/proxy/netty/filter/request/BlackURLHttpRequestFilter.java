@@ -13,10 +13,15 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author liushiming
@@ -31,7 +36,22 @@ public class BlackURLHttpRequestFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    // TODO Auto-generated method stub
+    if (httpObject instanceof HttpRequest) {
+      HttpRequest httpRequest = (HttpRequest) httpObject;
+      String url = httpRequest.uri();
+      int index = url.indexOf("?");
+      if (index > -1) {
+        url = url.substring(0, index);
+      }
+      List<Pattern> patterns = super.getRule(this.getClass());
+      for (Pattern pat : patterns) {
+        Matcher matcher = pat.matcher(url);
+        if (matcher.find()) {
+          super.writeFilterLog(url, BlackIpHttpRequesFilter.class, pat.toString());
+          return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+        }
+      }
+    }
     return null;
   }
 

@@ -41,11 +41,11 @@ public class BlackIpHttpRequesFilter extends HttpRequestFilter {
     if (httpObject instanceof HttpRequest) {
       HttpRequest httpRequest = (HttpRequest) httpObject;
       String realIp = FilterUtil.getRealIp(httpRequest, channelHandlerContext);
-      List<Pattern> patterns = super.getRule(BlackIpHttpRequesFilter.class);
+      List<Pattern> patterns = super.getRule(this.getClass());
       for (Pattern pat : patterns) {
         Matcher matcher = pat.matcher(realIp);
         if (matcher.find()) {
-          writeFilterLog(realIp, BlackIpHttpRequesFilter.class, pat.toString());
+          super.writeFilterLog(realIp, BlackIpHttpRequesFilter.class, pat.toString());
           return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
         }
       }

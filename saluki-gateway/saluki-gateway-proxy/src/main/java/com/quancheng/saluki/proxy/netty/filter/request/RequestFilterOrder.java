@@ -27,10 +27,9 @@ public enum RequestFilterOrder {
   COOKIE(2), // Cookie黑名单拦截
   UA(3), // User-Agent黑名单拦截
   BLACKURL(4), // URL路径黑名单拦截
-  WRITEIP(5), // IP白名单
-  BLACKIP(6), // IP黑名单
-  SCANNER(7), // 扫描
-  RATELIMIT(8), // 限流
+  BLACKIP(5), // IP黑名单
+  SCANNER(6), // 扫描
+  RATELIMIT(7), // 限流
 
 
 

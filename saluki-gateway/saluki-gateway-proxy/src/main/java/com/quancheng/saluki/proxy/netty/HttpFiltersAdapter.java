@@ -58,6 +58,10 @@ public class HttpFiltersAdapter {
   // dynamics route
   public void dynamicsRouting(HttpRequest httpRequest) {
     String actorPath = httpRequest.uri();
+    int index = actorPath.indexOf("?");
+    if (index > -1) {
+      actorPath = actorPath.substring(0, index);
+    }
     RouteDO route = routeCaceh.getRoute(actorPath);
     if (route != null) {
       String targetPath = route.getToPath();

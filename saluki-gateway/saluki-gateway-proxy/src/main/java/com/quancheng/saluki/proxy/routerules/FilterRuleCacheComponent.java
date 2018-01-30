@@ -14,6 +14,7 @@
 package com.quancheng.saluki.proxy.routerules;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -25,6 +26,11 @@ public class FilterRuleCacheComponent {
 
 
   public List<Pattern> getFilterRuleByClass(Class<?> filterClazz) {
+    return null;
+  }
+
+
+  public Map<String, Double> getRateLimit(Class<?> filterClazz) {
     return null;
   }
 }

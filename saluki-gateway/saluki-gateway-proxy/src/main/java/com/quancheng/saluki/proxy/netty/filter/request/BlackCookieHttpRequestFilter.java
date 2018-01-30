@@ -13,25 +13,48 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.quancheng.saluki.proxy.netty.filter.FilterUtil;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author liushiming
  * @version CookieHttpRequestFilter.java, v 0.0.1 2018年1月26日 下午3:56:53 liushiming
  */
-public class CookieHttpRequestFilter extends HttpRequestFilter {
+public class BlackCookieHttpRequestFilter extends HttpRequestFilter {
 
   public static HttpRequestFilter newFilter() {
-    return new CookieHttpRequestFilter();
+    return new BlackCookieHttpRequestFilter();
   }
 
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    // TODO Auto-generated method stub
+    if (httpObject instanceof HttpRequest) {
+      HttpRequest httpRequest = (HttpRequest) httpObject;
+      List<String> headerValues = FilterUtil.getHeaderValues(httpRequest, "Cookie");
+      List<Pattern> patterns = super.getRule(this.getClass());
+      if (headerValues.size() > 0 && headerValues.get(0) != null) {
+        String[] cookies = headerValues.get(0).split(";");
+        for (String cookie : cookies) {
+          for (Pattern pat : patterns) {
+            Matcher matcher = pat.matcher(cookie.toLowerCase());
+            if (matcher.find()) {
+              super.writeFilterLog(cookie, BlackIpHttpRequesFilter.class, pat.toString());
+              return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+            }
+          }
+        }
+      }
+    }
     return null;
   }
 

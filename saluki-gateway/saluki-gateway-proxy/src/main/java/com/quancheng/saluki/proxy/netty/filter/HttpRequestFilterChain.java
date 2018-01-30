@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.quancheng.saluki.proxy.config.SpringContextHolder;
 import com.quancheng.saluki.proxy.netty.filter.request.BlackIpHttpRequesFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.BlackURLHttpRequestFilter;
-import com.quancheng.saluki.proxy.netty.filter.request.CookieHttpRequestFilter;
+import com.quancheng.saluki.proxy.netty.filter.request.BlackCookieHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.DubboAdapterHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.GrpcAdapterHttpRequestFilter;
 import com.quancheng.saluki.proxy.netty.filter.request.HttpRequestFilter;
@@ -30,7 +30,7 @@ public class HttpRequestFilterChain {
 
   static {
     filters.add(BlackIpHttpRequesFilter.newFilter());
-    filters.add(CookieHttpRequestFilter.newFilter());
+    filters.add(BlackCookieHttpRequestFilter.newFilter());
     filters.add(RateLimitHttpRequestFilter.newFilter());
     filters.add(ScannerHttpRequestFilter.newFilter());
     filters.add(UaHttpRequestFilter.newFilter());

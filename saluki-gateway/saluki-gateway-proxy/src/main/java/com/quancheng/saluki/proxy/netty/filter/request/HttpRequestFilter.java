@@ -53,7 +53,7 @@ public abstract class HttpRequestFilter {
     return httpResponse;
   }
 
-  protected void writeFilterLog(String realIp, Class<?> type, String cause) {
-    logger.info("type:{},realIp:{},cause:{}", type.getSimpleName(), realIp, cause);
+  protected void writeFilterLog(String fact, Class<?> type, String cause) {
+    logger.info("type:{},fact:{},cause:{}", type.getSimpleName(), fact, cause);
   }
 }

@@ -13,10 +13,14 @@
  */
 package com.quancheng.saluki.proxy.netty.filter.request;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author liushiming
@@ -32,7 +36,39 @@ public class ScannerHttpRequestFilter extends HttpRequestFilter {
   @Override
   public HttpResponse doFilter(HttpRequest originalRequest, HttpObject httpObject,
       ChannelHandlerContext channelHandlerContext) {
-    // TODO Auto-generated method stub
+    if (httpObject instanceof HttpRequest) {
+      HttpRequest httpRequest = (HttpRequest) httpObject;
+      boolean acunetixAspect = httpRequest.headers().contains("Acunetix-Aspect");
+      boolean acunetixAspectPassword = httpRequest.headers().contains("Acunetix-Aspect-Password");
+      boolean acunetixAspectQueries = httpRequest.headers().contains("Acunetix-Aspect-Queries");
+      boolean xScanMemo = httpRequest.headers().contains("X-Scan-Memo");
+      boolean xRequestMemo = httpRequest.headers().contains("X-Request-Memo");
+      boolean xRequestManagerMemo = httpRequest.headers().contains("X-RequestManager-Memo");
+      boolean xWIPP = httpRequest.headers().contains("X-WIPP");
+      Pattern pattern1 = Pattern.compile("AppScan_fingerprint");
+      Matcher matcher1 = pattern1.matcher(httpRequest.uri());
+      String bsKey = "--%3E%27%22%3E%3CH1%3EXSS%40HERE%3C%2FH1%3E";
+      boolean matcher2 = httpRequest.uri().contains(bsKey);
+      Pattern pattern3 = Pattern.compile("netsparker=");
+      Matcher matcher3 = pattern3.matcher(httpRequest.uri());
+      if (acunetixAspect || acunetixAspectPassword || acunetixAspectQueries) {
+        super.writeFilterLog(httpRequest.headers().toString(), this.getClass(),
+            "Acunetix Web Vulnerability");
+        return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      } else if (xScanMemo || xRequestMemo || xRequestManagerMemo || xWIPP) {
+        super.writeFilterLog(httpRequest.headers().toString(), this.getClass(), "HP WebInspect");
+        return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      } else if (matcher1.find()) {
+        super.writeFilterLog(httpRequest.headers().toString(), this.getClass(), "Appscan");
+        return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      } else if (matcher2) {
+        super.writeFilterLog(httpRequest.headers().toString(), this.getClass(), "Bugscan");
+        return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      } else if (matcher3.find()) {
+        super.writeFilterLog(httpRequest.headers().toString(), this.getClass(), "Netsparker");
+        return super.createResponse(HttpResponseStatus.FORBIDDEN, originalRequest);
+      }
+    }
     return null;
   }
 

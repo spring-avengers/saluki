@@ -116,3 +116,7 @@
 
 * 启动spring boot main，并访问localhost:8080/doc,可进行服务测试
 ![login](./doc/service.jpeg)
+
+
+# 关于网关
+  网关有一个新项目独立出来支撑grpc和dubbo，将在个人项目中孵化：<a href="https://github.com/linking12/tesla">gateway</a> 

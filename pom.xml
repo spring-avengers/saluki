@@ -22,7 +22,6 @@
 		<module>spring-boot-starter-saluki</module>
 		<module>saluki-monitor</module>
 		<module>saluki-plugin</module>
-		<module>saluki-gateway</module>
 	</modules>
 	<properties>
 		<grpc-all.version>1.8.0</grpc-all.version>

@@ -28,7 +28,7 @@ README: [English](https://github.com/venus-boot/saluki/blob/master/README.md) | 
    
 ```
 # Sample
-  <a href="https://github.com/linking12/saluki/tree/master/saluki-example">sample</a>
+  <a href="https://github.com/venus-boot/saluki/tree/master/saluki-example">sample</a>
   
 # Quick Start
 

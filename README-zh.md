@@ -26,13 +26,13 @@
    
 ```
 # 关于服务调用Sample
-  详细请查看 <a href="https://github.com/linking12/saluki/tree/master/saluki-example">sample</a>
+  详细请查看 <a href="https://github.com/venus-boot/saluki/tree/master/saluki-example">sample</a>
   
 # Quick Start
 
 * 首先在proto文件工程配置grpc提供的gradle或maven插件生成stub
 
-示例：<a href="https://github.com/linking12/saluki/tree/master/saluki-service"> api </a>
+示例：<a href=https://github.com/venus-boot/saluki/tree/master/saluki-service"> api </a>
 
 ```
 <build>

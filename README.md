@@ -13,7 +13,6 @@ README: [English](https://github.com/venus-boot/saluki/blob/master/README.md) | 
 * failover by retry
 * hystrix integrated
 * spring-boot integrated
-* validator interfrated
 
 
 # Detail

@@ -20,6 +20,5 @@
 	</licenses>
 	<modules>
 		<module>saluki-registry-consul</module>
-		<module>saluki-registry-etcd3</module>
 	</modules>
 </project>

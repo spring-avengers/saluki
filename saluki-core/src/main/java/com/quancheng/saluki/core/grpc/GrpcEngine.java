@@ -101,7 +101,7 @@ public final class GrpcEngine {
             .usePlaintext(false)//
             .negotiationType(NegotiationType.TLS)//
             .eventLoopGroup(createWorkEventLoopGroup())//
-            .keepAliveTime(1, TimeUnit.DAYS)//
+            .keepAliveTime(60, TimeUnit.SECONDS)//
             .maxHeaderListSize(4 * 1024 * 1024)//
             .directExecutor()//
             .build();//
@@ -120,7 +120,7 @@ public final class GrpcEngine {
 
     final NettyServerBuilder remoteServer = NettyServerBuilder.forPort(rpcPort)//
         .sslContext(buildServerSslContext())//
-        .keepAliveTime(1, TimeUnit.DAYS)//
+        .keepAliveTime(60, TimeUnit.SECONDS)//
         .bossEventLoopGroup(createBossEventLoopGroup())//
         .workerEventLoopGroup(createWorkEventLoopGroup())//
         .maxHeaderListSize(4 * 1024 * 1024)//

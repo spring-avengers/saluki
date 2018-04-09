@@ -98,7 +98,6 @@ public final class GrpcEngine {
             .nameResolverFactory(new GrpcNameResolverProvider(subscribeUrl))//
             .loadBalancerFactory(buildLoadBalanceFactory())//
             .sslContext(buildClientSslContext())//
-            .usePlaintext(false)//
             .negotiationType(NegotiationType.TLS)//
             .eventLoopGroup(createWorkEventLoopGroup())//
             .keepAliveTime(60, TimeUnit.SECONDS)//

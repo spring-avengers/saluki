@@ -19,7 +19,7 @@
 		</license>
 	</licenses>
 	<modules>
-		<module>spring-boot-starter-saluki-monitor</module>
+		<module>spring-boot-starter-salukiops</module>
 		<module>saluki-ops-console</module>
 	</modules>
 </project>

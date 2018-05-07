@@ -7,7 +7,7 @@
 	<inceptionYear>2017</inceptionYear>
 	<parent>
 		<groupId>io.github.saluki</groupId>
-		<artifactId>saluki-monitor</artifactId>
+		<artifactId>saluki-ops</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
 	<licenses>

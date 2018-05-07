@@ -65,7 +65,7 @@ public class MybatisConfiguration {
   @Configuration
   @EnableTransactionManagement
   @ConditionalOnExpression("${saluki.monitor.enabled:true}")
-  public static class TransactionConfig implements TransactionManagementConfigurer {
+  protected static class TransactionConfig implements TransactionManagementConfigurer {
 
     @Autowired
     private EmbeddedDatabase dataSource;

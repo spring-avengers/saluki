@@ -9,6 +9,7 @@ package io.github.saluki.monitor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -66,11 +67,8 @@ public class MybatisConfiguration {
   @ConditionalOnExpression("${saluki.monitor.enabled:true}")
   public static class TransactionConfig implements TransactionManagementConfigurer {
 
+    @Autowired
     private EmbeddedDatabase dataSource;
-
-    public TransactionConfig(EmbeddedDatabase dataSource) {
-      this.dataSource = dataSource;
-    }
 
     @Bean
     @Override

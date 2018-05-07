@@ -1,10 +1,10 @@
-package io.github.saluki.monitor;
+package io.github.saluki.monitor.dao;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import io.github.saluki.monitor.domain.GrpcInvoke;
+import io.github.saluki.monitor.dao.domain.GrpcInvoke;
 
 @Mapper
 public interface InvokeMapper {

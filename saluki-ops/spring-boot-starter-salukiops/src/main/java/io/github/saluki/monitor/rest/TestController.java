@@ -28,6 +28,7 @@ import io.github.saluki.boot.SalukiReference;
 import io.github.saluki.boot.SalukiService;
 import io.github.saluki.boot.autoconfigure.GrpcProperties;
 import io.github.saluki.boot.common.GrpcAop;
+import io.github.saluki.monitor.dao.domain.GrpcServiceTestModel;
 import io.github.saluki.monitor.jaket.Jaket;
 import io.github.saluki.monitor.jaket.model.GenericInvokeMetadata;
 import io.github.saluki.monitor.jaket.model.MetadataType;
@@ -37,7 +38,6 @@ import io.github.saluki.monitor.jaket.util.GenericInvokeUtils;
 import io.github.saluki.common.RpcContext;
 import io.github.saluki.grpc.service.GenericService;
 import io.github.saluki.utils.ReflectUtils;
-import io.github.saluki.monitor.domain.GrpcServiceTestModel;
 
 @RestController
 @RequestMapping("service")

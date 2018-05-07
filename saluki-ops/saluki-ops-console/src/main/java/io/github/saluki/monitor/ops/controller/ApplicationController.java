@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.saluki.monitor.domain.Application;
-import io.github.saluki.monitor.domain.ApplicationDependcy;
+import io.github.saluki.monitor.dao.domain.Application;
+import io.github.saluki.monitor.dao.domain.ApplicationDependcy;
 import io.github.saluki.monitor.ops.service.ApplicationDependcyService;
 import io.github.saluki.monitor.ops.service.ConsulRegistryService;
 

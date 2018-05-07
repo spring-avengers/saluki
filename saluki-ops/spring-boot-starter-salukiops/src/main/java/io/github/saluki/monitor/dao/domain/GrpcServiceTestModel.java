@@ -1,4 +1,4 @@
-package io.github.saluki.monitor.domain;
+package io.github.saluki.monitor.dao.domain;
 
 public class GrpcServiceTestModel {
 

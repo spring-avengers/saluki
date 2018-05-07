@@ -14,6 +14,9 @@ import java.util.UUID;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import io.github.saluki.monitor.config.MybatisConfiguration;
+import io.github.saluki.monitor.config.MybatisMapperScannerConfig;
+
 /**
  * @author shimingliu 2016年12月20日 下午3:01:31
  * @version MonitorUtil.java, v 0.0.1 2016年12月20日 下午3:01:31 shimingliu

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.saluki.monitor.domain.GrpcService;
+import io.github.saluki.monitor.dao.domain.GrpcService;
 import io.github.saluki.monitor.ops.service.ConsulRegistryService;
 
 @RestController

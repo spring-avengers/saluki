@@ -25,7 +25,7 @@ import com.google.common.collect.Sets;
 import io.github.saluki.common.Constants;
 import io.github.saluki.common.GrpcURL;
 import io.github.saluki.common.NamedThreadFactory;
-import io.github.saluki.monitor.domain.GrpcHost;
+import io.github.saluki.monitor.dao.domain.GrpcHost;
 @Repository
 public class ConsulRegistryRepository {
     private static final Logger                                   log             = Logger.getLogger(ConsulRegistryRepository.class);

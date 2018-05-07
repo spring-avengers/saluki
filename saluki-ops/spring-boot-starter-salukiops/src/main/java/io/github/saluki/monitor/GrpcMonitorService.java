@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import io.github.saluki.common.Constants;
 import io.github.saluki.common.GrpcURL;
 import io.github.saluki.grpc.service.MonitorService;
-import io.github.saluki.monitor.domain.GrpcInvoke;
-import io.github.saluki.monitor.InvokeMapper;
 import io.github.saluki.monitor.MonitorUtil;
+import io.github.saluki.monitor.dao.InvokeMapper;
+import io.github.saluki.monitor.dao.domain.GrpcInvoke;
 
 /**
  * @author shimingliu 2016年12月21日 下午7:15:56

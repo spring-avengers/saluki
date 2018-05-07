@@ -50,7 +50,7 @@
 	</insert>
 
 	<select id="queryData" parameterType="java.util.Map"
-		resultType="io.github.saluki.monitor.ops.domain.GrpcnvokeStatistics">
+		resultType="io.github.saluki.monitor.dao.domain.GrpcnvokeStatistics">
 		SELECT
 		<choose>
 			<when test="interval =='day'">
@@ -116,7 +116,8 @@
 		FROM
 		saluki_invoke
 		where type='consumer'
-		group by application,service
+		group by
+		application,service
 	</select>
 
 	<select id="queryProvider" parameterType="java.util.Map"
@@ -124,7 +125,8 @@
 		SELECT * from saluki_invoke
 		where
 		type='provider'
-		and service=#{service}
+		and
+		service=#{service}
 		group by application;
 	</select>
 

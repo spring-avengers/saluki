@@ -18,9 +18,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import io.github.saluki.monitor.domain.Application;
-import io.github.saluki.monitor.domain.GrpcHost;
-import io.github.saluki.monitor.domain.GrpcService;
+import io.github.saluki.monitor.dao.domain.Application;
+import io.github.saluki.monitor.dao.domain.GrpcHost;
+import io.github.saluki.monitor.dao.domain.GrpcService;
 import io.github.saluki.monitor.ops.repository.ConsulRegistryRepository;
 
 @Service

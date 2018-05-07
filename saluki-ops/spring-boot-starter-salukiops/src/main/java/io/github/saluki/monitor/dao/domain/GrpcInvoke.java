@@ -1,5 +1,5 @@
 
-package io.github.saluki.monitor.domain;
+package io.github.saluki.monitor.dao.domain;
 
 import java.io.Serializable;
 import java.util.Date;

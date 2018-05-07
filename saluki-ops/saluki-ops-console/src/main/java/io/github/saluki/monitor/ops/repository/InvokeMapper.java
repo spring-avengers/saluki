@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import io.github.saluki.monitor.domain.GrpcInvoke;
-import io.github.saluki.monitor.domain.GrpcnvokeStatistics;
+import io.github.saluki.monitor.dao.domain.GrpcInvoke;
+import io.github.saluki.monitor.dao.domain.GrpcnvokeStatistics;
 
 @Mapper
 public interface InvokeMapper {

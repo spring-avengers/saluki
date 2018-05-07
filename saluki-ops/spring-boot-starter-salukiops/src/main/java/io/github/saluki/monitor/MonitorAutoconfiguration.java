@@ -48,7 +48,7 @@ public class MonitorAutoconfiguration {
             BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
             ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
             scanner.setResourceLoader(applicationContext);
-            scanner.scan("io.github.saluki.monitor");
+            scanner.scan("io.github.saluki.monitor.rest");
           } catch (Throwable e) {
             log.error(e.getMessage(), e);
           }

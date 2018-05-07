@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import io.github.saluki.monitor.domain.GrpcServiceTestModel;
+import io.github.saluki.monitor.dao.domain.GrpcServiceTestModel;
 import io.github.saluki.monitor.jaket.model.GenericInvokeMetadata;
 import io.github.saluki.monitor.jaket.model.MethodDefinition;
 

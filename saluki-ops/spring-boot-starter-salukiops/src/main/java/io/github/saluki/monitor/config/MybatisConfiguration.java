@@ -4,7 +4,7 @@
  * such Confidential Information and shall use it only in accordance with the terms of the license
  * agreement you entered into with Quancheng-ec.com.
  */
-package io.github.saluki.monitor;
+package io.github.saluki.monitor.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -47,7 +47,7 @@ public class MybatisConfiguration {
   public SqlSessionFactory sqlSessionFactoryBean(EmbeddedDatabase dataSource) {
     SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
     bean.setDataSource(dataSource);
-    bean.setTypeAliasesPackage("io.github.saluki.monitor.domain");
+    bean.setTypeAliasesPackage("io.github.saluki.monitor.dao.domain");
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     try {
       bean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));

@@ -21,9 +21,9 @@ import io.github.saluki.boot.autoconfigure.GrpcProperties;
 import io.github.saluki.common.NamedThreadFactory;
 import io.github.saluki.utils.NetUtils;
 import io.github.saluki.utils.Version;
-import io.github.saluki.monitor.domain.GrpcInvoke;
-import io.github.saluki.monitor.InvokeMapper;
 import io.github.saluki.monitor.MonitorUtil;
+import io.github.saluki.monitor.dao.InvokeMapper;
+import io.github.saluki.monitor.dao.domain.GrpcInvoke;
 
 @RestController
 @RequestMapping("monitor")

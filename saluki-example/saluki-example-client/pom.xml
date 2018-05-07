@@ -32,7 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.github.saluki</groupId>
-			<artifactId>spring-boot-starter-saluki-monitor</artifactId>
+			<artifactId>spring-boot-starter-salukiops</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

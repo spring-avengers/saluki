@@ -4,14 +4,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saluki.example.model.First;
+import com.saluki.example.model.Second;
+
 import io.github.examples.model.hello.HelloReply;
 import io.github.examples.model.hello.HelloRequest;
 import io.github.examples.service.HelloService;
 import io.github.saluki.boot.SalukiReference;
-import io.github.saluki.core.common.RpcContext;
-import com.saluki.example.model.First;
-import com.saluki.example.model.Second;
-
+import io.github.saluki.common.RpcContext;
 import io.grpc.stub.StreamObserver;
 
 @RestController

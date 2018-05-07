@@ -23,7 +23,7 @@ import io.github.examples.model.Hello;
 import io.github.examples.model.hello.HelloReply;
 import io.github.examples.service.HelloServiceGrpc;
 import io.github.saluki.boot.SalukiReference;
-import io.github.saluki.core.grpc.util.SerializerUtil;
+import io.github.saluki.grpc.util.SerializerUtil;
 import io.github.saluki.serializer.exception.ProtobufException;
 
 /**

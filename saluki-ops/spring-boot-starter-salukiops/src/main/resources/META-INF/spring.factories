@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.github.saluki.boot.MonitorAutoconfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.github.saluki.monitor.MonitorAutoconfiguration

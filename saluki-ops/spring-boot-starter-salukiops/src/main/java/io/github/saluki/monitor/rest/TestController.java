@@ -1,4 +1,4 @@
-package io.github.saluki.monitor.common;
+package io.github.saluki.monitor.rest;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;

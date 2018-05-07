@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SalukiExampleServerApp {
 
   public static void main(String[] args) {
-
     SpringApplication.run(SalukiExampleServerApp.class, args);
   }
 

@@ -4,8 +4,7 @@ import io.github.examples.model.hello.HelloReply;
 import io.github.examples.model.hello.HelloRequest;
 import io.github.examples.service.HelloService;
 import io.github.saluki.boot.SalukiService;
-import io.github.saluki.core.common.RpcContext;
-
+import io.github.saluki.common.RpcContext;
 import io.grpc.stub.StreamObserver;
 
 @SalukiService

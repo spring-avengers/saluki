@@ -1,4 +1,4 @@
-package io.github.saluki.plugin
+package io.github.saluki.plugin.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import groovy.io.FileType

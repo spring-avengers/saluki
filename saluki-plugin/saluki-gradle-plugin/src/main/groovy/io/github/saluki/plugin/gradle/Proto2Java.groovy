@@ -2,7 +2,7 @@ package io.github.saluki.plugin.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import groovy.io.FileType
-import io.github.plugin.common.CommonProto2Java
+import io.github.saluki.plugin.common.CommonProto2Java
 
 
 class Proto2Java implements Plugin<Project> {

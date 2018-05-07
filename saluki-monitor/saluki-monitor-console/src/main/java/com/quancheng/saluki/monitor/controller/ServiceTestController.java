@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import io.github.saluki.boot.jaket.model.GenericInvokeMetadata;
-import io.github.saluki.boot.jaket.model.MethodDefinition;
-import io.github.saluki.domain.GrpcServiceTestModel;
+import io.github.saluki.monitor.jaket.model.GenericInvokeMetadata;
+import io.github.saluki.monitor.jaket.model.MethodDefinition;
+import io.github.saluki.monitor.domain.GrpcServiceTestModel;
 
 @RestController
 @RequestMapping("/api/serviceMeasure")

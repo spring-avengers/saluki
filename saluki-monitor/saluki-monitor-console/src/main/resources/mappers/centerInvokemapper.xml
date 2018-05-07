@@ -50,7 +50,7 @@
 	</insert>
 
 	<select id="queryData" parameterType="java.util.Map"
-		resultType="io.github.saluki.domain.GrpcnvokeStatistics">
+		resultType="io.github.saluki.monitor.domain.GrpcnvokeStatistics">
 		SELECT
 		<choose>
 			<when test="interval =='day'">

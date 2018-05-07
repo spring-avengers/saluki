@@ -1,0 +1,14 @@
+syntax = "proto3";
+option java_package = "io.github.examples.service";
+option java_outer_classname = "HelloServiceProto2";
+package io.github.examples.service;
+import "example/hello.proto";
+service HelloService {
+    rpc sayHello (io.github.examples.model.HelloRequest) returns (io.github.examples.model.HelloReply) {}
+    
+    rpc sayHelloServerStream (io.github.examples.model.HelloRequest) returns (stream io.github.examples.model.HelloReply) {}
+    
+    rpc sayHelloClientStream (stream io.github.examples.model.HelloRequest) returns (io.github.examples.model.HelloReply) {}
+    
+    rpc sayHelloBidiStream (stream io.github.examples.model.HelloRequest) returns (stream io.github.examples.model.HelloReply) {}
+}

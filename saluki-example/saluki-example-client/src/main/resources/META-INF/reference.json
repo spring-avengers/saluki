@@ -1,0 +1,8 @@
+[
+    {
+        "service": "io.github.examples.service.HelloService", 
+        "group": "example", 
+        "version": "1.0.0"
+    }
+    
+]

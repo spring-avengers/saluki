@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import io.github.saluki.domain.ApplicationDependcy;
+import io.github.saluki.monitor.domain.ApplicationDependcy;
 import io.github.saluki.monitor.repository.InvokeMapper;
 
 @Service

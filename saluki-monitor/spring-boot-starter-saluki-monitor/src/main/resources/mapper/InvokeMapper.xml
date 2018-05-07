@@ -25,7 +25,7 @@
 		output
 	</sql>
 
-	<insert id="addInvoke" parameterType="io.github.saluki.domain.GrpcInvoke">
+	<insert id="addInvoke" parameterType="io.github.saluki.monitor.domain.GrpcInvoke">
 		insert into
 		invoke_data (
 		<include refid="allNoAsOfInvoke" />
@@ -52,7 +52,7 @@
 		)
 	</insert>
 
-	<select id="queryData" resultType="io.github.saluki.domain.GrpcInvoke">
+	<select id="queryData" resultType="io.github.saluki.monitor.domain.GrpcInvoke">
 		SELECT *
 		FROM invoke_data
 	</select>

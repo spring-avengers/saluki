@@ -50,6 +50,7 @@
 		<module>saluki-registry</module>
 		<module>saluki-serializer</module>
 		<module>saluki-service</module>
+		<module>saluki-monitor</module>
 		<module>spring-boot-starter-saluki</module>
 		<module>saluki-plugin</module>
 	</modules>

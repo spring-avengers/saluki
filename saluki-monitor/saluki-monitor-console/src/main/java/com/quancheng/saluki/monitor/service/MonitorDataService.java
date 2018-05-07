@@ -36,9 +36,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import io.github.saluki.common.NamedThreadFactory;
-import io.github.saluki.domain.GrpcHost;
-import io.github.saluki.domain.GrpcInvoke;
-import io.github.saluki.domain.GrpcnvokeStatistics;
+import io.github.saluki.monitor.domain.GrpcHost;
+import io.github.saluki.monitor.domain.GrpcInvoke;
+import io.github.saluki.monitor.domain.GrpcnvokeStatistics;
 import io.github.saluki.monitor.repository.ConsulRegistryRepository;
 import io.github.saluki.monitor.repository.InvokeMapper;
 

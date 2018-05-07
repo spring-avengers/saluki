@@ -40,7 +40,7 @@ public class MybatisConfiguration extends SingleDataSourceConfig
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
     bean.setDataSource(dataSource);
-    bean.setTypeAliasesPackage("io.github.saluki.domain");
+    bean.setTypeAliasesPackage("io.github.saluki.monitor.domain");
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     try {
       bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));

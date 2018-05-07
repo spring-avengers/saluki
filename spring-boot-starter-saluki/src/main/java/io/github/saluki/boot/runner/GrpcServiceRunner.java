@@ -51,8 +51,8 @@ public class GrpcServiceRunner implements DisposableBean, CommandLineRunner {
 
   private RpcServiceConfig rpcService;
 
-  public GrpcServiceRunner(GrpcProperties thrallProperties) {
-    this.grpcProperties = thrallProperties;
+  public GrpcServiceRunner(GrpcProperties props) {
+    this.grpcProperties = props;
   }
 
   @Override

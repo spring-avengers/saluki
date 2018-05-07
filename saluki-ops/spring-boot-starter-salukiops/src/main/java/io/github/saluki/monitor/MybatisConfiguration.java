@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the
- * confidential and proprietary information of Quancheng-ec.com ("Confidential
- * Information"). You shall not disclose such Confidential Information and shall
- * use it only in accordance with the terms of the license agreement you entered
- * into with Quancheng-ec.com.
+ * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and
+ * proprietary information of Quancheng-ec.com ("Confidential Information"). You shall not disclose
+ * such Confidential Information and shall use it only in accordance with the terms of the license
+ * agreement you entered into with Quancheng-ec.com.
  */
 package io.github.saluki.monitor;
 
@@ -32,53 +31,53 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 @ConditionalOnExpression("${saluki.monitor.enabled:true}")
 public class MybatisConfiguration {
 
+  @Bean
+  @ConditionalOnMissingBean(EmbeddedDatabase.class)
+  public EmbeddedDatabase dataSource() {
+    EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+    EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.H2) //
+        .setName("grpcmonitor")//
+        .addScript("mapper/create-db.sql")//
+        .build();
+    return db;
+  }
+
+  @Bean(name = "sqlSessionFactory")
+  public SqlSessionFactory sqlSessionFactoryBean(EmbeddedDatabase dataSource) {
+    SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+    bean.setDataSource(dataSource);
+    bean.setTypeAliasesPackage("io.github.saluki.monitor.domain");
+    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    try {
+      bean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
+      return bean.getObject();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Bean
+  public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+    return new SqlSessionTemplate(sqlSessionFactory);
+  }
+
+  @Configuration
+  @EnableTransactionManagement
+  @ConditionalOnExpression("${saluki.monitor.enabled:true}")
+  public static class TransactionConfig implements TransactionManagementConfigurer {
+
+    private EmbeddedDatabase dataSource;
+
+    public TransactionConfig(EmbeddedDatabase dataSource) {
+      this.dataSource = dataSource;
+    }
+
     @Bean
-    @ConditionalOnMissingBean(EmbeddedDatabase.class)
-    public EmbeddedDatabase dataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.H2) //
-                                     .setName("grpcmonitor")//
-                                     .addScript("mapper/create-db.sql")//
-                                     .build();
-        return db;
+    @Override
+    public PlatformTransactionManager annotationDrivenTransactionManager() {
+      return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactoryBean(EmbeddedDatabase dataSource) {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-        bean.setDataSource(dataSource);
-        bean.setTypeAliasesPackage("io.github.saluki.monitor.domain");
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        try {
-            bean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
-            return bean.getObject();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Bean
-    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-        return new SqlSessionTemplate(sqlSessionFactory);
-    }
-
-    @Configuration
-    @EnableTransactionManagement
-    @ConditionalOnExpression("${saluki.monitor.enabled:true}")
-    public static class TransactionConfig implements TransactionManagementConfigurer {
-
-        private EmbeddedDatabase dataSource;
-
-        public TransactionConfig(EmbeddedDatabase dataSource){
-            this.dataSource = dataSource;
-        }
-
-        @Bean
-        @Override
-        public PlatformTransactionManager annotationDrivenTransactionManager() {
-            return new DataSourceTransactionManager(dataSource);
-        }
-
-    }
+  }
 
 }

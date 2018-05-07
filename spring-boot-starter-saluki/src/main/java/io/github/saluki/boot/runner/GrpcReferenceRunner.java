@@ -69,10 +69,9 @@ public class GrpcReferenceRunner extends InstantiationAwareBeanPostProcessorAdap
   @Autowired
   private Environment env;
 
-
-  public GrpcReferenceRunner(GrpcProperties thrallProperties) {
-    this.grpcProperties = thrallProperties;
-    String referenceDefinPath = thrallProperties.getReferenceDefinition();
+  public GrpcReferenceRunner(GrpcProperties props) {
+    this.grpcProperties = props;
+    String referenceDefinPath = props.getReferenceDefinition();
     if (StringUtils.isNoneBlank(referenceDefinPath)) {
       InputStream in =
           GrpcReferenceRunner.class.getClassLoader().getResourceAsStream(referenceDefinPath);

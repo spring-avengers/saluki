@@ -34,12 +34,12 @@ public class GrpcAutoConfiguration {
 
   @Bean
   @ConditionalOnBean(value = GrpcProperties.class, annotation = SalukiService.class)
-  public GrpcServiceRunner thrallServiceRunner() {
+  public GrpcServiceRunner serviceRunner() {
     return new GrpcServiceRunner(grpcProperties);
   }
 
   @Bean
-  public BeanPostProcessor thrallReferenceRunner() {
+  public BeanPostProcessor referenceRunner() {
     return new GrpcReferenceRunner(grpcProperties);
   }
 

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.boot.web;
+package io.github.saluki.boot.web;
 
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
-import com.quancheng.saluki.boot.autoconfigure.GrpcProperties;
-import com.quancheng.saluki.core.common.NamedThreadFactory;
-import com.quancheng.saluki.core.utils.NetUtils;
-import com.quancheng.saluki.core.utils.Version;
-import com.quancheng.saluki.domain.GrpcInvoke;
-import com.quancheng.saluki.monitor.InvokeMapper;
-import com.quancheng.saluki.monitor.MonitorUtil;
+import io.github.saluki.boot.autoconfigure.GrpcProperties;
+import io.github.saluki.common.NamedThreadFactory;
+import io.github.saluki.utils.NetUtils;
+import io.github.saluki.utils.Version;
+import io.github.saluki.domain.GrpcInvoke;
+import io.github.saluki.monitor.InvokeMapper;
+import io.github.saluki.monitor.MonitorUtil;
 
 @RestController
 @RequestMapping("monitor")

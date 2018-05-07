@@ -6,7 +6,7 @@
 	<artifactId>spring-boot-starter-saluki-monitor</artifactId>
 	<inceptionYear>2017</inceptionYear>
 	<parent>
-		<groupId>com.quancheng.saluki</groupId>
+		<groupId>io.github.saluki</groupId>
 		<artifactId>saluki-monitor</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
@@ -30,7 +30,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.quancheng.saluki</groupId>
+			<groupId>io.github.saluki</groupId>
 			<artifactId>spring-boot-starter-saluki</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>

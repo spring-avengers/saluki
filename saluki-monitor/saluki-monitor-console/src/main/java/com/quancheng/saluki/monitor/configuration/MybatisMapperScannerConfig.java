@@ -5,7 +5,7 @@
  * use it only in accordance with the terms of the license agreement you entered
  * into with Quancheng-ec.com.
  */
-package com.quancheng.saluki.monitor.configuration;
+package io.github.saluki.monitor.configuration;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -24,7 +24,7 @@ public class MybatisMapperScannerConfig {
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-        mapperScannerConfigurer.setBasePackage("com.quancheng.saluki.monitor.repository");
+        mapperScannerConfigurer.setBasePackage("io.github.saluki.monitor.repository");
         return mapperScannerConfigurer;
     }
 }

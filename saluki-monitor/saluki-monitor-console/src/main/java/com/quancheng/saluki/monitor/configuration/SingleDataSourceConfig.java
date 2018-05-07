@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.quancheng.saluki.monitor.configuration;
+package io.github.saluki.monitor.configuration;
 
 import java.sql.SQLException;
 
@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.quancheng.saluki.monitor.configuration.SingleDataSourceConfig.DataSourcePropertiesCommon;
+import io.github.saluki.monitor.configuration.SingleDataSourceConfig.DataSourcePropertiesCommon;
 
 
 /**

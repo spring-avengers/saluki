@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.service;
+package io.github.saluki.monitor.service;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.quancheng.saluki.domain.Application;
-import com.quancheng.saluki.domain.GrpcHost;
-import com.quancheng.saluki.domain.GrpcService;
-import com.quancheng.saluki.monitor.repository.ConsulRegistryRepository;
+import io.github.saluki.domain.Application;
+import io.github.saluki.domain.GrpcHost;
+import io.github.saluki.domain.GrpcService;
+import io.github.saluki.monitor.repository.ConsulRegistryRepository;
 
 @Service
 public class ConsulRegistryService {

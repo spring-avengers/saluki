@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.quancheng.saluki.boot.autoconfigure.WebAppAutoConfiguration,\
-com.quancheng.saluki.boot.autoconfigure.GrpcAutoConfiguration
+io.github.saluki.boot.autoconfigure.WebAppAutoConfiguration,\
+io.github.saluki.boot.autoconfigure.GrpcAutoConfiguration

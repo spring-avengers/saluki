@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
-        classpath 'com.quancheng.saluki:saluki-gradle-plugin:1.5.1+'
+        classpath 'io.github.saluki:saluki-gradle-plugin:1.5.1+'
     }
 }
 
@@ -65,7 +65,7 @@ maven
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.quancheng.saluki</groupId>
+				<groupId>io.github.saluki</groupId>
 				<artifactId>saluki-maven-plugin</artifactId>
 				<version>1.5.1-SNAPSHOT</version>
 				<configuration>

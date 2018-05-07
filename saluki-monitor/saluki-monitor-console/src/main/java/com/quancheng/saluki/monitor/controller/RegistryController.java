@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.controller;
+package io.github.saluki.monitor.controller;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quancheng.saluki.domain.GrpcService;
-import com.quancheng.saluki.monitor.service.ConsulRegistryService;
+import io.github.saluki.domain.GrpcService;
+import io.github.saluki.monitor.service.ConsulRegistryService;
 
 @RestController
 @RequestMapping(value = "/api/service")

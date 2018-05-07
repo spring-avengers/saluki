@@ -5,7 +5,7 @@
  * use it only in accordance with the terms of the license agreement you entered
  * into with Quancheng-ec.com.
  */
-package com.quancheng.saluki.boot;
+package io.github.saluki.boot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class MonitorAutoconfiguration {
                         BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
                         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
                         scanner.setResourceLoader(applicationContext);
-                        scanner.scan("com.quancheng.saluki.boot.web");
+                        scanner.scan("io.github.saluki.boot.web");
                     } catch (Throwable e) {
                         log.error(e.getMessage(), e);
                     }

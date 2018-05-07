@@ -1,12 +1,12 @@
-package com.quancheng.saluki.monitor.repository;
+package io.github.saluki.monitor.repository;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.quancheng.saluki.domain.GrpcInvoke;
-import com.quancheng.saluki.domain.GrpcnvokeStatistics;
+import io.github.saluki.domain.GrpcInvoke;
+import io.github.saluki.domain.GrpcnvokeStatistics;
 
 @Mapper
 public interface InvokeMapper {

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.boot.web;
+package io.github.saluki.boot.web;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -24,20 +24,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.quancheng.saluki.boot.SalukiReference;
-import com.quancheng.saluki.boot.SalukiService;
-import com.quancheng.saluki.boot.autoconfigure.GrpcProperties;
-import com.quancheng.saluki.boot.common.GrpcAop;
-import com.quancheng.saluki.boot.jaket.Jaket;
-import com.quancheng.saluki.boot.jaket.model.GenericInvokeMetadata;
-import com.quancheng.saluki.boot.jaket.model.MetadataType;
-import com.quancheng.saluki.boot.jaket.model.MethodDefinition;
-import com.quancheng.saluki.boot.jaket.model.ServiceDefinition;
-import com.quancheng.saluki.boot.jaket.util.GenericInvokeUtils;
-import com.quancheng.saluki.core.common.RpcContext;
-import com.quancheng.saluki.core.grpc.service.GenericService;
-import com.quancheng.saluki.core.utils.ReflectUtils;
-import com.quancheng.saluki.domain.GrpcServiceTestModel;
+import io.github.saluki.boot.SalukiReference;
+import io.github.saluki.boot.SalukiService;
+import io.github.saluki.boot.autoconfigure.GrpcProperties;
+import io.github.saluki.boot.common.GrpcAop;
+import io.github.saluki.boot.jaket.Jaket;
+import io.github.saluki.boot.jaket.model.GenericInvokeMetadata;
+import io.github.saluki.boot.jaket.model.MetadataType;
+import io.github.saluki.boot.jaket.model.MethodDefinition;
+import io.github.saluki.boot.jaket.model.ServiceDefinition;
+import io.github.saluki.boot.jaket.util.GenericInvokeUtils;
+import io.github.saluki.common.RpcContext;
+import io.github.saluki.grpc.service.GenericService;
+import io.github.saluki.utils.ReflectUtils;
+import io.github.saluki.domain.GrpcServiceTestModel;
 
 @RestController
 @RequestMapping("service")

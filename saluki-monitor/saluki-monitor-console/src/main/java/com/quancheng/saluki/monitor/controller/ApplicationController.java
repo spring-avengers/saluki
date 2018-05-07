@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.controller;
+package io.github.saluki.monitor.controller;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quancheng.saluki.domain.Application;
-import com.quancheng.saluki.domain.ApplicationDependcy;
-import com.quancheng.saluki.monitor.service.ApplicationDependcyService;
-import com.quancheng.saluki.monitor.service.ConsulRegistryService;
+import io.github.saluki.domain.Application;
+import io.github.saluki.domain.ApplicationDependcy;
+import io.github.saluki.monitor.service.ApplicationDependcyService;
+import io.github.saluki.monitor.service.ConsulRegistryService;
 
 @RestController
 @RequestMapping(value = "/api/application")

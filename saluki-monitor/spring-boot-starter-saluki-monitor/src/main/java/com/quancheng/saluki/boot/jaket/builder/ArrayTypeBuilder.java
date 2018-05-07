@@ -1,10 +1,10 @@
-package com.quancheng.saluki.boot.jaket.builder;
+package io.github.saluki.boot.jaket.builder;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import com.quancheng.saluki.boot.jaket.JaketTypeBuilder;
-import com.quancheng.saluki.boot.jaket.model.TypeDefinition;
+import io.github.saluki.boot.jaket.JaketTypeBuilder;
+import io.github.saluki.boot.jaket.model.TypeDefinition;
 
 /**
  * Created by huangsheng.hs on 2015/1/27.

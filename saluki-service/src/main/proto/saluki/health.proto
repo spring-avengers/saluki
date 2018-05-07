@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-option java_package = "com.quancheng.saluki.service";
+option java_package = "io.github.saluki.service";
 option java_outer_classname = "ServiceParam";
 
-package com.quancheng.saluki.service;
+package io.github.saluki.service;
 
 service Health {
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse);

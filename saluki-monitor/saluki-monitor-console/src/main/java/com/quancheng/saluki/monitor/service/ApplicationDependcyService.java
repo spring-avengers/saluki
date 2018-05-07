@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.service;
+package io.github.saluki.monitor.service;
 
 import java.util.List;
 import java.util.Map;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.quancheng.saluki.domain.ApplicationDependcy;
-import com.quancheng.saluki.monitor.repository.InvokeMapper;
+import io.github.saluki.domain.ApplicationDependcy;
+import io.github.saluki.monitor.repository.InvokeMapper;
 
 @Service
 public class ApplicationDependcyService {

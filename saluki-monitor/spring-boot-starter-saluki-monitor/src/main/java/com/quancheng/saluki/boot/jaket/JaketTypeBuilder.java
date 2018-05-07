@@ -1,4 +1,4 @@
-package com.quancheng.saluki.boot.jaket;
+package io.github.saluki.boot.jaket;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.quancheng.saluki.boot.jaket.builder.ArrayTypeBuilder;
-import com.quancheng.saluki.boot.jaket.builder.CollectionTypeBuilder;
-import com.quancheng.saluki.boot.jaket.builder.DefaultTypeBuilder;
-import com.quancheng.saluki.boot.jaket.builder.EnumTypeBuilder;
-import com.quancheng.saluki.boot.jaket.builder.MapTypeBuilder;
-import com.quancheng.saluki.boot.jaket.builder.TypeBuilder;
-import com.quancheng.saluki.boot.jaket.model.TypeDefinition;
+import io.github.saluki.boot.jaket.builder.ArrayTypeBuilder;
+import io.github.saluki.boot.jaket.builder.CollectionTypeBuilder;
+import io.github.saluki.boot.jaket.builder.DefaultTypeBuilder;
+import io.github.saluki.boot.jaket.builder.EnumTypeBuilder;
+import io.github.saluki.boot.jaket.builder.MapTypeBuilder;
+import io.github.saluki.boot.jaket.builder.TypeBuilder;
+import io.github.saluki.boot.jaket.model.TypeDefinition;
 
 /**
  * Created by huangsheng.hs on 2015/1/27.

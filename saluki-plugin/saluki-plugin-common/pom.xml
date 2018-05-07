@@ -6,7 +6,7 @@
 	<artifactId>saluki-plugin-common</artifactId>
 	<inceptionYear>2017</inceptionYear>
 	<parent>
-		<groupId>com.quancheng.saluki</groupId>
+		<groupId>io.github.saluki</groupId>
 		<artifactId>saluki-plugin</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>

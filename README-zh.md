@@ -69,14 +69,14 @@
 
 ```
 <dependency>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>saluki-core</artifactId>
 	<version>1.5.7.RELEASE</version>
 	<scope>provided</scope>
 </dependency>
 
 <plugin>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>saluki-maven-plugin</artifactId>
 	<version>1.5.7.RELEASE</version>
 	<configuration>
@@ -102,12 +102,12 @@
 
 ```
 <dependency>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>spring-boot-starter-saluki</artifactId>
 	<version>1.5.7.RELEASE</version>
 </dependency>
 <dependency>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>spring-boot-starter-saluki-monitor</artifactId>
 	<version>1.5.7.RELEASE</version>
 </dependency>

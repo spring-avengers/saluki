@@ -5,7 +5,7 @@ const apiData = [{
   "dependcyApps": [{
     "appName": 'example-service';
     "services": [{
-      "name": "com.quancheng.test.service.UserService",
+      "name": "io.github.test.service.UserService",
       "callCount": 1908818
     }]
   }]
@@ -24,7 +24,7 @@ function getApiMock() {
       dependcyApps[i] = {
         "appName": data[dependcyKey].name,
         "dependcyServices": [{
-          "serviceName": "com.quancheng.test.service.UserService",
+          "serviceName": "io.github.test.service.UserService",
           "callCount": 1908818
         }]
       }

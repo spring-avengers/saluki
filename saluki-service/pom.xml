@@ -6,7 +6,7 @@
 	<artifactId>saluki-service</artifactId>
 	<inceptionYear>2017</inceptionYear>
 	<parent>
-		<groupId>com.quancheng.saluki</groupId>
+		<groupId>io.github.saluki</groupId>
 		<artifactId>saluki</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
@@ -19,7 +19,7 @@
 	</licenses>
 	<dependencies>
 		<dependency>
-			<groupId>com.quancheng.saluki</groupId>
+			<groupId>io.github.saluki</groupId>
 			<artifactId>saluki-core</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -63,7 +63,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.quancheng.saluki</groupId>
+				<groupId>io.github.saluki</groupId>
 				<artifactId>saluki-maven-plugin</artifactId>
 				<version>${project.version}</version>
 				<configuration>

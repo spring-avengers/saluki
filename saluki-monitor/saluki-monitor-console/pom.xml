@@ -6,7 +6,7 @@
 	<artifactId>saluki-monitor-console</artifactId>
 	<inceptionYear>2017</inceptionYear>
 	<parent>
-		<groupId>com.quancheng.saluki</groupId>
+		<groupId>io.github.saluki</groupId>
 		<artifactId>saluki-monitor</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
@@ -78,12 +78,12 @@
 			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.quancheng.saluki</groupId>
+			<groupId>io.github.saluki</groupId>
 			<artifactId>saluki-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.quancheng.saluki</groupId>
+			<groupId>io.github.saluki</groupId>
 			<artifactId>spring-boot-starter-saluki-monitor</artifactId>
 			<version>${project.version}</version>
 			<exclusions>

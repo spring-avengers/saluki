@@ -1,4 +1,4 @@
-package com.quancheng.saluki.domain;
+package io.github.saluki.domain;
 
 import java.io.Serializable;
 import java.util.Collection;

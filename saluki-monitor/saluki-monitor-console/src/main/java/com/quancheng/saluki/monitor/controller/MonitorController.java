@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.controller;
+package io.github.saluki.monitor.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.quancheng.saluki.domain.GrpcnvokeStatistics;
-import com.quancheng.saluki.monitor.service.MonitorDataService;
+import io.github.saluki.domain.GrpcnvokeStatistics;
+import io.github.saluki.monitor.service.MonitorDataService;
 
 @RestController
 @RequestMapping(value = "/api/monitor")

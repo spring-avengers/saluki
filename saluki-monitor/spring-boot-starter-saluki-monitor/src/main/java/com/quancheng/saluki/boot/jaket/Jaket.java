@@ -1,14 +1,14 @@
-package com.quancheng.saluki.boot.jaket;
+package io.github.saluki.boot.jaket;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.quancheng.saluki.boot.jaket.model.MethodDefinition;
-import com.quancheng.saluki.boot.jaket.model.ServiceDefinition;
-import com.quancheng.saluki.boot.jaket.model.TypeDefinition;
-import com.quancheng.saluki.boot.jaket.util.ClassUtils;
+import io.github.saluki.boot.jaket.model.MethodDefinition;
+import io.github.saluki.boot.jaket.model.ServiceDefinition;
+import io.github.saluki.boot.jaket.model.TypeDefinition;
+import io.github.saluki.boot.jaket.util.ClassUtils;
 
 /**
  * Created by huangsheng.hs on 2015/1/27.
@@ -16,7 +16,7 @@ import com.quancheng.saluki.boot.jaket.util.ClassUtils;
 public final class Jaket {
 
     /**
-     * Describe a Java interface in {@link com.quancheng.saluki.boot.jaket.model.ServiceDefinition}.
+     * Describe a Java interface in {@link io.github.saluki.boot.jaket.model.ServiceDefinition}.
      *
      * @return Service description
      */

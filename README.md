@@ -35,12 +35,12 @@ README: [English](https://github.com/venus-boot/saluki/blob/master/README.md) | 
 
 ```
 <dependency>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>spring-boot-starter-saluki</artifactId>
 	<version>1.5.7.RELEASE</version>
 </dependency>
 <dependency>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>spring-boot-starter-saluki-monitor</artifactId>
 	<version>1.5.7.RELEASE</version>
 </dependency>

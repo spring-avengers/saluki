@@ -1,4 +1,4 @@
-package com.quancheng.saluki.monitor.repository;
+package io.github.saluki.monitor.repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,10 +18,10 @@ import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.agent.model.Check;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.quancheng.saluki.core.common.Constants;
-import com.quancheng.saluki.core.common.GrpcURL;
-import com.quancheng.saluki.core.common.NamedThreadFactory;
-import com.quancheng.saluki.domain.GrpcHost;
+import io.github.saluki.common.Constants;
+import io.github.saluki.common.GrpcURL;
+import io.github.saluki.common.NamedThreadFactory;
+import io.github.saluki.domain.GrpcHost;
 @Repository
 public class ConsulRegistryRepository {
     private static final Logger                                   log             = Logger.getLogger(ConsulRegistryRepository.class);

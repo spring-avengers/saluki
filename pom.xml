@@ -2,11 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.quancheng.saluki</groupId>
+	<groupId>io.github.saluki</groupId>
 	<artifactId>saluki</artifactId>
 	<version>1.5.7.RELEASE</version>
 	<inceptionYear>2017</inceptionYear>
 	<packaging>pom</packaging>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -14,13 +19,38 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<name>shiming.liu</name>
+			<email>297442500@qq.com</email>
+			<organization>shiming.liu</organization>
+			<url>https://github.com/venus-boot/saluki</url>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git@github.com:venus-boot/saluki.git</connection>
+		<developerConnection>scm:git:git@github.com:venus-boot/saluki.git</developerConnection>
+		<url>https://github.com/venus-boot/saluki</url>
+		<tag>1.0</tag>
+	</scm>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>oss</id>
+			<name>OSS Snapshots Repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>oss</id>
+			<name>OSS Staging Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 	<modules>
 		<module>saluki-core</module>
 		<module>saluki-registry</module>
 		<module>saluki-serializer</module>
 		<module>saluki-service</module>
 		<module>spring-boot-starter-saluki</module>
-		<module>saluki-monitor</module>
 		<module>saluki-plugin</module>
 	</modules>
 	<properties>
@@ -39,12 +69,6 @@
 		<hystrix.version>1.5.11</hystrix.version>
 		<os.maven.version>1.5.0.Final</os.maven.version>
 	</properties>
-	<scm>
-		<url>https://github.com/linking12/saluki</url>
-		<connection>scm:git:git@github.com:linking12/saluki.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:linking12/saluki.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -38,7 +38,7 @@
                       <div class="col-md-12">
                         <p>
                           <router-link :to="{path:'/service/detail/'+item.serviceName}">
-                            <!-- com.quancheng.zeus.service.AccountService-->
+                            <!-- io.github.zeus.service.AccountService-->
                             {{ item.serviceName }} <span class="label label-default">{{ item.version }}</span>
                           </router-link>
                         </p>

@@ -1,4 +1,4 @@
-package com.quancheng.saluki.boot.jaket.model;
+package io.github.saluki.boot.jaket.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

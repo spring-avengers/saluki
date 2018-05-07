@@ -4,7 +4,7 @@
  * such Confidential Information and shall use it only in accordance with the terms of the license
  * agreement you entered into with Quancheng-ec.com.
  */
-package com.quancheng.saluki.monitor.configuration;
+package io.github.saluki.monitor.configuration;
 
 import java.sql.SQLException;
 
@@ -40,7 +40,7 @@ public class MybatisConfiguration extends SingleDataSourceConfig
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
     bean.setDataSource(dataSource);
-    bean.setTypeAliasesPackage("com.quancheng.saluki.domain");
+    bean.setTypeAliasesPackage("io.github.saluki.domain");
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     try {
       bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));

@@ -123,9 +123,6 @@ public final class GrpcEngine {
         .bossEventLoopGroup(createBossEventLoopGroup())//
         .workerEventLoopGroup(createWorkEventLoopGroup())//
         .maxHeaderListSize(4 * 1024 * 1024)//
-        // This is a performance optimization that avoids the synchronization and queuing overhead
-        // that comes with SerializingExecutor.
-        // 性能优化，用户线程与Io线程的切换需要耗费时间的，而同步和入队需要耗费时间的
         .addTransportFilter(new ServerTransportFilter() {
           @Override
           public Attributes transportReady(Attributes transportAttrs) {

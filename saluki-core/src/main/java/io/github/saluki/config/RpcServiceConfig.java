@@ -6,7 +6,6 @@
  */
 package io.github.saluki.config;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import io.github.saluki.common.Constants;
 import io.github.saluki.common.GrpcURL;
 
@@ -30,13 +30,15 @@ public class RpcServiceConfig extends RpcBaseConfig {
   private transient io.grpc.Server internalServer;
 
   public void destroy() {
-    Runtime.getRuntime().addShutdownHook(new Thread() {
+    internalServer.shutdown();
+  }
 
-      public void run() {
-        if (internalServer != null)
-          internalServer.shutdown();
-      }
-    });
+  public void await() {
+    try {
+      internalServer.awaitTermination();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   public void addServiceDefinition(String serviceName, String group, String version,
@@ -66,24 +68,8 @@ public class RpcServiceConfig extends RpcBaseConfig {
       providerUrls.put(providerUrl, serviceRef);
     }
     try {
-      internalServer = super.getGrpcEngine().getServer(providerUrls, super.getRealityRpcPort());
-      Thread awaitThread = new Thread() {
-
-        @Override
-        public void run() {
-          try {
-            internalServer.start();
-            internalServer.awaitTermination();
-          } catch (InterruptedException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-          } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-          }
-        }
-
-      };
-      awaitThread.setDaemon(false);
-      awaitThread.start();
+      internalServer =
+          super.getGrpcEngine().getServer(providerUrls, super.getRealityRpcPort()).start();
     } catch (Exception e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

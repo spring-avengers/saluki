@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.frostingwolf</groupId>
 	<artifactId>saluki</artifactId>
-	<version>1.5.7.RELEASE</version>
+	<version>1.5.8-SNAPSHOT</version>
 	<inceptionYear>2017</inceptionYear>
 	<packaging>pom</packaging>
 	<parent>
@@ -35,14 +35,12 @@
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
-			<id>oss</id>
-			<name>OSS Snapshots Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<id>platform-snapshots</id>
+			<url>http://nexus.bkjk-inc.com/nexus/content/repositories/Bkjk-Platform-Snapshots/</url>
 		</snapshotRepository>
 		<repository>
-			<id>oss</id>
-			<name>OSS Staging Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<id>platform-releases</id>
+			<url>http://nexus.bkjk-inc.com/nexus/content/repositories/Bkjk-Platform-Releases/</url>
 		</repository>
 	</distributionManagement>
 	<modules>

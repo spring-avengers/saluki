@@ -7,7 +7,7 @@
 	<inceptionYear>2017</inceptionYear>
 	<packaging>pom</packaging>
 	<parent>
-		<groupId>io.github.saluki</groupId>
+		<groupId>io.github.frostingwolf</groupId>
 		<artifactId>saluki</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>

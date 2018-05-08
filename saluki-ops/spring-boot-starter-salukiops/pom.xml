@@ -6,7 +6,7 @@
 	<artifactId>spring-boot-starter-salukiops</artifactId>
 	<inceptionYear>2017</inceptionYear>
 	<parent>
-		<groupId>io.github.saluki</groupId>
+		<groupId>io.github.frostingwolf</groupId>
 		<artifactId>saluki-ops</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
@@ -30,7 +30,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.github.saluki</groupId>
+			<groupId>io.github.frostingwolf</groupId>
 			<artifactId>spring-boot-starter-saluki</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>

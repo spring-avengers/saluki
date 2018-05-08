@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>io.github.saluki</groupId>
+		<groupId>io.github.frostingwolf</groupId>
 		<artifactId>saluki-example</artifactId>
 		<version>1.5.7.RELEASE</version>
 	</parent>
@@ -13,13 +13,13 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>io.github.saluki</groupId>
+			<groupId>io.github.frostingwolf</groupId>
 			<artifactId>saluki-core</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.github.saluki</groupId>
+			<groupId>io.github.frostingwolf</groupId>
 			<artifactId>saluki-service</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -63,7 +63,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>io.github.saluki</groupId>
+				<groupId>io.github.frostingwolf</groupId>
 				<artifactId>saluki-maven-plugin</artifactId>
 				<version>${project.version}</version>
 				<configuration>

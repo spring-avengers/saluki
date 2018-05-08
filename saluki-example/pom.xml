@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.github.saluki</groupId>
+	<groupId>io.github.frostingwolf</groupId>
 	<artifactId>saluki-example</artifactId>
 	<version>1.5.7.RELEASE</version>
 	<inceptionYear>2017</inceptionYear>
@@ -27,12 +27,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.github.saluki</groupId>
+				<groupId>io.github.frostingwolf</groupId>
 				<artifactId>spring-boot-starter-saluki</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>io.github.saluki</groupId>
+				<groupId>io.github.frostingwolf</groupId>
 				<artifactId>spring-boot-starter-salukiops</artifactId>
 				<version>${project.version}</version>
 			</dependency>

@@ -133,10 +133,6 @@
 						<groupId>org.hdrhistogram</groupId>
 						<artifactId>HdrHistogram</artifactId>
 					</exclusion>
-					<exclusion>
-						<groupId>com.netflix.archaius</groupId>
-						<artifactId>archaius-core</artifactId>
-					</exclusion>
 				</exclusions>
 			</dependency>
 		</dependencies>
@@ -206,6 +202,30 @@
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<includeEmptyDirs>true</includeEmptyDirs>
+							<resources>
+								<resource>
+									<directory>src/main/resource</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

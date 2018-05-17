@@ -71,6 +71,7 @@ public class GenericProxyClient<T> implements GrpcProtocolClient<T> {
       } else {
         GrpcURL resetRefUrl = GenericProxyClient.this.refUrl;
         resetRefUrl = resetRefUrl.setPath(getServiceName(args));
+        resetRefUrl = resetRefUrl.addParameter(Constants.METHOD_KEY, getMethod(args));
         resetRefUrl = resetRefUrl.addParameter(Constants.GROUP_KEY, getGroup(args));
         resetRefUrl = resetRefUrl.addParameter(Constants.VERSION_KEY, getVersion(args));
         MethodDescriptor<Message, Message> methodDesc =

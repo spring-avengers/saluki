@@ -10,13 +10,13 @@ import java.lang.reflect.Method;
 
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
+
 import io.github.saluki.common.Constants;
 import io.github.saluki.common.GrpcURL;
 import io.github.saluki.grpc.annotation.GrpcMethodType;
 import io.github.saluki.grpc.exception.RpcFrameworkException;
 import io.github.saluki.grpc.util.GrpcUtil;
 import io.github.saluki.utils.ReflectUtils;
-
 import io.grpc.Channel;
 import io.grpc.MethodDescriptor;
 
@@ -91,8 +91,8 @@ public abstract class GrpcRequest {
         MethodDescriptor<Message, Message> methodDesc, DynamicMessage message, int callType,
         int callTimeout) {
       super();
-      this.methodName = MethodDescriptor.extractFullServiceName(methodDesc.getFullMethodName());
-      this.refUrl = refUrl.addParameter(Constants.METHOD_KEY, methodName);
+      this.refUrl = refUrl;
+      this.methodName = refUrl.getParameter(Constants.METHOD_KEY);
       this.channel = channelPool.getChannel(refUrl);
       this.callType = callType;
       this.callTimeout = callTimeout;

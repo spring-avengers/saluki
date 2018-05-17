@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.frostingwolf</groupId>
 	<artifactId>saluki</artifactId>
-	<version>1.5.7.RELEASE</version>
+	<version>1.5.9-SNAPSHOT</version>
 	<inceptionYear>2017</inceptionYear>
 	<packaging>pom</packaging>
 	<parent>
@@ -40,6 +40,7 @@
 		<module>saluki-service</module>
 		<module>spring-boot-starter-saluki</module>
 		<module>saluki-plugin</module>
+		<module>saluki-ops</module>
 	</modules>
 	<properties>
 		<grpc-all.version>1.12.0</grpc-all.version>

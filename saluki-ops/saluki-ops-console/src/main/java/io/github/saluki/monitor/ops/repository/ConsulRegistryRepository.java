@@ -1,4 +1,5 @@
 package io.github.saluki.monitor.ops.repository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +14,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -26,17 +28,18 @@ import io.github.saluki.common.Constants;
 import io.github.saluki.common.GrpcURL;
 import io.github.saluki.common.NamedThreadFactory;
 import io.github.saluki.monitor.dao.domain.GrpcHost;
+
 @Repository
 public class ConsulRegistryRepository {
-    private static final Logger                                   log             = Logger.getLogger(ConsulRegistryRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsulRegistryRepository.class);
     @Value("${saluki.monitor.consulhost}")
-    private String                                                agentHost;
-    private ConsulClient                                          consulClient;
+    private String agentHost;
+    private ConsulClient consulClient;
     private final Map<String, Pair<Set<GrpcHost>, Set<GrpcHost>>> servicesPassing = Maps.newConcurrentMap();
     private final Map<String, Pair<Set<GrpcHost>, Set<GrpcHost>>> servicesFailing = Maps.newConcurrentMap();
-    private final ScheduledExecutorService                        executor        = Executors.newScheduledThreadPool(1,
-                                                                                                                     new NamedThreadFactory("ConsulLookUpService",
-                                                                                                                                            true));;
+    private final ScheduledExecutorService executor =
+        Executors.newScheduledThreadPool(1, new NamedThreadFactory("ConsulLookUpService", true));;
+
     @PostConstruct
     public void init() {
         consulClient = new ConsulClient(agentHost);
@@ -54,6 +57,7 @@ public class ConsulRegistryRepository {
             }
         }, 0, 1, TimeUnit.MINUTES);
     }
+
     public void loadAllServiceFromConsul() {
         Map<String, Check> allServices = consulClient.getAgentChecks().getValue();
         for (Map.Entry<String, Check> entry : allServices.entrySet()) {
@@ -66,8 +70,8 @@ public class ConsulRegistryRepository {
                 String version = hostPortServiceVersion.getRight();
                 String serviceKey = generateServicekey(group, service, version);
                 if (serviceCheck.getStatus() == Check.CheckStatus.PASSING) {
-                    Pair<Set<GrpcHost>, Set<GrpcHost>> providerAndConsumer = getProviderAndConsumer(group, service,
-                                                                                                    version);
+                    Pair<Set<GrpcHost>, Set<GrpcHost>> providerAndConsumer =
+                        getProviderAndConsumer(group, service, version);
                     if (providerAndConsumer != null) {
                         servicesPassing.put(serviceKey, providerAndConsumer);
                     }
@@ -86,29 +90,32 @@ public class ConsulRegistryRepository {
             }
         }
     }
+
     public Map<String, Pair<Set<GrpcHost>, Set<GrpcHost>>> getAllPassingService() {
         return this.servicesPassing;
     }
+
     public Map<String, Pair<Set<GrpcHost>, Set<GrpcHost>>> getAllFailingService() {
         return this.servicesFailing;
     }
+
     private Pair<Set<GrpcHost>, Set<GrpcHost>> getProviderAndConsumer(String group, String service, String version) {
         Set<GrpcHost> providerHosts = Sets.newHashSet();
         Set<GrpcHost> comsumerHosts = Sets.newHashSet();
-        List<String> providerAndConsumerKvs = consulClient.getKVKeysOnly(group + "/" + service + "/"
-                                                                         + version).getValue();
+        List<String> providerAndConsumerKvs =
+            consulClient.getKVKeysOnly(group + "/" + service + "/" + version).getValue();
         if (providerAndConsumerKvs != null) {
             for (String providerAndConsumerKv : providerAndConsumerKvs) {
-                Triple<String, String, String> machineInfo = getmachineInfo(providerAndConsumerKv,
-                                                                            group + "/" + service);
+                Triple<String, String, String> machineInfo =
+                    getmachineInfo(providerAndConsumerKv, group + "/" + service);
                 String appFlag = machineInfo.getLeft();
                 String[] appHostRpcPort = machineInfo.getMiddle().split(":");
                 String appHttpPort = machineInfo.getRight();
                 if (appFlag.equals(Constants.PROVIDERS_CATEGORY)) {
                     GrpcHost host = new GrpcHost(appHostRpcPort[0], appHttpPort, appHostRpcPort[1]);
                     host.setStatus("passing");
-                    host.setUrl("service:" + appHostRpcPort[0] + ":" + appHostRpcPort[1] + "-" + service + "-"
-                                + version);
+                    host.setUrl(
+                        "service:" + appHostRpcPort[0] + ":" + appHostRpcPort[1] + "-" + service + "-" + version);
                     providerHosts.add(host);
                 } else if (appFlag.equals(Constants.CONSUMERS_CATEGORY)) {
                     GrpcHost host = new GrpcHost(appHostRpcPort[0], appHttpPort, "0");
@@ -121,6 +128,7 @@ public class ConsulRegistryRepository {
         }
         return null;
     }
+
     /**
      * ==============help method=============
      */
@@ -131,8 +139,9 @@ public class ConsulRegistryRepository {
         String[] serverInfos = StringUtils.split(flagAndIp, "/");
         String machineFlag = serverInfos[1];
         return new ImmutableTriple<String, String, String>(machineFlag, url.getAddress(),
-                                                           url.getParameter(Constants.HTTP_PORT_KEY));
+            url.getParameter(Constants.HTTP_PORT_KEY));
     }
+
     private Triple<String, String, String> getPortHostService(String serviceId) {
         String[] args = StringUtils.split(serviceId, "-");
         String hostRpcPort = args[0];
@@ -143,12 +152,15 @@ public class ConsulRegistryRepository {
         }
         return new ImmutableTriple<String, String, String>(hostRpcPort, service, version);
     }
+
     private String generateServicekey(String group, String service, String version) {
         return StringUtils.remove(group, Constants.CONSUL_SERVICE_PRE) + ":" + service + ":" + version;
     }
+
     public String getAgentHost() {
         return agentHost;
     }
+
     public void setAgentHost(String agentHost) {
         this.agentHost = agentHost;
     }

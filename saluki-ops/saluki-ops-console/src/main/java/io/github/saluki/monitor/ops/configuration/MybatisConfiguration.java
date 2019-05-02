@@ -1,8 +1,7 @@
 /*
- * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and
- * proprietary information of Quancheng-ec.com ("Confidential Information"). You shall not disclose
- * such Confidential Information and shall use it only in accordance with the terms of the license
- * agreement you entered into with Quancheng-ec.com.
+ * Copyright (c) 2016, Quancheng-ec.com All right reserved. This software is the confidential and proprietary
+ * information of Quancheng-ec.com ("Confidential Information"). You shall not disclose such Confidential Information
+ * and shall use it only in accordance with the terms of the license agreement you entered into with Quancheng-ec.com.
  */
 package io.github.saluki.monitor.ops.configuration;
 
@@ -28,44 +27,43 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
  */
 @Configuration
 @EnableTransactionManagement
-public class MybatisConfiguration extends SingleDataSourceConfig
-    implements TransactionManagementConfigurer {
+public class MybatisConfiguration extends SingleDataSourceConfig implements TransactionManagementConfigurer {
 
-  @Bean
-  public DataSource datasource() throws SQLException {
-    return createDataSource();
-  }
-
-  @Bean(name = "sqlSessionFactory")
-  public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-    SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-    bean.setDataSource(dataSource);
-    bean.setTypeAliasesPackage("io.github.saluki.monitor.ops.domain");
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-    try {
-      bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
-      return bean.getObject();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    @Bean
+    public DataSource datasource() throws SQLException {
+        return createDataSource();
     }
-  }
 
-  @Bean
-  public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-    if (sqlSessionFactory == null) {
-      return null;
+    @Bean(name = "sqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setTypeAliasesPackage("io.github.saluki.monitor.ops.domain");
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        try {
+            bean.setMapperLocations(resolver.getResources("classpath:mappers/*.xml"));
+            return bean.getObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    return new SqlSessionTemplate(sqlSessionFactory);
-  }
 
-  @Bean
-  @Override
-  public PlatformTransactionManager annotationDrivenTransactionManager() {
-    try {
-      return new DataSourceTransactionManager(datasource());
-    } catch (SQLException e) {
-      e.printStackTrace();
+    @Bean
+    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+        if (sqlSessionFactory == null) {
+            return null;
+        }
+        return new SqlSessionTemplate(sqlSessionFactory);
     }
-    return null;
-  }
+
+    @Bean
+    @Override
+    public PlatformTransactionManager annotationDrivenTransactionManager() {
+        try {
+            return new DataSourceTransactionManager(datasource());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
